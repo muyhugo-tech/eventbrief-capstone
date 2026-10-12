@@ -1,0 +1,13 @@
+{
+  "id": "01-new-inquiry",
+  "fields": {
+    "event_date": { "value": "2027-06-12", "status": "requested", "evidence": [{ "message_id": "m1", "quote": "Could you host lunch for 36 people on June 12, 2027?" }] },
+    "guest_count": { "value": 36, "status": "stated", "evidence": [{ "message_id": "m1", "quote": "36 people" }] },
+    "venue": { "value": null, "status": "unknown", "evidence": [] }
+  },
+  "pending_changes": [],
+  "open_questions": [
+    { "topic": "step_free_access", "question": "Is a room with step-free access available?", "evidence": [{ "message_id": "m1", "quote": "Do you have a room with step-free access?" }] }
+  ],
+  "rationale": "This is a requested date, not an accepted booking. No room is named. Accessibility remains unanswered."
+}

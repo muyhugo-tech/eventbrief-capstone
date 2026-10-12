@@ -1,0 +1,11 @@
+{
+  "id": "07-answered-access",
+  "fields": {
+    "event_date": { "value": "2027-10-02", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We have agreed on October 2, 2027, Alder Gallery, and 30 guests." }] },
+    "guest_count": { "value": 30, "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We have agreed on October 2, 2027, Alder Gallery, and 30 guests." }] },
+    "venue": { "value": "Alder Gallery", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We have agreed on October 2, 2027, Alder Gallery, and 30 guests." }] }
+  },
+  "pending_changes": [],
+  "open_questions": [],
+  "rationale": "Both questions have explicit answers. A negative answer is still an answer; the unavailable projector must not remain an open question."
+}

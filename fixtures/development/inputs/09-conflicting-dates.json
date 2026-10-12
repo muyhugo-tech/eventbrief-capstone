@@ -1,0 +1,10 @@
+{
+  "id": "09-conflicting-dates",
+  "title": "Contradictory records are explicitly unresolved",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-07-08T09:00:00Z", "body": "My sheet lists our agreed date as November 6, 2027, at Maple Loft for 40 guests." },
+    { "id": "m2", "role": "customer", "sent_at": "2027-07-08T10:00:00Z", "body": "My copy says the agreed date is November 13, 2027. Maple Loft and 40 guests match." },
+    { "id": "m3", "role": "coordinator", "sent_at": "2027-07-08T11:00:00Z", "body": "Those dates conflict and I cannot determine which was accepted. Treat the current event date as unknown until we resolve this. Maple Loft and 40 guests are still agreed. Which date is on the signed confirmation?" }
+  ]
+}

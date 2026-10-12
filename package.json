@@ -1,0 +1,21 @@
+{
+  "name": "eventbrief-capstone",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "dev": "node --use-system-ca --watch server.mjs",
+    "start": "node --use-system-ca server.mjs",
+    "start:ai": "node --use-system-ca server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check:fixtures": "node scripts/check-fixtures.mjs",
+    "eval": "node scripts/evaluate.mjs",
+    "eval:self-check": "node scripts/check-evaluator.mjs",
+    "eval:package": "node scripts/evaluate-package.mjs",
+    "eval:package:self-check": "node scripts/check-package-evaluator.mjs",
+    "test:ai": "node --use-system-ca scripts/run-package-model.mjs",
+    "check:public": "node scripts/public-check.mjs",
+    "export:public": "node scripts/public-check.mjs --export"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "06-tentative-count",
+  "fields": {
+    "event_date": { "value": null, "status": "unknown", "evidence": [] },
+    "guest_count": { "value": 52, "status": "stated", "evidence": [{ "message_id": "m1", "quote": "We are estimating 52 guests for a team lunch. That count is tentative, not final." }] },
+    "venue": { "value": null, "status": "unknown", "evidence": [] }
+  },
+  "pending_changes": [],
+  "open_questions": [{ "topic": "final_attendance_timing", "question": "When will the final attendance be known?", "evidence": [{ "message_id": "m2", "quote": "When will you know the final attendance?" }] }],
+  "rationale": "The v0 contract has no tentative status: a single explicit numeric estimate is stated, never agreed. No earlier agreed count exists to change. The exact quote preserves the qualification; this representation limitation needs manual review."
+}

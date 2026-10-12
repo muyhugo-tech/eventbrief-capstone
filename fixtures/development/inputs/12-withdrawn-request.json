@@ -1,0 +1,11 @@
+{
+  "id": "12-withdrawn-request",
+  "title": "A withdrawn date change and a still-pending count change",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-07-11T09:00:00Z", "body": "We agreed on February 5, 2028 at Fern Pavilion for 60 guests." },
+    { "id": "m2", "role": "customer", "sent_at": "2027-07-11T10:00:00Z", "body": "Could we move to February 12, 2028 and increase attendance to 72 guests?" },
+    { "id": "m3", "role": "customer", "sent_at": "2027-07-11T11:00:00Z", "body": "Withdraw the date change; keep February 5, 2028. I still request 72 guests at Fern Pavilion." },
+    { "id": "m4", "role": "coordinator", "sent_at": "2027-07-11T12:00:00Z", "body": "February 5, 2028 and Fern Pavilion remain agreed. I have not accepted 72 guests; 60 remains agreed while I check capacity." }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "11-partial-answers",
+  "title": "One of two planning questions is answered",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-07-10T09:00:00Z", "body": "We agreed on January 22, 2028 in Rowan Hall for 28 guests. Will anyone need a vegetarian meal? Will you bring your own microphone?" },
+    { "id": "m2", "role": "customer", "sent_at": "2027-07-10T10:00:00Z", "body": "Four guests need vegetarian meals. I have not decided about the microphone yet." }
+  ]
+}

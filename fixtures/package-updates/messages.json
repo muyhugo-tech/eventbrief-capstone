@@ -1,0 +1,26 @@
+{
+  "id": "patio-updated",
+  "title": "Birthday dinner · updated date and guests",
+  "parent_scenario_id": "patio-complete",
+  "summary": "The host and restaurant agree to November 15, 2027 and 36 guests. The host checks dietary needs for all 36.",
+  "messages": [
+    {
+      "id": "m5",
+      "role": "customer",
+      "sender": "Alex Morgan <alex@example.test>",
+      "recipient": "Riley Chen <riley@linden-fig.example>",
+      "sent_at": "2027-10-23T16:00:00Z",
+      "subject": "Re: Your birthday dinner at Linden & Fig",
+      "body": "Could we move the dinner to November 15, 2027 and increase attendance to 36 guests in total: 36 guests aged 13 or older and zero children aged 0 through 12? I checked with all 36 guests: No allergies or dietary restrictions. Please keep the menu, drinks, times, table setup and guest instructions the same."
+    },
+    {
+      "id": "m6",
+      "role": "coordinator",
+      "sender": "Riley Chen <riley@linden-fig.example>",
+      "recipient": "Alex Morgan <alex@example.test>",
+      "sent_at": "2027-10-23T17:00:00Z",
+      "subject": "Re: Your birthday dinner at Linden & Fig",
+      "body": "Confirmed: the updated booking is accepted for November 15, 2027 and 36 guests in total: 36 guests aged 13 or older and zero children aged 0 through 12. Thank you for confirming No allergies or dietary restrictions for all 36. All other previously agreed arrangements stay the same. Riley will still lead the event handover."
+    }
+  ]
+}

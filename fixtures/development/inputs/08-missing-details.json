@@ -1,0 +1,9 @@
+{
+  "id": "08-missing-details",
+  "title": "No current date, attendance, or venue is supplied",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "customer", "sent_at": "2027-07-07T09:00:00Z", "body": "I am exploring a celebration but have not chosen any details yet." },
+    { "id": "m2", "role": "coordinator", "sent_at": "2027-07-07T10:00:00Z", "body": "What date, guest count, and venue do you have in mind?" }
+  ]
+}

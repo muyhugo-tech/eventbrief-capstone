@@ -1,0 +1,175 @@
+{
+  "schema_version": "eventbrief.restaurant.v2",
+  "id": "linden-fig-demo",
+  "version": "fictional-v3",
+  "synthetic": true,
+  "name": "Linden & Fig",
+  "description": "A fictional restaurant for the EventBrief capstone",
+  "timezone": "America/Los_Angeles",
+  "opening_time": "17:00",
+  "closing_time": "22:00",
+  "currency": "USD",
+  "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+  "categories": {
+    "guest_13_plus_count": {
+      "label": "Guests",
+      "age_min": 13,
+      "age_max": null
+    },
+    "child_count": {
+      "label": "Children (0–12)",
+      "age_min": 0,
+      "age_max": 12
+    }
+  },
+  "venues": {
+    "Garden Patio": {
+      "capacity": 40,
+      "setups": [
+        "One long table",
+        "Three tables of ten"
+      ]
+    }
+  },
+  "menus": {
+    "Menu 2": {
+      "description": "Family-style seasonal dinner",
+      "courses": [
+        "Garden salad",
+        "Roast squash and herb chicken, served family-style",
+        "Apple crumble"
+      ],
+      "prices_cents": {
+        "guest_13_plus_count": 5800,
+        "child_count": 2200
+      },
+      "beverages": [
+        "Beer and wine service",
+        "Nonalcoholic service"
+      ]
+    }
+  },
+  "beverages": {
+    "Beer and wine service": {
+      "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+      "prices_cents": {
+        "guest_13_plus_count": 1800,
+        "child_count": 600
+      }
+    },
+    "Nonalcoholic service": {
+      "description": "Nonalcoholic drinks for all guests",
+      "prices_cents": {
+        "guest_13_plus_count": 600,
+        "child_count": 600
+      }
+    }
+  },
+  "supported_dietary": [
+    "No allergies or dietary restrictions"
+  ],
+  "supported_av": [
+    "No AV required"
+  ],
+  "supported_special": [
+    "No special requirements"
+  ],
+  "readiness": {
+    "calendar": {
+      "required": [
+        "host_name",
+        "event_date",
+        "start_time",
+        "end_time",
+        "timezone",
+        "venue"
+      ],
+      "agreed": [
+        "event_date",
+        "start_time",
+        "end_time",
+        "timezone",
+        "venue"
+      ]
+    },
+    "quote": {
+      "required": [
+        "host_name",
+        "guest_count",
+        "guest_13_plus_count",
+        "child_count",
+        "menu",
+        "beverage"
+      ],
+      "agreed": []
+    },
+    "kitchen": {
+      "required": [
+        "host_name",
+        "event_date",
+        "start_time",
+        "timezone",
+        "guest_count",
+        "menu",
+        "dietary"
+      ],
+      "agreed": [
+        "event_date",
+        "start_time",
+        "guest_count",
+        "menu"
+      ]
+    },
+    "staff": {
+      "required": [
+        "host_name",
+        "event_date",
+        "start_time",
+        "end_time",
+        "timezone",
+        "venue",
+        "guest_count",
+        "menu",
+        "beverage",
+        "dietary",
+        "setup",
+        "av",
+        "special",
+        "staff_notes"
+      ],
+      "agreed": [
+        "event_date",
+        "start_time",
+        "end_time",
+        "venue",
+        "guest_count",
+        "menu",
+        "beverage",
+        "setup"
+      ]
+    },
+    "guest": {
+      "required": [
+        "host_name",
+        "event_date",
+        "start_time",
+        "end_time",
+        "timezone",
+        "venue",
+        "guest_count",
+        "menu",
+        "beverage",
+        "guest_notes"
+      ],
+      "agreed": [
+        "event_date",
+        "start_time",
+        "end_time",
+        "venue",
+        "guest_count",
+        "menu",
+        "beverage"
+      ]
+    }
+  }
+}

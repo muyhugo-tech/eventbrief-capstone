@@ -1,0 +1,15 @@
+{
+  "id": "03-pending-date",
+  "fields": {
+    "event_date": { "value": "2027-06-12", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "Our agreed details are June 12, 2027, Juniper Hall, and 36 guests." }, { "message_id": "m4", "quote": "The change is not confirmed; June 12 remains our agreed date for now." }] },
+    "guest_count": { "value": 36, "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "Our agreed details are June 12, 2027, Juniper Hall, and 36 guests." }] },
+    "venue": { "value": "Juniper Hall", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "Our agreed details are June 12, 2027, Juniper Hall, and 36 guests." }] }
+  },
+  "pending_changes": [
+    { "field": "event_date", "value": "2027-06-19", "status": "requested", "evidence": [{ "message_id": "m3", "quote": "Could we move the event to June 19, 2027 instead?" }, { "message_id": "m4", "quote": "The change is not confirmed; June 12 remains our agreed date for now." }] }
+  ],
+  "open_questions": [
+    { "topic": "date_change_availability", "question": "Can the event move to June 19, 2027?", "evidence": [{ "message_id": "m3", "quote": "Could we move the event to June 19, 2027 instead?" }, { "message_id": "m4", "quote": "I need to check availability for June 19." }] }
+  ],
+  "rationale": "June 12 remains agreed. June 19 is requested and unresolved. The dietary question was answered and must not remain open."
+}

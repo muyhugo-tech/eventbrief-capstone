@@ -1,0 +1,11 @@
+{
+  "id": "03-pending-date",
+  "title": "A date request and an answered planning question",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-05-04T10:00:00Z", "body": "Our agreed details are June 12, 2027, Juniper Hall, and 36 guests. Are there any dietary restrictions?" },
+    { "id": "m2", "role": "customer", "sent_at": "2027-05-04T11:00:00Z", "body": "There are no dietary restrictions." },
+    { "id": "m3", "role": "customer", "sent_at": "2027-05-05T10:00:00Z", "body": "Could we move the event to June 19, 2027 instead? The 36 guests and Juniper Hall would stay the same." },
+    { "id": "m4", "role": "coordinator", "sent_at": "2027-05-05T11:00:00Z", "body": "I need to check availability for June 19. The change is not confirmed; June 12 remains our agreed date for now." }
+  ]
+}

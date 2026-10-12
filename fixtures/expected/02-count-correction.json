@@ -1,0 +1,11 @@
+{
+  "id": "02-count-correction",
+  "fields": {
+    "event_date": { "value": "2027-06-12", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We have agreed on June 12, 2027 in Juniper Hall for 36 guests." }, { "message_id": "m3", "quote": "June 12, 2027 and Juniper Hall are unchanged." }] },
+    "guest_count": { "value": 44, "status": "agreed", "evidence": [{ "message_id": "m2", "quote": "Please change the attendance to 44 guests." }, { "message_id": "m3", "quote": "Confirmed: 44 guests." }] },
+    "venue": { "value": "Juniper Hall", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We have agreed on June 12, 2027 in Juniper Hall for 36 guests." }, { "message_id": "m3", "quote": "June 12, 2027 and Juniper Hall are unchanged." }] }
+  },
+  "pending_changes": [],
+  "open_questions": [],
+  "rationale": "An explicit acceptance resolves the count change. The earlier count is historical, not current."
+}

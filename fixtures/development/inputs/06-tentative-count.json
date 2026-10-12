@@ -1,0 +1,9 @@
+{
+  "id": "06-tentative-count",
+  "title": "An attendance estimate is not an agreement",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "customer", "sent_at": "2027-07-05T09:00:00Z", "body": "We are estimating 52 guests for a team lunch. That count is tentative, not final. No date or venue has been chosen." },
+    { "id": "m2", "role": "coordinator", "sent_at": "2027-07-05T10:00:00Z", "body": "I have recorded your estimate, not agreed a guest count. When will you know the final attendance?" }
+  ]
+}

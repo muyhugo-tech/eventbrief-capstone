@@ -1,0 +1,11 @@
+{
+  "id": "04-accepted-date",
+  "fields": {
+    "event_date": { "value": "2027-08-15", "status": "agreed", "evidence": [{ "message_id": "m2", "quote": "Please move our event to August 15, 2027." }, { "message_id": "m3", "quote": "Accepted: the event date is now August 15, 2027." }] },
+    "guest_count": { "value": 24, "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on August 8, 2027 at Cedar Studio for 24 guests." }, { "message_id": "m3", "quote": "Cedar Studio and 24 guests remain agreed." }] },
+    "venue": { "value": "Cedar Studio", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on August 8, 2027 at Cedar Studio for 24 guests." }, { "message_id": "m3", "quote": "Cedar Studio and 24 guests remain agreed." }] }
+  },
+  "pending_changes": [],
+  "open_questions": [],
+  "rationale": "The coordinator explicitly accepts the replacement date. The request is resolved, not pending, and the historical August 8 date must not survive as current."
+}

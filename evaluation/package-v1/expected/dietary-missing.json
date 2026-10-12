@@ -1,0 +1,270 @@
+{
+  "schema_version": "eventbrief.package-expectation.v1",
+  "record": {
+    "schema_version": "eventbrief.package-record.v3",
+    "fields": {
+      "host_name": {
+        "value": "Alex Morgan",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "I am Alex Morgan, the host."
+          }
+        ]
+      },
+      "booking_status": {
+        "value": "Confirmed in the conversation",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted"
+          }
+        ]
+      },
+      "event_date": {
+        "value": "2027-11-14",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Please book the Garden Patio on November 14, 2027 from 18:00 to 21:00 in America/Los_Angeles."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "start_time": {
+        "value": "18:00",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Please book the Garden Patio on November 14, 2027 from 18:00 to 21:00 in America/Los_Angeles."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "end_time": {
+        "value": "21:00",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Please book the Garden Patio on November 14, 2027 from 18:00 to 21:00 in America/Los_Angeles."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "timezone": {
+        "value": "America/Los_Angeles",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Please book the Garden Patio on November 14, 2027 from 18:00 to 21:00 in America/Los_Angeles."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "guest_count": {
+        "value": 30,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "There will be 30 guests in total: 30 guests aged 13 or older and zero children aged 0 through 12."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "guest_13_plus_count": {
+        "value": 30,
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "There will be 30 guests in total: 30 guests aged 13 or older and zero children aged 0 through 12."
+          }
+        ]
+      },
+      "child_count": {
+        "value": 0,
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "There will be 30 guests in total: 30 guests aged 13 or older and zero children aged 0 through 12."
+          }
+        ]
+      },
+      "venue": {
+        "value": "Garden Patio",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Please book the Garden Patio on November 14, 2027 from 18:00 to 21:00 in America/Los_Angeles."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "menu": {
+        "value": "Menu 2",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "We select Menu 2 and Beer and wine service."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "beverage": {
+        "value": "Beer and wine service",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "We select Menu 2 and Beer and wine service."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "dietary": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "setup": {
+        "value": "One long table",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Please use One long table."
+          },
+          {
+            "message_id": "m3",
+            "quote": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected."
+          }
+        ]
+      },
+      "av": {
+        "value": "No AV required",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "No AV required."
+          }
+        ]
+      },
+      "special": {
+        "value": "No special requirements",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "No special requirements."
+          }
+        ]
+      },
+      "guest_notes": {
+        "value": "Arrive at the garden entrance at 18:00; gifts are optional.",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m2",
+            "quote": "Guest instructions: Arrive at the garden entrance at 18:00; gifts are optional."
+          }
+        ]
+      },
+      "staff_notes": {
+        "value": "Riley will lead the event handover.",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "m3",
+            "quote": "Riley will lead the event handover."
+          }
+        ]
+      }
+    },
+    "pending_changes": [],
+    "open_questions": [
+      {
+        "field": "dietary",
+        "question": "What are the dietary requirements?",
+        "evidence": [
+          {
+            "message_id": "m3",
+            "quote": "We still need your dietary reply before preparing the kitchen sheet and staff plan."
+          }
+        ]
+      }
+    ]
+  },
+  "document_states": {
+    "calendar": "ready_for_review",
+    "quote": "ready_for_review",
+    "kitchen": "blocked",
+    "staff": "blocked",
+    "guest": "ready_for_review"
+  },
+  "quote": {
+    "total_cents": 228000,
+    "lines": [
+      {
+        "source_fields": [
+          "menu",
+          "guest_13_plus_count"
+        ],
+        "quantity": 30,
+        "unit_cents": 5800,
+        "amount_cents": 174000
+      },
+      {
+        "source_fields": [
+          "beverage",
+          "guest_13_plus_count"
+        ],
+        "quantity": 30,
+        "unit_cents": 1800,
+        "amount_cents": 54000
+      }
+    ]
+  },
+  "forbidden_guest_text": [
+    "Riley will lead the event handover.",
+    "riley@linden-fig.example"
+  ],
+  "manual_review": [
+    "Check that every quotation actually supports its value and status.",
+    "Check question meaning, completeness, and audience suitability."
+  ]
+}

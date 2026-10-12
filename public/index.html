@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Review event details against the conversation that supports them. A synthetic-data capstone prototype.">
+  <title>EventBrief — Conversation review</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to review</a>
+  <aside class="rail" aria-label="Scenario navigation">
+    <a class="wordmark" href="/" aria-label="EventBrief home">Event<span>Brief</span><span class="brand-period">.</span></a>
+    <p class="rail-intro">The conversation.<br>The details that matter.</p>
+    <a href="/package" class="package-entry">Open event package demo</a>
+    <nav id="scenario-nav" aria-label="Example conversations"></nav>
+    <label class="mobile-picker">Example conversation<select id="scenario-select"></select></label>
+    <div class="rail-note"><span class="sample-label">Capstone prototype</span><p>All conversations are fictional. No real bookings are changed.</p></div>
+  </aside>
+  <main id="workspace">
+    <header class="page-header">
+      <div><h1>Conversation review</h1><p id="scenario-description">Loading the examples…</p></div>
+      <button id="export" class="button secondary" disabled>Export reviewed brief</button>
+    </header>
+    <div class="toolbar">
+      <div class="source-mode"><span id="mode-label" class="mode-label">Reference example</span><span id="mode-description">Authored answers · no AI call</span></div>
+      <div class="analysis-actions"><button id="reference" class="text-button">Load reference</button><button id="analyze" class="button primary" disabled>Analyze with AI</button></div>
+    </div>
+    <p id="live-note" class="live-note">Checking live analysis availability…</p>
+    <p id="notice" role="status" aria-live="polite" class="notice" hidden></p>
+    <p id="error" role="alert" class="error" hidden></p>
+    <div class="workspace-grid">
+      <section class="conversation-pane" aria-labelledby="conversation-heading">
+        <div class="pane-heading"><h2 id="conversation-heading">Conversation</h2><span id="message-count"></span></div>
+        <div id="messages"></div>
+      </section>
+      <section class="brief-pane" aria-labelledby="brief-heading" aria-busy="false">
+        <div class="pane-heading"><h2 id="brief-heading">Booking brief</h2><span id="review-progress">Not reviewed</span></div>
+        <p class="review-instruction">Check each detail against its source, then accept or correct it.</p>
+        <div id="brief"><p class="empty">Choose a conversation to begin.</p></div>
+        <div id="completion" class="completion" hidden><strong>Review complete</strong><p>Your decisions are ready to export. Requested changes remain requests.</p></div>
+        <p id="storage-note" class="storage-note">Reviews save in this browser only.</p>
+      </section>
+    </div>
+    <footer>EventBrief <span>Public demo in development · synthetic data only</span></footer>
+  </main>
+</body>
+</html>

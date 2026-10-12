@@ -1,0 +1,43 @@
+{
+  "id": "unsupported-menu",
+  "title": "Custom menu needs coordinator review",
+  "synthetic": true,
+  "messages": [
+    {
+      "id": "m1",
+      "role": "coordinator",
+      "sender": "Riley Chen <riley@linden-fig.example>",
+      "recipient": "Alex Morgan <alex@example.test>",
+      "sent_at": "2027-10-20T16:00:00Z",
+      "subject": "Your birthday dinner at Linden & Fig",
+      "body": "For your birthday dinner, I can offer the Garden Patio on November 14, 2027, from 18:00 to 21:00 in America/Los_Angeles. Custom tasting menu is our family-style seasonal dinner. We can offer Beer and wine service or Nonalcoholic service. Internal staff note: Riley will lead the event handover."
+    },
+    {
+      "id": "m2",
+      "role": "customer",
+      "sender": "Alex Morgan <alex@example.test>",
+      "recipient": "Riley Chen <riley@linden-fig.example>",
+      "sent_at": "2027-10-20T17:00:00Z",
+      "subject": "Re: Your birthday dinner at Linden & Fig",
+      "body": "I am Alex Morgan, the host. Please book the Garden Patio on November 14, 2027 from 18:00 to 21:00 in America/Los_Angeles. There will be 30 guests in total: 30 guests aged 13 or older and zero children aged 0 through 12. We select Custom tasting menu and Beer and wine service. Please use One long table. No AV required. No special requirements. Guest instructions: Arrive at the garden entrance at 18:00; gifts are optional. I will check dietary requirements and send those separately."
+    },
+    {
+      "id": "m3",
+      "role": "coordinator",
+      "sender": "Riley Chen <riley@linden-fig.example>",
+      "recipient": "Alex Morgan <alex@example.test>",
+      "sent_at": "2027-10-21T16:00:00Z",
+      "subject": "Re: Your birthday dinner at Linden & Fig",
+      "body": "Confirmed: your booking is accepted for the room, date, times, timezone, 30 guests, menu, beverage service, and table setup you selected. Riley will lead the event handover. We still need your dietary reply before preparing the kitchen sheet and staff plan."
+    },
+    {
+      "id": "m4",
+      "role": "customer",
+      "sender": "Alex Morgan <alex@example.test>",
+      "recipient": "Riley Chen <riley@linden-fig.example>",
+      "sent_at": "2027-10-22T16:00:00Z",
+      "subject": "Re: Your birthday dinner at Linden & Fig",
+      "body": "I checked with all 30 guests: No allergies or dietary restrictions. Everything else stays as agreed."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "05-rejected-date",
+  "title": "A rejected date change leaves the agreement intact",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-07-03T09:00:00Z", "body": "Our agreed event is September 4, 2027 in Willow Room for 18 guests." },
+    { "id": "m2", "role": "customer", "sent_at": "2027-07-04T09:00:00Z", "body": "Can we change the date to September 11, 2027?" },
+    { "id": "m3", "role": "coordinator", "sent_at": "2027-07-04T10:00:00Z", "body": "No, September 11 is unavailable. I am declining that change; September 4, 2027 remains agreed." },
+    { "id": "m4", "role": "customer", "sent_at": "2027-07-04T11:00:00Z", "body": "Understood. We will keep September 4 and drop the September 11 request." }
+  ]
+}

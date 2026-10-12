@@ -1,0 +1,11 @@
+{
+  "id": "11-partial-answers",
+  "fields": {
+    "event_date": { "value": "2028-01-22", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on January 22, 2028 in Rowan Hall for 28 guests." }] },
+    "guest_count": { "value": 28, "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on January 22, 2028 in Rowan Hall for 28 guests." }] },
+    "venue": { "value": "Rowan Hall", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on January 22, 2028 in Rowan Hall for 28 guests." }] }
+  },
+  "pending_changes": [],
+  "open_questions": [{ "topic": "microphone_source", "question": "Will the customer bring a microphone?", "evidence": [{ "message_id": "m1", "quote": "Will you bring your own microphone?" }, { "message_id": "m2", "quote": "I have not decided about the microphone yet." }] }],
+  "rationale": "Dietary requirements are answered; the microphone decision remains open. Four vegetarian meals is a subset of the guests, not a revised attendance count."
+}

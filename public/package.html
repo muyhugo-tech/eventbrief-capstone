@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prepare and review five event drafts from one fictional conversation.">
+  <title>EventBrief — Event package</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/package.css">
+  <script type="module" src="/package.js"></script>
+</head>
+<body class="package-page">
+  <a class="skip-link" href="#workspace">Skip to event package</a>
+  <aside class="rail" aria-label="Event workspace">
+    <a class="wordmark" href="/package"><span class="brand-mark" aria-hidden="true">e</span>EventBrief</a>
+    <p class="rail-intro">Linden &amp; Fig <span>Demo workspace</span></p>
+    <nav class="workspace-nav" aria-label="Workspaces">
+      <!-- Icon geometry adapted from Yanni's components/AppSidebar.tsx. -->
+      <button id="show-events" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="4" width="17" height="4.5" rx="1.5"/><rect x="3.5" y="11" width="17" height="4.5" rx="1.5"/><path d="M3.5 19.5h17" stroke-linecap="round"/></svg>Events <span id="rail-event-count"></span></button>
+      <button id="new-event"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>New event</button>
+    </nav>
+    <div class="recent-events"><h2>Recent events</h2><nav id="recent-events" aria-label="Recent events"></nav></div>
+    <div class="rail-note"><span class="sample-label">Synthetic data only</span><p>Prepare, check, then share.<br>Nothing is sent or booked.</p><a href="/">Extraction examples</a></div>
+  </aside>
+  <main id="workspace">
+    <header class="page-header">
+      <div class="header-title"><h1 id="page-title">Event workspace</h1><span class="demo-badge">Local demo</span></div>
+      <button id="header-new-event" class="button secondary">New event</button>
+    </header>
+    <section id="events-overview" class="events-overview" hidden aria-labelledby="events-heading">
+      <div class="overview-heading"><div><h2 id="events-heading">Your events</h2><p>Open an event to check its drafts or add the next reply.</p></div><span id="events-count"></span></div>
+      <label class="event-search" for="event-search">Find an event<input id="event-search" type="search" placeholder="Search by event name" autocomplete="off"></label>
+      <div class="events-table-wrap"><table class="events-table"><thead><tr><th>Event</th><th>Progress</th><th>Version</th><th>Source</th></tr></thead><tbody id="event-rows"></tbody></table></div>
+      <p id="events-empty" class="empty" hidden>No events match. Try a different name.</p>
+    </section>
+    <div id="event-workbench">
+    <div class="workbench-heading"><p id="workbench-help">Paste a conversation. Get five drafts. Check the details.</p><span id="package-mode-label" class="mode-label">Authored demo · no AI call</span></div>
+    <div class="package-controls">
+      <label for="package-scenario">Choose a conversation<select id="package-scenario" disabled><option>Loading…</option></select></label>
+      <label for="package-mode">Make drafts with<select id="package-mode" disabled><option value="reference">Saved example</option><option value="live" disabled>Real AI</option></select></label>
+    </div>
+    <section id="paste-panel" class="paste-panel" hidden>
+      <label for="event-messages">Paste event messages</label>
+      <p id="paste-help">Paste the whole conversation, with the oldest message first. Use fictional details for this demo.</p>
+      <textarea id="event-messages" rows="7" maxlength="8000" aria-describedby="paste-help paste-count" placeholder="Host: We would like to hold a dinner…&#10;Restaurant: Here is what we can offer…"></textarea>
+      <div class="item-actions"><button id="paste-example" class="text-button">Fill with an example</button><span id="paste-count" class="live-note">0 / 8,000 characters</span></div>
+      <p class="live-note">AI reads the messages. Missing details stay marked for review.</p>
+      <p class="live-note">This demo uses Linden &amp; Fig’s sample menu and prices. Other menu or venue requests need checking.</p>
+    </section>
+    <div class="prepare-row"><button id="prepare" class="button primary" disabled>Prepare five drafts</button><p id="package-live-status" class="live-note"></p></div>
+    <p id="save-status" class="save-status" role="status" aria-live="polite"></p>
+    <div id="update-controls" class="item-actions" hidden><button id="add-update" class="small-button">Add demo update</button><span class="live-note">Try an agreed change to the date and guest count.</span></div>
+    <p id="version-note" class="notice" role="status" hidden></p>
+    <p id="package-notice" class="notice" role="status" aria-live="polite" hidden></p>
+    <p id="package-error" class="error" role="alert" hidden></p>
+    <details id="attempt-panel" class="attempt-panel" hidden><summary>Preparation details</summary><p id="attempt-summary"></p><button id="download-attempt" class="text-button">Download attempt record</button></details>
+    <section id="package-result" aria-labelledby="package-heading" aria-busy="false" hidden>
+      <div class="package-result-heading">
+        <div><h2 id="package-heading">Alex Morgan’s birthday dinner</h2><p id="package-summary"></p></div>
+        <span id="review-progress" class="review-progress"></span>
+      </div>
+      <div id="event-facts" class="event-facts"></div>
+      <p class="review-instruction">Open each draft. Check its details, then mark it reviewed.</p>
+      <section id="reply-panel" class="reply-panel" hidden aria-labelledby="reply-heading">
+        <div class="reply-heading"><div><h3 id="reply-heading">Got a new reply?</h3><p>Add it here. Earlier messages and versions stay saved.</p></div><button id="show-reply" class="small-button" aria-expanded="false" aria-controls="reply-form">Add a reply</button></div>
+        <form id="reply-form" hidden>
+          <label for="reply-role">Who sent it?<select id="reply-role"><option value="host">Event host</option><option value="coordinator">Restaurant</option></select></label>
+          <label for="reply-text">Paste their reply<textarea id="reply-text" rows="4" maxlength="2000" placeholder="I checked with everyone. No allergies or dietary restrictions." required></textarea></label>
+          <button id="fill-demo-reply" type="button" class="text-button" hidden>Fill with the sample reply</button>
+          <div class="item-actions"><button id="submit-reply" type="submit" class="button primary">Update drafts</button><button id="cancel-reply" type="button" class="text-button">Cancel</button><span id="reply-help" class="live-note"></span></div>
+        </form>
+      </section>
+      <section id="package-issues" class="package-issues" aria-label="Unresolved conversation details" hidden></section>
+      <div class="package-grid">
+        <nav id="document-list" class="document-list" aria-label="Event drafts"></nav>
+        <section class="document-pane" aria-label="Selected draft">
+          <div class="draft-actions"><button id="review-document" class="small-button">Mark this draft reviewed</button><button id="download-document" class="text-button">Download this draft</button></div>
+          <div id="document-preview"></div>
+        </section>
+      </div>
+    </section>
+    <section id="package-empty" class="package-empty">
+      <h2>Your five drafts will appear here</h2>
+      <ol><li>Paste event messages or choose a saved conversation.</li><li>Click <strong>Prepare five drafts</strong>.</li><li>Open each draft and check the details.</li></ol>
+      <p>If a detail is missing, its draft will show what needs to be fixed.</p>
+      <button id="try-demo" class="small-button" hidden>Try the full workflow · free example</button>
+      <p id="demo-help" class="live-note" hidden>This guided example uses written sample results. It does not call AI.</p>
+    </section>
+    <section id="pending-reply-panel" class="notice" hidden><p>New messages are saved. Prepare the updated drafts to continue.</p><button id="open-current" class="text-button">Open latest version</button></section>
+    <details id="history-panel" class="source-panel" hidden><summary>Earlier versions &amp; saved results</summary><ul id="package-history" class="package-history"></ul></details>
+    <details id="record-panel" class="source-panel">
+      <summary>Event record &amp; source conversation <span id="source-summary"></span></summary>
+      <div class="workspace-grid">
+        <section class="conversation-pane" aria-labelledby="package-conversation-heading">
+          <div class="pane-heading"><h2 id="package-conversation-heading">Source conversation</h2><span id="package-message-count"></span></div>
+          <div id="package-messages"></div>
+        </section>
+        <section class="brief-pane" aria-labelledby="package-record-heading">
+          <div class="pane-heading"><h2 id="package-record-heading">Shared event record</h2></div>
+          <p class="review-instruction">Corrections are saved separately from the original record. Dependent drafts are rebuilt and need fresh review. A correction does not dismiss a pending request or open question.</p>
+          <div id="package-fields"><p class="empty">Prepare the package to inspect its record.</p></div>
+        </section>
+      </div>
+    </details>
+    <details id="policy-panel" class="source-panel" hidden>
+      <summary>Fictional restaurant rules</summary>
+      <div id="policy-content" class="policy-content"></div>
+    </details>
+    <details id="export-panel" class="source-panel" hidden><summary>Keep a copy of this review</summary><p class="live-note">This file contains the conversation, staff notes, and review marks. It is for your own records. To share a draft, use its Download button above.</p><button id="download-package" class="button secondary">Download review package</button></details>
+    <p class="storage-note">Drafts, saved corrections, and review marks stay on this computer. Reopening them is free. Nothing is sent or booked.</p>
+    </div>
+    <footer>EventBrief <span>Local capstone prototype · all data fictional</span></footer>
+  </main>
+</body>
+</html>

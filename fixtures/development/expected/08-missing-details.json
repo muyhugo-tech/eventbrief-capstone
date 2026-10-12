@@ -1,0 +1,11 @@
+{
+  "id": "08-missing-details",
+  "fields": {
+    "event_date": { "value": null, "status": "unknown", "evidence": [] },
+    "guest_count": { "value": null, "status": "unknown", "evidence": [] },
+    "venue": { "value": null, "status": "unknown", "evidence": [] }
+  },
+  "pending_changes": [],
+  "open_questions": [{ "topic": "initial_details", "question": "What date, guest count, and venue does the customer want?", "evidence": [{ "message_id": "m2", "quote": "What date, guest count, and venue do you have in mind?" }] }],
+  "rationale": "All three current values are absent. A message timestamp is not an event date. The compound question may validly be split into three questions; its semantics require manual scoring."
+}

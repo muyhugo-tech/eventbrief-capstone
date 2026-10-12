@@ -1,0 +1,10 @@
+{
+  "id": "02-count-correction",
+  "title": "An accepted attendance correction",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-05-02T10:00:00Z", "body": "We have agreed on June 12, 2027 in Juniper Hall for 36 guests." },
+    { "id": "m2", "role": "customer", "sent_at": "2027-05-03T10:00:00Z", "body": "Please change the attendance to 44 guests. The date and room stay the same." },
+    { "id": "m3", "role": "coordinator", "sent_at": "2027-05-03T11:00:00Z", "body": "Confirmed: 44 guests. June 12, 2027 and Juniper Hall are unchanged." }
+  ]
+}

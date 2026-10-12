@@ -1,0 +1,13 @@
+{
+  "id": "01-new-inquiry",
+  "title": "An inquiry with missing venue details",
+  "synthetic": true,
+  "messages": [
+    {
+      "id": "m1",
+      "role": "customer",
+      "sent_at": "2027-05-01T10:00:00Z",
+      "body": "Could you host lunch for 36 people on June 12, 2027? Do you have a room with step-free access?"
+    }
+  ]
+}

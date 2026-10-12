@@ -1,0 +1,10 @@
+{
+  "id": "07-answered-access",
+  "title": "Accessibility and equipment questions are answered",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-07-06T09:00:00Z", "body": "We have agreed on October 2, 2027, Alder Gallery, and 30 guests." },
+    { "id": "m2", "role": "customer", "sent_at": "2027-07-06T10:00:00Z", "body": "Is the entrance step-free? Can you provide a projector?" },
+    { "id": "m3", "role": "coordinator", "sent_at": "2027-07-06T11:00:00Z", "body": "Yes, the entrance is step-free. No, we cannot provide a projector." }
+  ]
+}

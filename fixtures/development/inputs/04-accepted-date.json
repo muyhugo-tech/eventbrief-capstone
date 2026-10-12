@@ -1,0 +1,10 @@
+{
+  "id": "04-accepted-date",
+  "title": "An explicitly accepted date change",
+  "synthetic": true,
+  "messages": [
+    { "id": "m1", "role": "coordinator", "sent_at": "2027-07-01T09:00:00Z", "body": "We agreed on August 8, 2027 at Cedar Studio for 24 guests." },
+    { "id": "m2", "role": "customer", "sent_at": "2027-07-02T09:00:00Z", "body": "Please move our event to August 15, 2027. Keep Cedar Studio and the 24 guests." },
+    { "id": "m3", "role": "coordinator", "sent_at": "2027-07-02T10:00:00Z", "body": "Accepted: the event date is now August 15, 2027. Cedar Studio and 24 guests remain agreed." }
+  ]
+}

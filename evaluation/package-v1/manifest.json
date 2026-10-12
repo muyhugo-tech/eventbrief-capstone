@@ -1,0 +1,109 @@
+{
+  "schema_version": "eventbrief.package-dataset.v1",
+  "version": "package-development-v1",
+  "contract_version": "eventbrief.package-record.v3",
+  "synthetic": true,
+  "purpose": "development_evaluation",
+  "profile": {
+    "path": "profile.json",
+    "sha256": "0483372fe7568c651516e19034238f0a953d9b7c93a85ed803516fa0de969707"
+  },
+  "cases": [
+    {
+      "id": "complete",
+      "title": "Complete dinner: five ready drafts",
+      "input": "inputs/complete.json",
+      "expected": "expected/complete.json",
+      "input_sha256": "3cd1d00dd3ea8c79ac457c5c98bd48e14a73439a19a8de02d02dc672a6c41ce7",
+      "expected_sha256": "da36eea539d5f6178ec50a5875ab48cbac2b081008c5d989b6c6eaa66d7557d9"
+    },
+    {
+      "id": "dietary-missing",
+      "title": "Dietary reply still missing",
+      "input": "inputs/dietary-missing.json",
+      "expected": "expected/dietary-missing.json",
+      "input_sha256": "869fe3164ebb295520d3e20dbf84848a34a306f1d58d801cef1a20051098cf47",
+      "expected_sha256": "458688057ef1b869d332b00e09580a6689279ed995eee22fc95b54544b0ba19c"
+    },
+    {
+      "id": "mixed-party",
+      "title": "22 Guests and 8 Children",
+      "input": "inputs/mixed-party.json",
+      "expected": "expected/mixed-party.json",
+      "input_sha256": "ffe64c7a662da4bba33d19f5c2569be89c7f54478d7b59553011fd2596a32a51",
+      "expected_sha256": "f4d20ef3f90a9f8d7686ed7f52fd0baffebaf06e9001ba24ce78fba1d9253fcf"
+    },
+    {
+      "id": "date-requested",
+      "title": "New date requested, current date stays",
+      "input": "inputs/date-requested.json",
+      "expected": "expected/date-requested.json",
+      "input_sha256": "b593671ac7f4052f5150d23bd1fafa8529bb74dc06d45b4de00f754673c8fc23",
+      "expected_sha256": "e6264f37982a42753d276376cb29af27287eba086273a52a00f91d6221812480"
+    },
+    {
+      "id": "date-accepted",
+      "title": "New date accepted with contextual evidence",
+      "input": "inputs/date-accepted.json",
+      "expected": "expected/date-accepted.json",
+      "input_sha256": "ef74b570be6586605df90e5453e9eedc60baf8394d54cdfe3a81937fa5e8889c",
+      "expected_sha256": "522d96ecf3de0451875035e135cb0ed082ed159a0f6a4cdbec7304f60512e5e0"
+    },
+    {
+      "id": "count-conflict",
+      "title": "Conflicting accepted attendance copies",
+      "input": "inputs/count-conflict.json",
+      "expected": "expected/count-conflict.json",
+      "input_sha256": "8f56cb07970abd3d9c01b7e242c89ddea80a397b4c033f4b78715e77347019a8",
+      "expected_sha256": "dc396c715bb0a50ae013cd2a0464f14d71129619814f9a3821ab6c0f635befb1"
+    },
+    {
+      "id": "category-missing",
+      "title": "Total known, age-group counts unknown",
+      "input": "inputs/category-missing.json",
+      "expected": "expected/category-missing.json",
+      "input_sha256": "22394ef52d71f86c23b994d6d423b1d6d79ac1aa9963ce146eed3202cf582034",
+      "expected_sha256": "76faa46dc47e032d8f8113231b181a6322829ba3e10bd15ab4cef0ef98ee5798"
+    },
+    {
+      "id": "capacity-exceeded",
+      "title": "41 people exceed the fictional patio capacity",
+      "input": "inputs/capacity-exceeded.json",
+      "expected": "expected/capacity-exceeded.json",
+      "input_sha256": "5285f3ba1689ef92c0d0f024e5918dfff28e7e32e183952a2aeeeb053b2a3eae",
+      "expected_sha256": "3c40f01f0a977b05a740dd249ac2adcb96dfbd484a34bf22c80b336e3bce7d9a"
+    },
+    {
+      "id": "after-hours",
+      "title": "Accepted end time outside demo service hours",
+      "input": "inputs/after-hours.json",
+      "expected": "expected/after-hours.json",
+      "input_sha256": "387ea72df73820473b47c4f399741a6c3ea4150adfa7cef7a254a38811afe2c5",
+      "expected_sha256": "48a3993e26bdbcb61d29dffa427a64d4bfef14c9476feff0a8c6cf08119008d9"
+    },
+    {
+      "id": "unsupported-menu",
+      "title": "Custom menu needs coordinator review",
+      "input": "inputs/unsupported-menu.json",
+      "expected": "expected/unsupported-menu.json",
+      "input_sha256": "b1f46625c0353d2f948c3ccba52de6fa14c8c0d84600ca2a5f34ce22b41f6ee7",
+      "expected_sha256": "7253281fb2c457b375cfcb2e9af360826b7f974080946a349f51dd27cf24ce8e"
+    },
+    {
+      "id": "staff-private",
+      "title": "Internal note stays in the staff plan",
+      "input": "inputs/staff-private.json",
+      "expected": "expected/staff-private.json",
+      "input_sha256": "431a07a4fe17e04fa384a9ca977fbd07ec1474b67fe67435d96bd8451dd5da8b",
+      "expected_sha256": "dd2de0217a52fb188c50d5298a0e65bc99d6de1778d995b8a7e1f06f3c013574"
+    },
+    {
+      "id": "message-instructions",
+      "title": "Quoted instructions cannot control extraction",
+      "input": "inputs/message-instructions.json",
+      "expected": "expected/message-instructions.json",
+      "input_sha256": "e5bc9afd1018248ca775692d735ee6867f0fcc6a705e3b9d5b58c3316bd633f4",
+      "expected_sha256": "9fcec0fe9b5a9e08533b4a52c736db4651b2a4633e1009800eeb7e43f40191a4"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "schema_version": "eventbrief.dataset.v1",
+  "version": "development-v1",
+  "cases": [
+    {
+      "id": "01-new-inquiry",
+      "group": "starter",
+      "tags": [
+        "missing_information",
+        "unanswered_question"
+      ],
+      "input": "fixtures/inputs/01-new-inquiry.json",
+      "expected": "fixtures/expected/01-new-inquiry.json",
+      "input_sha256": "d240963021d8ee98bece6980cc321d81f48949bd294940677721b76f82d798ab",
+      "expected_sha256": "f5a623b62518b8e0cd7977aa8d5eac23a010992fac6916cbfc9460c05024760d"
+    },
+    {
+      "id": "02-count-correction",
+      "group": "starter",
+      "tags": [
+        "accepted_count_change"
+      ],
+      "input": "fixtures/inputs/02-count-correction.json",
+      "expected": "fixtures/expected/02-count-correction.json",
+      "input_sha256": "ab62c0c96e77ec64b6574ad4e6db5d8c2b4a6b122b4271c99aa9bcfc886f22c1",
+      "expected_sha256": "8319fc3214ac14cb5b349d8d7a8cfd0b76c582bee82cd11f304656d085312762"
+    },
+    {
+      "id": "03-pending-date",
+      "group": "starter",
+      "tags": [
+        "pending_date_change",
+        "answered_question"
+      ],
+      "input": "fixtures/inputs/03-pending-date.json",
+      "expected": "fixtures/expected/03-pending-date.json",
+      "input_sha256": "bdf0f627db20ada027e7558ab69dfa5fd1aefef3bc30ab29f289800de040d496",
+      "expected_sha256": "01e083b608206a2bff9ccbe8db5f15749176e02267021043b888ee4714795a4e"
+    },
+    {
+      "id": "04-accepted-date",
+      "group": "development",
+      "tags": [
+        "accepted_date_change"
+      ],
+      "input": "fixtures/development/inputs/04-accepted-date.json",
+      "expected": "fixtures/development/expected/04-accepted-date.json",
+      "input_sha256": "679e704c6570140594f3162daa819ad239cb07f57e8e0f060791ac2ce31a69be",
+      "expected_sha256": "fbdfdd94e00f7651d823a45cf23cfc3932217721815eca2e8c1fcab4f68cdac2"
+    },
+    {
+      "id": "05-rejected-date",
+      "group": "development",
+      "tags": [
+        "rejected_date_change",
+        "answered_question"
+      ],
+      "input": "fixtures/development/inputs/05-rejected-date.json",
+      "expected": "fixtures/development/expected/05-rejected-date.json",
+      "input_sha256": "6f17c800d34ba4e45395e33c7b0ecb83b5f329c05192dc2d897b276e93e6e553",
+      "expected_sha256": "377db5164097dd16044af7e7ab6ccf5e9fbffb8091b08a7de2a107aab52778e2"
+    },
+    {
+      "id": "06-tentative-count",
+      "group": "development",
+      "tags": [
+        "tentative_attendance",
+        "missing_information"
+      ],
+      "input": "fixtures/development/inputs/06-tentative-count.json",
+      "expected": "fixtures/development/expected/06-tentative-count.json",
+      "input_sha256": "5e39d6bb6187d9af5ca442aa09f49dd55d740e02fff0d86212d926ad4d1fe4b1",
+      "expected_sha256": "56a38f576c3093abda671eaa2435f3f059894cdd8ef32eef62ff245afe8767f5"
+    },
+    {
+      "id": "07-answered-access",
+      "group": "development",
+      "tags": [
+        "answered_questions",
+        "negative_answer"
+      ],
+      "input": "fixtures/development/inputs/07-answered-access.json",
+      "expected": "fixtures/development/expected/07-answered-access.json",
+      "input_sha256": "54ac060cb386de2fb649cc8e73ce5a1fef6fb438ffa3e2ce4bfbc0f1497af065",
+      "expected_sha256": "6e4ae580f739f21820e9b3024a837a020f99ec4474345607c059def6745116e6"
+    },
+    {
+      "id": "08-missing-details",
+      "group": "development",
+      "tags": [
+        "missing_information",
+        "compound_question"
+      ],
+      "input": "fixtures/development/inputs/08-missing-details.json",
+      "expected": "fixtures/development/expected/08-missing-details.json",
+      "input_sha256": "ec0e9490c2ea65ff654979e7791a10bd585f039f031340f3872ff487066de261",
+      "expected_sha256": "03ecaa8ce27062030c2297d34d7629e264a720fa5eb202f55ad187881539f921"
+    },
+    {
+      "id": "09-conflicting-dates",
+      "group": "development",
+      "tags": [
+        "contradiction",
+        "unknown_date"
+      ],
+      "input": "fixtures/development/inputs/09-conflicting-dates.json",
+      "expected": "fixtures/development/expected/09-conflicting-dates.json",
+      "input_sha256": "81f25ddf2e4cf3b5569812b05de3ea07592fbe46cf7f2d01ff308107d3d8cb6d",
+      "expected_sha256": "874d5c9b46612ce056b3ba8c2b0d73f15b546e9c1dbe27db1d81d3b7254a4ae0"
+    },
+    {
+      "id": "10-message-instructions",
+      "group": "development",
+      "tags": [
+        "message_instructions",
+        "unsupported_agreement"
+      ],
+      "input": "fixtures/development/inputs/10-message-instructions.json",
+      "expected": "fixtures/development/expected/10-message-instructions.json",
+      "input_sha256": "e4ca800b079a953a0d4d55ed22eeabce41481ed6984969569c2f78ade79ec083",
+      "expected_sha256": "d85998d5e491e420a4c7817c295ba36ffee2feb93deac9836db2f17ceea86243"
+    },
+    {
+      "id": "11-partial-answers",
+      "group": "development",
+      "tags": [
+        "partial_answer",
+        "attendance_subset"
+      ],
+      "input": "fixtures/development/inputs/11-partial-answers.json",
+      "expected": "fixtures/development/expected/11-partial-answers.json",
+      "input_sha256": "6bef8b6f7160c3596c7c05b6b7c62c84a173d3f015a3a229773f7d8e2b7e662c",
+      "expected_sha256": "df36d596fb4fac46e0c07bd1e2008305421bcd4b2d083d0d480aa6f71f08ed7a"
+    },
+    {
+      "id": "12-withdrawn-request",
+      "group": "development",
+      "tags": [
+        "withdrawn_date_change",
+        "pending_attendance_change"
+      ],
+      "input": "fixtures/development/inputs/12-withdrawn-request.json",
+      "expected": "fixtures/development/expected/12-withdrawn-request.json",
+      "input_sha256": "16c0fed14b829a9bbb52d64d862a606f20945c08b612a5f329fef1bef638ad6c",
+      "expected_sha256": "0618656c5eefbd2b9dc98e49712844c7efe8cccfca55018146d2d781db519d5e"
+    }
+  ]
+}

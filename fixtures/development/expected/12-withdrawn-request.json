@@ -1,0 +1,11 @@
+{
+  "id": "12-withdrawn-request",
+  "fields": {
+    "event_date": { "value": "2028-02-05", "status": "agreed", "evidence": [{ "message_id": "m3", "quote": "Withdraw the date change; keep February 5, 2028." }, { "message_id": "m4", "quote": "February 5, 2028 and Fern Pavilion remain agreed." }] },
+    "guest_count": { "value": 60, "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on February 5, 2028 at Fern Pavilion for 60 guests." }, { "message_id": "m4", "quote": "I have not accepted 72 guests; 60 remains agreed while I check capacity." }] },
+    "venue": { "value": "Fern Pavilion", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "We agreed on February 5, 2028 at Fern Pavilion for 60 guests." }, { "message_id": "m4", "quote": "February 5, 2028 and Fern Pavilion remain agreed." }] }
+  },
+  "pending_changes": [{ "field": "guest_count", "value": 72, "status": "requested", "evidence": [{ "message_id": "m3", "quote": "I still request 72 guests at Fern Pavilion." }, { "message_id": "m4", "quote": "I have not accepted 72 guests; 60 remains agreed while I check capacity." }] }],
+  "open_questions": [{ "topic": "increased_attendance_capacity", "question": "Can Fern Pavilion accommodate 72 guests?", "evidence": [{ "message_id": "m2", "quote": "Could we move to February 12, 2028 and increase attendance to 72 guests?" }, { "message_id": "m4", "quote": "I have not accepted 72 guests; 60 remains agreed while I check capacity." }] }],
+  "rationale": "Withdrawing the date request does not withdraw the attendance request. Keep the agreed 60 and show 72 separately as pending; the withdrawn February 12 date is neither current nor pending."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "05-rejected-date",
+  "fields": {
+    "event_date": { "value": "2027-09-04", "status": "agreed", "evidence": [{ "message_id": "m3", "quote": "I am declining that change; September 4, 2027 remains agreed." }, { "message_id": "m4", "quote": "We will keep September 4 and drop the September 11 request." }] },
+    "guest_count": { "value": 18, "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "Our agreed event is September 4, 2027 in Willow Room for 18 guests." }] },
+    "venue": { "value": "Willow Room", "status": "agreed", "evidence": [{ "message_id": "m1", "quote": "Our agreed event is September 4, 2027 in Willow Room for 18 guests." }] }
+  },
+  "pending_changes": [],
+  "open_questions": [],
+  "rationale": "The date request was rejected and explicitly dropped. Neither a pending change nor an unanswered availability question remains."
+}

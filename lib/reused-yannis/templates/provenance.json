@@ -1,0 +1,12 @@
+[
+  {
+    "file": "kitchen.mjs",
+    "source": "lib/kitchen/template.ts",
+    "sha256": "234fdd2b5111745e96336b015fec4fa811b905f338a67afcab7245649dc88c04"
+  },
+  {
+    "file": "event.mjs",
+    "source": "lib/beo/template.ts",
+    "sha256": "bf690e2c71880b57101c94fdfa0d2fce668f77c821dca3d95f7c9c12ef4eb86f"
+  }
+]

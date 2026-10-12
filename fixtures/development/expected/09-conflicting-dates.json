@@ -1,0 +1,11 @@
+{
+  "id": "09-conflicting-dates",
+  "fields": {
+    "event_date": { "value": null, "status": "unknown", "evidence": [] },
+    "guest_count": { "value": 40, "status": "agreed", "evidence": [{ "message_id": "m2", "quote": "Maple Loft and 40 guests match." }, { "message_id": "m3", "quote": "Maple Loft and 40 guests are still agreed." }] },
+    "venue": { "value": "Maple Loft", "status": "agreed", "evidence": [{ "message_id": "m2", "quote": "Maple Loft and 40 guests match." }, { "message_id": "m3", "quote": "Maple Loft and 40 guests are still agreed." }] }
+  },
+  "pending_changes": [],
+  "open_questions": [{ "topic": "conflicting_date_records", "question": "Which of November 6 or November 13, 2027 is on the signed confirmation?", "evidence": [{ "message_id": "m1", "quote": "My sheet lists our agreed date as November 6, 2027" }, { "message_id": "m2", "quote": "My copy says the agreed date is November 13, 2027." }, { "message_id": "m3", "quote": "Which date is on the signed confirmation?" }] }],
+  "rationale": "The parties explicitly withdraw reliance on either conflicting date. This is a record dispute, not a new date request. Unknown fields cannot carry evidence in v0; the open question holds the conflicting excerpts."
+}
