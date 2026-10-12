@@ -9,3 +9,4 @@ coverage/
 out/
 .impeccable/review/
 .DS_Store
+.vercel/

@@ -16,11 +16,13 @@ let events = [];
 let sourceVersions = {};
 let demo = null;
 let overview = false;
+let hosted = null;
+let accessBusy = false;
 const isPasted = () => currentId === 'new' || currentId?.startsWith('pasted-');
 const post = (path, body) => request(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 function rememberSelection() {
   try { localStorage.setItem('eventbrief.package.selection', JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, run_id:session()?.data?.extraction?.run_id??null})); }
-  catch { $('#save-status').textContent='Your place could not be saved in this browser. Completed reviews still save on this computer.'; }
+  catch { $('#save-status').textContent = hosted ? 'Your place could not be saved in this browser. Your completed reviews are still saved.' : 'Your place could not be saved in this browser. Completed reviews still save on this computer.'; }
 }
 const session = () => sessions.get(`${currentMode}:${currentId}`);
 function openSession() {
@@ -31,7 +33,7 @@ const currentInput = () => scenarios.find(input => input.id === currentId);
 const versionFor = (id = currentId) => sourceVersions[id] ?? (id === currentId ? session()?.data?.version : null);
 const referenceAvailable = (id = currentId) => Boolean(sourceVersions[id]?.reference_available || (!id?.startsWith('pasted-') && id !== 'new'));
 const isEarlier = () => Boolean(sourceVersions[currentId]?.superseded || (!isPasted() && updates?.active_scenario_id && currentId !== updates.active_scenario_id) || session()?.data?.version?.superseded);
-const canAnalyze = () => live.ready && live.remaining > 0 && !live.paused && !live.in_flight;
+const canAnalyze = () => (!hosted || hosted.unlocked) && live.ready && live.remaining > 0 && !live.paused && !live.in_flight;
 const isGuidedReply = () => Boolean(sourceVersions[currentId]?.reference_available && versionFor()?.revision === 1 && $('#reply-role').value === 'host' && $('#reply-text').value.trim() === demo?.reply);
 function renderReplyCost() {
   const guided = isGuidedReply();
@@ -42,11 +44,55 @@ function renderReplyCost() {
 function applyListing(data) {
   scenarios = data.scenarios; live = data.live; updates = data.updates; history = data.history ?? []; workspace = data.workspace;
   events = data.events ?? []; sourceVersions = data.source_versions ?? {}; demo = data.demo ?? null;
+  hosted = data.hosted ?? null;
   $('#package-scenario').innerHTML = (workspace ? '<option value="new">New event · paste messages</option>' : '') + scenarios.map(input => `<option value="${esc(input.id)}">${esc(input.title)}${sourceVersions[input.id]?.superseded ? ' · earlier version' : ''}</option>`).join('');
   $('#package-scenario').value = currentId;
+  renderAccess();
   renderEvents();
 }
 async function refreshListing() { applyListing(await request('/api/package/scenarios')); }
+function renderAccess() {
+  $('#hosted-access').hidden = !hosted;
+  if (!hosted) return;
+  $('.demo-badge').textContent = 'Public demo';
+  $('.storage-note').textContent = 'Saved for this browser. Keep using this browser to return to your drafts. Nothing is sent or booked.';
+  $('footer span').textContent = 'Capstone prototype · all data fictional';
+  $('#hosted-unlock-form').hidden = hosted.unlocked || !hosted.ai_configured;
+  $('#hosted-lock-button').hidden = !hosted.unlocked;
+  $('#hosted-lock-button').disabled = busy || accessBusy;
+  $('#hosted-access-code').disabled = busy || accessBusy;
+  $('#hosted-unlock-button').disabled = busy || accessBusy;
+  $('#hosted-unlock-button').textContent = accessBusy ? 'Checking…' : 'Unlock AI';
+  $('#hosted-try-demo').disabled = busy || accessBusy || !demo?.available;
+  $('#hosted-access-status').textContent = accessBusy ? 'Please wait…' : !hosted.ai_configured ? 'Real AI is not connected yet. You can still try the sample.' : hosted.unlocked ? 'AI unlocked. You can now prepare drafts from your messages.' : 'AI is locked. The sample is ready to try.';
+  $('#package-mode option[value="live"]').disabled = !live.ready || !hosted.unlocked;
+}
+function accessError(message) {
+  $('#hosted-access-error').textContent = message;
+  $('#hosted-access-error').hidden = !message;
+  $('#hosted-access-code').setAttribute('aria-invalid', String(Boolean(message)));
+}
+async function changeAccess(unlock) {
+  if (busy || accessBusy || !hosted) return;
+  const code = $('#hosted-access-code').value;
+  if (unlock && !code.trim()) { accessError('Enter your access code.'); $('#hosted-access-code').focus(); return; }
+  accessBusy = true; accessError(''); setBusy(true);
+  $('#prepare').textContent = 'Please wait…';
+  $('#hosted-access-code').value = '';
+  try {
+    await post(unlock ? '/api/hosted/unlock' : '/api/hosted/lock', unlock ? {code} : {});
+    await refreshListing();
+    renderPackage();
+  } catch (error) {
+    accessError(error.message || 'Could not change AI access. Please try again.');
+  } finally {
+    accessBusy = false; setBusy(false);
+    if (hosted.unlocked) $('#hosted-lock-button').focus();
+    else if (hosted.ai_configured) $('#hosted-access-code').focus();
+  }
+}
+$('#hosted-unlock-form').addEventListener('submit', event => { event.preventDefault(); changeAccess(true); });
+$('#hosted-lock-button').addEventListener('click', () => changeAccess(false));
 function renderHistory() {
   const eventId = versionFor()?.event_id;
   const entries = eventId ? history.filter(entry => entry.event_id === eventId || sourceVersions[entry.scenario_id]?.event_id === eventId) : history.filter(entry => entry.scenario_id === currentId);
@@ -155,6 +201,7 @@ function setBusy(value) {
   for (const button of document.querySelectorAll('#package-result button, #package-fields button')) button.disabled = value;
   if (!value && session()?.data) renderSelected();
   if (isEarlier()) for (const button of document.querySelectorAll('#package-fields [data-edit], #package-fields [data-undo]')) button.disabled = true;
+  renderAccess();
 }
 
 function renderMessages(highlight = null) {
@@ -248,13 +295,15 @@ function renderPackage() {
   $('#reply-panel').hidden = !data || !version?.can_add_reply || isEarlier();
   renderReplyCost();
   $('#fill-demo-reply').hidden = !sourceVersions[currentId]?.reference_available || !demo?.reply || version?.revision !== 1;
-  $('#try-demo').hidden = !demo?.available;
-  $('#demo-help').hidden = !demo?.available;
+  $('#try-demo').hidden = Boolean(hosted) || !demo?.available;
+  $('#demo-help').hidden = Boolean(hosted) || !demo?.available;
   $('#page-title').textContent = overview ? 'Events' : currentId === 'new' ? 'New event' : 'Event workspace';
   $('#workbench-help').textContent = currentId === 'new' ? 'Paste a conversation. Get five drafts. Check the details.' : `One event. One shared record. Five drafts.${version?.revision ? ` Version ${version.revision}.` : ''}`;
   renderHistory();
   $('#package-mode-label').textContent = data?.label ?? (currentMode === 'reference' ? 'Authored demo · no AI call' : live.mode === 'simulated' ? 'Simulated provider · no AI call' : 'AI extraction · not yet run');
-  $('#package-live-status').textContent = currentMode === 'reference' ? 'Written example · no AI call. Your review progress is saved.' : !live.ready ? 'AI is not connected. Try the free guided example below.'
+  $('#package-live-status').textContent = currentMode === 'reference' ? 'Written example · no AI call. Your review progress is saved.' : hosted && !hosted.ai_configured ? 'Real AI is not connected yet. Click Try a sample above.'
+    : hosted && !hosted.unlocked ? 'Enter your access code above to prepare drafts with AI. Or click Try a sample.'
+    : !live.ready ? hosted ? 'AI is unavailable. You can still try the sample above.' : 'AI is not connected. Try the free guided example below.'
     : live.in_flight ? 'AI is preparing a package. Refresh this page after it finishes.'
     : live.paused ? 'AI is paused while the last request is checked. You can still review the saved drafts.'
     : live.remaining < 1 ? 'The AI test limit has been reached. You can still review or download your drafts.'
@@ -323,7 +372,7 @@ async function saveProgress() {
   $('#save-status').textContent='Saving your progress…';
   try {
     const result=await post('/api/package/review',{scenario_id:currentId,run_id:s.data.extraction?.run_id??null,corrections:s.corrections,reviews:s.reviews,sequence:s.sequence});
-    s.sequence=result.saved.sequence;$('#save-status').textContent='Progress saved on this computer.';
+    s.sequence=result.saved.sequence;$('#save-status').textContent=hosted ? 'Saved for this browser. Keep using this browser to return to your drafts.' : 'Progress saved on this computer.';
   } catch(error) {$('#save-status').textContent='Progress was not saved. Keep this page open and download the review package.';throw error;}
 }
 async function openSaved(runId=null) {
@@ -398,7 +447,7 @@ document.addEventListener('click', event => {
   const button = event.target.closest('[data-open-event]');
   if (button && !busy) chooseScenario(button.dataset.openEvent);
 });
-$('#try-demo').addEventListener('click', async () => {
+async function tryDemo() {
   if (busy) return;
   setBusy(true); announce('Opening the guided example…'); announce('', true);
   try {
@@ -411,7 +460,9 @@ $('#try-demo').addEventListener('click', async () => {
     announce(!result.reference_available ? 'This example already has a custom reply. Its messages are saved. AI is needed to prepare a new result; no AI call was made.' : versionFor()?.revision === 1 ? 'Free guided example. The host has not supplied allergy details yet. Open a blocked draft, then add the host’s reply.' : 'Your completed guided example is open. Review the five drafts. No AI call was made.');
   } catch (error) { announce(error.message, true); }
   finally { setBusy(false); }
-});
+}
+$('#try-demo').addEventListener('click', tryDemo);
+$('#hosted-try-demo').addEventListener('click', tryDemo);
 $('#event-messages').addEventListener('input',saveMessageDraft);
 $('#paste-example').addEventListener('click',()=>{
   const input=scenarios.find(input=>input.id==='patio-complete');
@@ -591,13 +642,13 @@ async function init() {
     try { selection=JSON.parse(localStorage.getItem('eventbrief.package.selection')); $('#event-messages').value=localStorage.getItem('eventbrief.package.message-draft')??''; }
     catch {$('#save-status').textContent='Your last place could not be restored. Saved reviews are still available.';}
     $('#paste-count').textContent=`${$('#event-messages').value.length.toLocaleString()} / 8,000 characters`;
-    currentId = selection && (selection.id==='new'||scenarios.some(input=>input.id===selection.id)) ? selection.id : workspace ? 'new' : updates?.active_scenario_id ?? scenarios[0].id;
+    currentId = selection && (selection.id==='new'||scenarios.some(input=>input.id===selection.id)) ? selection.id : workspace || hosted ? 'new' : updates?.active_scenario_id ?? scenarios[0].id;
     currentMode = sourceVersions[currentId]?.reference_available ? 'reference' : isPasted() ? 'live' : selection?.mode==='reference' ? 'reference' : live.ready ? 'live' : 'reference';
     selectedDocument=['calendar','quote','kitchen','staff','guest'].includes(selection?.document)?selection.document:'calendar';
     const saved=history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded'&&entry.run_id===selection?.run_id) ?? history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded') ?? (live.last_successful?.scenario_id===currentId?live.last_successful:null);
     $('#package-mode').value = currentMode;
     openSession();
-    $('#package-mode option[value="live"]').disabled = !live.ready;
+    $('#package-mode option[value="live"]').disabled = !live.ready || Boolean(hosted && !hosted.unlocked);
     $('#package-mode option[value="live"]').textContent = live.mode === 'simulated' ? 'Test provider (no AI call)' : 'Real AI';
     $('#package-scenario').value = currentId;
     if (currentId!=='new' && (currentMode==='reference'||saved)) {
@@ -612,7 +663,7 @@ async function init() {
     restoreReplyDraft(); renderPackage();
     setBusy(false);
   } catch {
-    announce('Could not load the fictional event. Check the local server and reload this page.', true);
+    announce('Could not load the event workspace. Please reload this page.', true);
   }
 }
 init();

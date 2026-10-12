@@ -2,9 +2,9 @@
 
 ## Run without an API key
 
-1. Install Node.js 24 or newer.
+1. Install Node.js 24.
 2. Open a terminal in the EventBrief folder.
-3. Run `npm start`.
+3. Run `npm install`, then `npm start`.
 4. Open [EventBrief](http://127.0.0.1:3135/package).
 5. Choose **New event**, then **Try the full workflow · free example**.
 6. Open **Add a reply**, choose **Fill with the sample reply**, then **Update drafts**.
@@ -14,7 +14,22 @@ Saved examples are authored demonstrations, clearly labeled in the app. They do 
 
 The server listens only on your computer. Keep the terminal running while you use the app. Press **Ctrl+C** to stop it. If port 3135 is already occupied, stop the other copy of EventBrief or set `PORT` in your local configuration.
 
-## Enable real AI
+There is one direct package dependency, `@vercel/blob`, for hosted storage. Local examples do not need a Vercel account or cloud credentials.
+
+## Use the hosted demo
+
+The planned address is [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Deployment verification is in progress.
+
+1. Click **Try a sample**. No code is needed.
+2. Open a blocked draft to see the missing detail.
+3. Click **Add a reply**, **Fill with the sample reply**, then **Update drafts**.
+4. Check the five drafts and mark them reviewed.
+
+For real AI, enter the privately supplied **Access code**, then click **Unlock AI**. Choose **New event**, paste fictional messages, and click **Prepare five drafts**. **Lock AI** turns off paid generation for this browser without removing saved work. The code unlock lasts 12 hours.
+
+The public sample uses written results. Real AI requires the access code and available allowance. If AI is off or the limit is reached, the sample and saved drafts remain usable. Hosting setup is in [HOSTING.md](HOSTING.md).
+
+## Enable real AI locally
 
 1. Copy `.env.example` to `.env.local` in this folder.
 2. Open `.env.local` in a text editor.
@@ -37,7 +52,9 @@ The configured model and price constants are part of the recorded experiment. A 
 
 ## What is saved
 
-Completed conversations, AI receipts, source versions, corrections, and review marks are stored locally under `out/`. Browser storage remembers the current selection and unfinished message text. There is no account or cloud sync. Another computer starts with the bundled examples.
+On your computer, completed conversations, AI receipts, source versions, corrections, and review marks are stored under `out/`. Browser storage remembers the current selection and unfinished message text.
+
+On the hosted demo, completed work is stored privately in Blob storage and stays associated with this browser for up to 30 days through a signed cookie. Keep using the same browser to return to it. Redeploying the app does not remove the records. Clearing the cookie or letting it expire loses access; it does not automatically delete the stored records. There is no account, cross-device recovery, or progress transfer between local and hosted versions.
 
 - **Download draft:** printable HTML for that audience.
 - **Download review package:** internal JSON containing sources, original facts, corrections, and review marks.

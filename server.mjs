@@ -37,9 +37,10 @@ assets.set('/lib/reused-yannis/templates/kitchen.mjs', ['lib/reused-yannis/templ
 assets.set('/lib/reused-yannis/templates/event.mjs', ['lib/reused-yannis/templates/event.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/package-contract.mjs', ['lib/package-contract.mjs', 'text/javascript; charset=utf-8']);
 
-export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', maxCalls = 3, provider = analyze,
+export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol', maxCalls = 3, provider = analyze,
   packageTransport = responsesTransport, packageStore = createAttemptStore(fileURLToPath(new URL('out/model-attempts/package-v1/', root))),
-  packageRunMode = 'live', packageAllowance = null, packageMaxOutputTokens = 10000, packageUpdates = null, packageWorkspace = null } = {}) {
+  packageRunMode = 'live', packageAllowance = null, packageMaxOutputTokens = 10000, packageUpdates = null, packageWorkspace = null,
+  hostedOrigin = null, hosted = null } = {}) {
   if (!['live', 'simulated'].includes(packageRunMode)) throw new Error('Invalid package provider mode.');
   if (packageAllowance && packageStore !== packageAllowance.store) throw new Error('The spending allowance must use its own attempt store.');
   let calls = 0;
@@ -101,15 +102,16 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
         pending_update: sourceVersions[event.current_scenario_id]?.pending_update ?? true,
         summary: fields ? {host_name:fields.host_name.value,event_date:fields.event_date.value,guest_count:fields.guest_count.value,...summary} : null };
     }));
-    return { mode: 'authored_reference', workspace: Boolean(packageWorkspace), scenarios: [...bundles.values(), ...pasted].filter(({input}) => available(input.id,state)).map(({input}) => input),
+    return { mode: 'authored_reference', ...(hosted ? {hosted} : {}), workspace: Boolean(packageWorkspace), scenarios: [...bundles.values(), ...pasted].filter(({input}) => available(input.id,state)).map(({input}) => input),
       live: await packageLive(state?.active_scenario_id), updates: state,
       events: eventSummaries, source_versions: sourceVersions,
       demo: { available: Boolean(packageWorkspace), reply: demoReply, label: 'Guided example · authored results · no AI call' },
       history: history.map(entry => ({...entry, event_id: sourceVersion(entry.scenario_id, state).event_id, superseded: isSuperseded(entry.scenario_id, state)})) };
   };
-  return createServer(async (req, res) => {
-    const port = res.socket.localPort;
-    const hosts = [`127.0.0.1:${port}`, `localhost:${port}`];
+  return async (req, res) => {
+    const port = res.socket?.localPort;
+    const hosts = hostedOrigin ? [new URL(hostedOrigin).host] : [`127.0.0.1:${port}`, `localhost:${port}`];
+    const origins = hostedOrigin ? [hostedOrigin] : hosts.map(host => `http://${host}`);
     const send = (status, data, type = 'application/json; charset=utf-8') => {
       res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" });
       res.end(type.startsWith('application/json') ? JSON.stringify(data) : data);
@@ -126,7 +128,7 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
         return send(200, await packageListing());
       }
       if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load'].includes(pathname)) {
-        if (!hosts.map(host=>`http://${host}`).includes(req.headers.origin) || req.headers['sec-fetch-site']==='cross-site') return send(403,{error:'Open the app locally first.'});
+        if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site']==='cross-site') return send(403,{error:'Open the app locally first.'});
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'JSON is required.'});
         if (!packageWorkspace) return send(503,{error:'Saved conversations are not available.'});
         const chunks=[];let byteLength=0;for await(const chunk of req){chunks.push(chunk);byteLength+=chunk.length;if(byteLength>65536)return send(413,{error:'These messages or corrections are too long.'});}
@@ -185,7 +187,7 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
         catch { return send(404, { error: 'Attempt receipt not found or unreadable.' }); }
       }
       if (req.method === 'POST' && pathname === '/api/package/update') {
-        if (!hosts.map(host => `http://${host}`).includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403, {error:'Open the demo locally before adding messages.'});
+        if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403, {error:'Open the demo locally before adding messages.'});
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415, {error:'JSON is required.'});
         let body = '';
         for await (const chunk of req) { body += chunk; if (Buffer.byteLength(body)>2048) return send(413,{error:'Request too large.'}); }
@@ -202,7 +204,7 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
         finally {busy=false;}
       }
       if (req.method === 'POST' && pathname === '/api/package/analyze') {
-        if (!hosts.map(host => `http://${host}`).includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403, { error: 'Open the demo locally before requesting analysis.' });
+        if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403, { error: 'Open the demo locally before requesting analysis.' });
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415, { error: 'JSON is required.' });
         let body = '';
         for await (const chunk of req) {
@@ -250,7 +252,7 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
         } finally { busy = false; }
       }
       if (req.method === 'POST' && pathname === '/api/package/prepare') {
-        if (!hosts.map(host => `http://${host}`).includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') {
+        if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') {
           return send(403, { error: 'Open the package demo locally before preparing it.' });
         }
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415, { error: 'JSON is required.' });
@@ -291,7 +293,7 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
         return send(200, { run_id: `reference-${hash}`, mode: 'reference', output: fixture.output, meta: { label: 'Authored reference example. No AI call.' } });
       }
       if (req.method === 'POST' && pathname === '/api/analyze') {
-        const validOrigins = hosts.map(host => `http://${host}`);
+        const validOrigins = origins;
         if (!validOrigins.includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403, { error: 'Open the demo locally before requesting analysis.' });
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415, { error: 'JSON is required.' });
         let body = '';
@@ -318,8 +320,10 @@ export function createApp({ key = '', enabled = false, model = 'gpt-6.1-sol', ma
     } catch {
       return send(500, { error: 'The demo could not complete this request.' });
     }
-  });
+  };
 }
+
+export function createApp(options) { return createServer(createHandler(options)); }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   // Only this project's explicitly named file; never search the parent workspace.

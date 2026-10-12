@@ -1,0 +1,9 @@
+.git
+.env*
+!.env.example
+.vercel
+node_modules
+out
+coverage
+.impeccable/review
+dist

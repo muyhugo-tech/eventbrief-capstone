@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "node --use-system-ca --watch server.mjs",
     "start": "node --use-system-ca server.mjs",
@@ -16,6 +18,10 @@
     "eval:package:self-check": "node scripts/check-package-evaluator.mjs",
     "test:ai": "node --use-system-ca scripts/run-package-model.mjs",
     "check:public": "node scripts/public-check.mjs",
-    "export:public": "node scripts/public-check.mjs --export"
+    "export:public": "node scripts/public-check.mjs --export",
+    "build": "node scripts/build-hosted.mjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "2.8.1"
   }
 }

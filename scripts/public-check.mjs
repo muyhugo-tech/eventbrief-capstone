@@ -6,10 +6,10 @@ import { execFileSync } from 'node:child_process';
 
 // An explicit source allowlist: local conversations, receipts, keys, and Git
 // history never enter the submission, including when they are untracked.
-const rootFiles = new Set(['.env.example', '.gitignore', 'README.md', 'PRODUCT.md', 'HANDOFF.md', 'DESIGN.md', '.impeccable/design.json', 'package.json', 'package-lock.json', 'server.mjs', 'LICENSE', 'LICENSE.md', 'NOTICE']);
-const sourceDirectories = new Set(['lib', 'public', 'scripts', 'tests', 'fixtures', 'prompts', 'evaluation', 'docs']);
+const rootFiles = new Set(['vercel.json', '.vercelignore', '.env.example', '.gitignore', 'README.md', 'PRODUCT.md', 'HANDOFF.md', 'DESIGN.md', '.impeccable/design.json', 'package.json', 'package-lock.json', 'server.mjs', 'LICENSE', 'LICENSE.md', 'NOTICE']);
+const sourceDirectories = new Set(['api', 'lib', 'public', 'scripts', 'tests', 'fixtures', 'prompts', 'evaluation', 'docs']);
 const textExtensions = /\.(?:md|mjs|js|cjs|ts|tsx|jsx|json|html|css|txt|svg|yml|yaml)$/i;
-const prohibitedName = /(?:^|\/)(?:\.git|\.env(?:\..*)?|node_modules|out|coverage|dist|\.next|\.codex|\.agents)(?:\/|$)/i;
+const prohibitedName = /(?:^|\/)(?:\.git|\.env(?:\..*)?|node_modules|out|coverage|dist|\.vercel|\.next|\.codex|\.agents)(?:\/|$)/i;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const posix = path => path.split(sep).join('/');
 const git = (root, args, options = {}) => execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'], ...options });

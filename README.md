@@ -2,13 +2,16 @@
 
 Turn a restaurant event conversation into five drafts that a person can check: a calendar entry, guest quote, kitchen sheet, staff event plan, and guest event plan.
 
-This is a **local capstone prototype with fictional messages and prices**. It does not connect to an inbox, book events, send messages, or change a live restaurant system.
+This is a **capstone prototype with fictional messages and prices**, with local and hosted entry points that share the same application core. It does not connect to an inbox, book events, send messages, or change a live restaurant system.
 
 ## Try it
 
-You need **Node.js 24 or newer**. No package installation is required.
+The hosted demo is being deployed at the planned address [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Deployment verification is still in progress. Its **Try a sample** button needs no API key or access code. **Unlock AI** accepts the private access code for real model requests. The sample is a written demonstration, not an AI result.
+
+To run on your computer, use **Node.js 24**:
 
 ```sh
+npm install
 npm start
 ```
 
@@ -30,13 +33,13 @@ The workspace keeps these states separate:
 - **Reviewed:** a person checked this particular draft version.
 - **Blocked:** a required detail is missing, unresolved, conflicting, or outside the fictional restaurant rules.
 
-[Simple setup](docs/SETUP.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
+[Simple setup](docs/SETUP.md) · [Hosting and maintenance](docs/HOSTING.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
 
 ## How it works
 
 The LLM reads the messages once and produces a shared event record with source excerpts. Ordinary code checks the record, calculates the fictional quote, and builds the five drafts. This keeps the drafts consistent and makes the calculations inspectable.
 
-Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download printable HTML. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Saved sources, results, corrections, and reviews stay on the same computer under ignored `out/`; they survive refresh and restart.
+Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download printable HTML. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Local runs save under ignored `out/`. Hosted runs save in a separate private Blob store, associated with a signed browser cookie. Both preserve progress across refresh; hosted records also survive redeployment. There is no account or cross-device recovery. See [storage limits](docs/HOSTING.md#saved-progress).
 
 **Add a reply** appends a message to the same event without replacing earlier messages. Updating drafts uses the full revised conversation and starts a fresh review. Earlier versions remain readable and are marked as superseded; they cannot be reviewed or exported as the current version. The searchable **Events** view and **Earlier versions & saved results** let you return to saved work without another AI call.
 
@@ -54,7 +57,9 @@ The visible attendance labels are **Guests** and **Children (0–12)**. The gues
 
 Follow [the setup guide](docs/SETUP.md) to use a separate API key. The default example configuration leaves paid requests off. Keys stay server-side, local attempt records preserve failures, and a persistent allowance stops new requests when exhausted. Restarting does not reset it. Failed or uncertain attempts count; requests are not automatically retried.
 
-The allowance is a conservative local token-cost estimate, not a provider account-wide spending limit. The example model configuration must be supported by the API account used to run it.
+Local and hosted allowances are conservative reservations, not provider account-wide invoice limits. The hosted prototype has one shared, persistent allowance of **20 slots × $0.205 = $4.10**. A slot is consumed before a request and is not refunded after a failure. This fits within the existing $5 authorization after the two earlier calls estimated at $0.05384; it does not authorize another $5. Hosting and storage usage are separate from the AI allowance. [Hosting and maintenance](docs/HOSTING.md) explains the fixed plan and configuration.
+
+The hosted build adds one direct dependency, `@vercel/blob`. `npm run build` copies an allowlist of static assets. One Vercel function connects the existing extraction, validation, review, and export workflow to browser access and private storage. Future features can extend these adapters and the shared core.
 
 ## Evaluation
 
@@ -82,4 +87,4 @@ node scripts/public-check.mjs --export
 
 The export creates an audited ZIP and SHA-256 manifest under ignored `out/submission/`. It contains selected source and synthetic fixtures, excluding credentials, saved conversations, runtime output, and Git history. [Publication instructions](docs/PUBLIC-SUBMISSION.md) explain the boundary and the separate history check.
 
-The repository is prepared for public submission, but no remote publication or hosting is required to run this demo. A publication license has not been selected. Reused application code and design references are disclosed in [ATTRIBUTION.md](docs/ATTRIBUTION.md).
+The public source is at [muyhugo-tech/eventbrief-capstone](https://github.com/muyhugo-tech/eventbrief-capstone). Hosting is optional for local use. A publication license has not been selected; no license is included. Reused application code and design references are disclosed in [ATTRIBUTION.md](docs/ATTRIBUTION.md).
