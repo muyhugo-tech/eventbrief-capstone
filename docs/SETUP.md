@@ -18,7 +18,7 @@ There is one direct package dependency, `@vercel/blob`, for hosted storage. Loca
 
 ## Use the hosted demo
 
-The planned address is [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Deployment verification is in progress.
+Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). The public sample and access-code AI workflow are deployed.
 
 1. Click **Try a sample**. No code is needed.
 2. Open a blocked draft to see the missing detail.

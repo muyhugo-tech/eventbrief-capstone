@@ -6,7 +6,7 @@ This is a **capstone prototype with fictional messages and prices**, with local 
 
 ## Try it
 
-The hosted demo is being deployed at the planned address [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Deployment verification is still in progress. Its **Try a sample** button needs no API key or access code. **Unlock AI** accepts the private access code for real model requests. The sample is a written demonstration, not an AI result.
+Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Its **Try a sample** button needs no API key or access code. **Unlock AI** accepts the private access code for real model requests. The sample is a written demonstration, not an AI result. The hosted workflow and one real AI request were verified on October 12, 2026; see [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
 
 To run on your computer, use **Node.js 24**:
 

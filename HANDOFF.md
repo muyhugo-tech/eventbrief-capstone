@@ -2,7 +2,7 @@
 
 This is the standalone synthetic EventBrief capstone. Local and hosted modes reuse the same workflow. Keep both independent of the living Yannis restaurant system.
 
-Hosted deployment is in progress at the planned address `https://eventbrief-capstone.vercel.app`; this handoff does not confirm a successful deployment. See [hosting](docs/HOSTING.md) for configuration and the required checks.
+The hosted app is live at `https://eventbrief-capstone.vercel.app`. Public sample, private reviews, access-code gating, and one real AI request passed deployed verification on October 12, 2026. GitHub's `codex/capstone-submission` branch is linked as the production branch of the separate `eventbrief-capstone` Vercel project. See [hosting](docs/HOSTING.md) and [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
 
 ## Run and check
 

@@ -1,6 +1,6 @@
 # Hosting EventBrief
 
-Deployment verification is in progress. The planned public address is [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). This document describes the implementation and setup; it does not claim that the deployment has passed its checks.
+The public app is live at [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). The deployed sample, saved reviews, visitor isolation, access gate, and one real AI preparation passed verification on October 12, 2026. See [the evidence](HOSTED-VALIDATION-2026-10-12.md). The separate Vercel project is linked only to `muyhugo-tech/eventbrief-capstone`, with `codex/capstone-submission` as its production branch.
 
 ## What visitors can do
 
@@ -51,6 +51,8 @@ All hosted visitors share one persistent plan: **20 slots × $0.205 = $4.10** in
 The current model is `gpt-6.1-sol`, with bounded request size, 7,500 maximum output tokens, and fixed conservative price constants. These reservation limits are not a provider account-wide invoice cap. The provider's billing records remain the source for actual charges.
 
 The $4.10 plan comes from the owner's existing **$5 authorization**. Two earlier local validation calls were estimated at **$0.05384**, leaving about **$4.94616** before hosted use. This setup does not authorize an additional $5. Keep further local paid calls within the same remaining budget; local and hosted ledgers do not automatically reconcile with one another.
+
+The first hosted verification consumed one slot and an estimated **$0.0266275** in model usage. At that checkpoint, 19 hosted slots remained. These are historical checkpoint figures, not a live balance.
 
 Keep the same private Blob store and the global namespace `eventbrief/v1/visitors/global-paid-allowance-v1/paid/`. Do not rename it, delete reservations, or connect an empty store to replenish the plan. The sealed plan includes request-envelope hashes, model, schema, rates, and limits. Changes to prompts, model, schema, or pricing require a deliberate plan migration preserving consumed reservations and the approved remaining budget. A mismatched plan keeps AI off until checked.
 
