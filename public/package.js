@@ -274,7 +274,7 @@ function setBusy(value) {
   $('#add-update').disabled = value || !updates?.available || currentId !== 'patio-complete' || !session()?.data;
   for (const button of document.querySelectorAll('#recent-events button, #event-rows button, #event-board button, #calendar-content button, #asset-library button, [data-workspace], [data-event-layout], #new-event, #header-new-event, #show-events, #try-demo, #show-reply, #submit-reply, #cancel-reply, #fill-demo-reply, #open-current')) button.disabled = value;
   $('#reply-role').disabled = value;
-  $('[data-calendar-month]').disabled = value;
+  for (const control of document.querySelectorAll('[data-calendar-month]')) control.disabled = value;
   $('#reply-text').disabled = value;
   renderReplyCost();
   for (const button of document.querySelectorAll('#package-history button')) button.disabled = value;
@@ -953,6 +953,7 @@ $('#download-attempt').addEventListener('click', async () => {
 });
 
 async function init() {
+  setBusy(true);
   try {
     const data = await request('/api/package/scenarios');
     applyListing(data);
@@ -989,6 +990,7 @@ async function init() {
       await tryDemo();
     }
   } catch {
+    setBusy(false);
     announce('Could not load the event workspace. Please reload this page.', true);
   }
 }
