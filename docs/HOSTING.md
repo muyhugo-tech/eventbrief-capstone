@@ -64,7 +64,9 @@ Keep the same private Blob store and the global namespace `eventbrief/v1/visitor
 
 ## Check before sharing
 
-Guest quote PDF downloads use the same saved-data and workspace checks as reviews. The endpoint accepts only event/run identifiers, a review sequence, and a quote revision, then builds its own audience-filtered HTML. It rejects blocked or superseded quotes and rechecks for changes after rendering. It does not accept arbitrary HTML or URLs. The PDF engine runs with page scripts disabled and network requests blocked; fonts are embedded from pinned local packages. Vercel includes Chromium and those fonts in the function bundle. Local development uses an installed Edge or Chrome. PDF generation does not call AI or consume AI preparations.
+Guest quote and kitchen PDF downloads use the same saved-data and workspace checks as reviews. The endpoints accept only event/run identifiers, a review sequence, and a document revision, then build their own audience-filtered HTML. They reject blocked or superseded documents and recheck for changes after rendering. They do not accept arbitrary HTML, quantities or URLs. The PDF engine runs with page scripts disabled and network requests blocked; fonts are embedded from pinned local packages. Vercel includes Chromium and those fonts in the function bundle. Local development uses an installed Edge or Chrome. PDF generation does not call AI or consume AI preparations.
+
+Kitchen prep rules are separate from the extraction profile so this format update preserves saved AI receipts and the sealed paid-call allowance. The computed prep plan is included in the kitchen document revision; changing prep rules invalidates old kitchen review marks. It does not change unrelated document revisions or discard saved coordinator corrections.
 
 Run `npm test`, `npm run build`, and `npm run check:public`. Automated tests use fake providers; they do not spend the AI allowance.
 

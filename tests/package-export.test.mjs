@@ -13,7 +13,7 @@ test('reused builders retain approved times in winter and summer without inventi
   assert.match(staff,/Reviewed draft/);assert.match(staff,/6:00 PM/);
   assert.doesNotMatch(staff,/Private party|YANNI|Scripps Ranch|undefined/);
   const kitchen=standaloneDocument(prepared.documents.find(d=>d.id==='kitchen'),prepared,true);
-  assert.match(kitchen,/TOTAL ATTENDANCE/);assert.match(kitchen,/No allergies or dietary restrictions/);
+  assert.match(kitchen,/Total attendance/);assert.match(kitchen,/No allergies or dietary restrictions/);
   assert.doesNotMatch(kitchen,/Riley will lead|riley@|\$2,280/);
 });
 
@@ -36,7 +36,7 @@ test('four usable assets retain supplied schedule, place, attendance and distinc
     assert.doesNotMatch(html,/<script\b|<iframe\b|<link\b|<img\b|data-field=|data-policy=/i,id);
   }
   const kitchen=standaloneDocument(asset(prepared,'kitchen'),prepared,true);
-  assert.match(kitchen,/production quantities are not supplied/);
+  assert.match(kitchen,/Fictional prep guide/);assert.match(kitchen,/30 portions/);
   assert.doesNotMatch(kitchen,/Riley will lead|Arrive at the garden entrance|\$1,704/);
   const staff=standaloneDocument(asset(prepared,'staff'),prepared,true);
   assert.match(staff,/Riley will lead the event handover/);

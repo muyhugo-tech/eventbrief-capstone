@@ -81,20 +81,24 @@ function setup({ duringTransport, quotePdfRenderer } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
-test('hosted quote download returns PDF bytes within the selected workspace without an AI call',async()=>{
+for(const kind of ['quote','kitchen'])test(`hosted ${kind} download returns PDF bytes within the selected workspace without an AI call`,async()=>{
   let renders=0;
   const system=setup({quotePdfRenderer:async()=>{renders++;return Buffer.from('%PDF-1.7\nsynthetic test');}});
   const visitor=system.visitor(),owner=system.visitor();
   const source=await visitor.request('/api/package/demo',{});
-  const prepared=await visitor.request('/api/package/prepare',{scenario_id:source.data.input.id,corrections:{}});
-  const body={scenario_id:source.data.input.id,run_id:null,sequence:0,revision:prepared.data.documents.find(doc=>doc.id==='quote').revision};
-  const pdf=await visitor.request('/api/package/quote/pdf',body);
+  const reply=await visitor.request('/api/package/reply',{scenario_id:source.data.input.id,text:demoReply,role:'host'});
+  const prepared=await visitor.request('/api/package/prepare',{scenario_id:reply.data.input.id,corrections:{}});
+  const body={scenario_id:reply.data.input.id,run_id:null,sequence:0,revision:prepared.data.documents.find(doc=>doc.id===kind).revision};
+  const route=`/api/package/${kind}/pdf`;
+  const pdf=await visitor.request(route,body);
   assert.equal(pdf.status,200);assert.equal(pdf.data.toString(),'%PDF-1.7\nsynthetic test');
   assert.match(pdf.headers.get('Content-Disposition'),/attachment; filename="eventbrief-.*\.pdf"/);
   await owner.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
-  assert.equal((await owner.request('/api/package/quote/pdf',body)).status,400);
-  assert.equal((await owner.request('/api/package/quote/pdf',body,{headers:{'X-EventBrief-Workspace':'public'}})).status,409);
-  assert.equal((await visitor.request('/api/package/quote/pdf',body,{headers:{Origin:'https://untrusted.example'}})).status,403);
+  assert.equal((await owner.request(route,body)).status,400);
+  assert.equal((await owner.request(route,body,{headers:{'X-EventBrief-Workspace':'public'}})).status,409);
+  assert.equal((await visitor.request(route,body,{headers:{Origin:'https://untrusted.example'}})).status,403);
+  await visitor.request('/api/package/reply',{scenario_id:body.scenario_id,text:'We may need a different date.',role:'host'});
+  assert.equal((await visitor.request(route,body)).status,409);
   assert.equal(renders,1);assert.equal(system.calls(),0);
 });
 const marksFor = data => Object.fromEntries(data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => [doc.id, {

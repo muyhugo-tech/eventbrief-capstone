@@ -187,6 +187,18 @@ Source mode, local-demo status, and draft review labels are small contextual tag
 
 ### Asset previews and copies
 
+The kitchen sheet is reference-locked to the owner's photographed prep checklist: white Letter paper, a centered uppercase title, compact event facts, gray table headings, quantities, and two empty checkoff columns. The reused kitchen builder supplies the high-contrast, plain sans-serif approach; Refero's typography guidance supplies clear hierarchy and tabular quantities. No live Refero tools were available. The existing quote's embedded-font and download infrastructure supplies PDF delivery, without its decorative serif or colored total band.
+
+| Kitchen decision | Source and role | Boundary |
+| --- | --- | --- |
+| Grouped food tables, Qty / Prepped / Checked columns | Owner's photo; working paper for the kitchen. | Empty cells are for handwritten checks, not saved event-review decisions. Only selected-menu food appears. |
+| Black type, gray headers, white paper | Photo and existing kitchen template; legibility when printed. | Dashboard colors remain outside the paper. Montserrat uses the already packaged regular/semibold fonts. |
+| Dietary box and attendance split | EventBrief's existing kitchen requirements and user terminology. | Guests, Children (0–12), and total attendance stay explicit. Missing required dietary details still block export. |
+| Shared preview/PDF template | Existing guest quote delivery pattern. | Saved details and review state are authoritative. No new AI call is needed. |
+| Visible prep guide | Synthetic-data brief; no real production quantity rules supplied. | Fictional Menu 2 quantities are calculated in code, labeled on the paper, and included in the kitchen revision. Unknown menus show Confirm instead of borrowing the demo rules. |
+
+`public/kitchen-document.mjs` owns both kitchen preview and PDF. A typical event fits one page. Long content flows to extra pages with repeating table headings; it is not clipped or reduced to unreadable text. Source-check controls remain outside the printable paper. Notes and both checkoff columns provide handwriting space.
+
 The guest quote is reference-locked to the owner's one-page Yannis wedding estimate: a serif brand/title, thin dividing rule, two-column pale event summary, dark total band, and itemized rows. The EventBrief green palette owns the color role; no production contact details or commercial rules are carried over. Montserrat body text and Playfair Display headings follow that document, supplied by pinned Fontsource packages. Preview and PDF share `public/quote-document.mjs`; the PDF embeds the same fonts. Source-check buttons sit outside the paper. The normal synthetic quote fits one Letter page; longer text flows to more pages rather than clipping. This document styling does not restyle the dashboard. The direct **Download PDF** action exports only the saved, current, ready quote and retains its review label.
 
 Previews group approved facts for their audience. Quotes lead into an itemized estimate and draft total. Kitchen sheets emphasize courses and dietary requirements. Staff plans expose schedule, setup, and internal instructions. Guest plans show the host's schedule, food, drinks, and arrival information without internal notes, prices, or individual dietary details.

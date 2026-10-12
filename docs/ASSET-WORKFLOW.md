@@ -29,18 +29,19 @@ Use **Refresh inbox** to load changes saved from another browser. Search covers 
 | --- | --- | --- |
 | **Calendar** | Date, start and end times, restaurant timezone, and venue. | A calendar `.ics` file. |
 | **Guest quotes** | Guests, Children (0–12), menu, drinks, itemized prices, and estimated total. | A direct PDF download or printed copy. |
-| **Kitchen sheets** | Attendance, menu courses, and allergy or dietary information. | A standalone HTML sheet, or a printed/PDF copy. |
+| **Kitchen sheets** | Attendance, dishes, prep quantities, and allergy or dietary information. | A direct PDF download or printed checklist. |
 | **Staff event plans** | Schedule, setup, equipment, service details, and internal team instructions. | A standalone HTML plan, or a printed/PDF copy. |
 | **Guest event plans** | Schedule, venue, menu, drinks, and arrival instructions for the host. | A standalone HTML plan, or a printed/PDF copy. |
 
 Each asset list opens the matching draft for that event. A draft marked **Needs details** opens its missing-information explanation. It cannot be downloaded or printed as a completed draft until those details are resolved.
 
-The kitchen sheet does not invent course times or production quantities. Those are not supplied by the current event record. Confirm them with the event team before service.
+The kitchen sheet uses the fictional Menu 2 prep guide in `lib/kitchen-prep.mjs`: one salad bowl, squash tray and chicken platter per ten people, rounded up, plus one dessert per person. Guests and children each count as one person for these demo quantities. The guide is printed on the sheet. It is a capstone assumption, not a tested production recipe. A different menu without a prep guide shows **Confirm** in the quantity cells. Course serve times are not inferred from event start time.
 
 ## Download or print
 
 - **Download PDF** on a guest quote saves the presented estimate directly as a PDF. The preview and PDF use one EventBrief template, including the current prices and review status. No AI call or email delivery occurs. A normal estimate fits one Letter page; longer content can continue onto more pages.
-- **Download reviewed draft** saves an HTML file for a kitchen sheet, staff plan, or guest plan. Open the file in a browser to present it or print it. An unreviewed download is labeled **Draft · not reviewed**.
+- **Download PDF** on a kitchen sheet saves the presented prep checklist, including quantities, allergy details, empty **Prepped** and **Checked** cells, and space for handwritten notes. Saved attendance changes recalculate the demo quantities and clear the affected review. Downloads are snapshots; download a fresh PDF after changes.
+- **Download reviewed draft** saves an HTML file for a staff plan or guest plan. Open the file in a browser to present it or print it. An unreviewed download is labeled **Draft · not reviewed**.
 - **Print / Save PDF** opens the browser's print window for the selected draft. Choose a printer or **Save as PDF**.
 - **Download calendar file (.ics)** saves a tentative calendar entry. Open that file in your calendar app to import it yourself. EventBrief does not connect to or synchronize an external calendar. Importing is not a reservation or invitation.
 
