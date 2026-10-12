@@ -15,6 +15,8 @@ Target: the independent EventBrief production site at `https://eventbrief-capsto
 - Review persistence and locking were checked after the real result. Test-created review marks are verification data, not independent customer approval.
 - The browser access-code form unlocked AI without another model call. The code was cleared from the form and was not stored in localStorage.
 - The post-check Vercel error-log query returned no entries for the project in the checked 30-minute window.
+- A push of commit `199b7a6` triggered a Vercel deployment with `source: git` and `readyState: READY`, confirming automatic deployment from `codex/capstone-submission`.
+- After redeployment, the existing browser restored its saved event with 1 of 5 drafts reviewed. The shared allowance still showed 19 remaining requests; this persistence check made no AI call.
 
 ## Real request usage
 

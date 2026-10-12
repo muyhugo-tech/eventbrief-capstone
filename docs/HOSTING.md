@@ -2,6 +2,8 @@
 
 The public app is live at [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). The deployed sample, saved reviews, visitor isolation, access gate, and one real AI preparation passed verification on October 12, 2026. See [the evidence](HOSTED-VALIDATION-2026-10-12.md). The separate Vercel project is linked only to `muyhugo-tech/eventbrief-capstone`, with `codex/capstone-submission` as its production branch.
 
+Pushing to that branch automatically deploys EventBrief. A Git-triggered deployment was verified successfully, including saved review progress and the remaining AI allowance after redeployment.
+
 ## What visitors can do
 
 - **Try a sample:** a public written example, including the missing-detail and reply workflow. No access code or model request.
