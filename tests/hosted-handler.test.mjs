@@ -232,7 +232,7 @@ test('two browsers with the code share messages, results and reviews while publi
   const second = await inApp.request('/api/package/review', {...identity, corrections: {}, reviews: marks, sequence: 1});
   assert.equal(second.status, 200);
   const stale = await chrome.request('/api/package/review', {...identity, corrections: {}, reviews: {}, sequence: 1});
-  assert.equal(stale.status, 400); assert.match(stale.data.error, /changed in another tab/);
+  assert.equal(stale.status, 409); assert.match(stale.data.error, /changed in another tab/);
   assert.equal(Object.keys((await chrome.request('/api/package/review/load', identity)).data.saved.reviews).length, 5);
   await publicVisitor.request('/api/package/demo', {});
   assert.equal((await publicVisitor.request('/api/package/scenarios')).data.events[0].revision, 1);
@@ -290,4 +290,69 @@ test('shared asset summaries follow saved corrections and clear stale schedules 
   const changed=await second.request('/api/package/scenarios');
   assert.equal(changed.data.events[0].pending_update,true);assert.equal(changed.data.events[0].summary,null);
   assert.equal(system.calls(),0);
+});
+
+test('one coordinator save updates shared assets, preserves unaffected reviews and rejects stale edits', async () => {
+  const system=setup(), first=system.visitor(), second=system.visitor(), publicVisitor=system.visitor();
+  for(const client of [first,second]) await client.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
+  await first.request('/api/package/messages',{text:demoText});
+  const reply=await first.request('/api/package/reply',{scenario_id:demoInput.id,text:demoReply,role:'host'});
+  const identity={scenario_id:reply.data.input.id,run_id:null};
+  const before=(await first.request('/api/package/prepare',{scenario_id:identity.scenario_id,corrections:{}})).data;
+  const allReviews=marksFor(before);
+  await first.request('/api/package/review',{...identity,corrections:{},reviews:allReviews,sequence:0});
+  const edited=await first.request('/api/package/edit',{...identity,sequence:1,changes:{guest_13_plus_count:18,child_count:2},reason:'Host confirmed the final numbers.'});
+  assert.equal(edited.status,200,edited.data.error);
+  assert.deepEqual(edited.data.changed_documents.map(doc=>doc.id),['quote','kitchen','staff','guest']);
+  assert.deepEqual(edited.data.saved.reviews,{calendar:allReviews.calendar});
+  assert.equal(edited.data.data.record.fields.guest_count.value,20);
+  assert.equal(edited.data.data.documents.find(doc=>doc.id==='quote').quote.total_cents,142400);
+  assert.deepEqual(edited.data.data.input,before.input);
+  assert.deepEqual(edited.data.data.original_record,before.original_record);
+  const loaded=await second.request('/api/package/review/load',identity);
+  assert.deepEqual(loaded.data.data.record,edited.data.data.record);
+  const summary=(await second.request('/api/package/scenarios')).data.events[0].summary;
+  assert.equal(summary.guest_count,20);assert.equal(summary.guest_13_plus_count,18);assert.equal(summary.child_count,2);
+  assert.equal(summary.quote_total_cents,142400);assert.equal(summary.reviewed_count,1);
+  const stale=await second.request('/api/package/edit',{...identity,sequence:1,changes:{event_date:'2027-12-03'},reason:''});
+  assert.equal(stale.status,409);
+  const invalid=await first.request('/api/package/edit',{...identity,sequence:2,changes:{guest_13_plus_count:-1,child_count:2},reason:''});
+  assert.equal(invalid.status,400);
+  assert.equal((await first.request('/api/package/review/load',identity)).data.saved.sequence,2);
+  const publicEdit=await publicVisitor.request('/api/package/edit',{...identity,sequence:2,changes:{host_name:'Public visitor'},reason:''});
+  assert.equal(publicEdit.status,400);
+  const wrongScope=await first.request('/api/package/edit',{...identity,sequence:2,changes:{host_name:'Wrong scope'},reason:''},{headers:{'X-EventBrief-Workspace':'public'}});
+  assert.equal(wrongScope.status,409);
+  const moved=await second.request('/api/package/edit',{...identity,sequence:2,changes:{event_date:'2027-12-03'},reason:'Host confirmed.'});
+  assert.equal(moved.status,200,moved.data.error);
+  assert.equal(moved.data.changed_documents.length,5);assert.deepEqual(moved.data.saved.reviews,{});
+  for(const doc of moved.data.data.documents) assert.equal(doc.rows.find(row=>row.field==='event_date').value,'2027-12-03');
+  assert.equal((await first.request('/api/package/scenarios')).data.events[0].summary.event_date,'2027-12-03');
+  await first.request('/api/package/review',{...identity,sequence:3,corrections:moved.data.saved.corrections,reviews:marksFor(moved.data.data)});
+  const staff=await first.request('/api/package/edit',{...identity,sequence:4,changes:{staff_notes:'Set up at 5:30 PM.'},reason:''});
+  assert.equal(staff.status,200,staff.data.error);
+  assert.deepEqual(staff.data.changed_documents.map(doc=>doc.id),['staff']);
+  assert.deepEqual(Object.keys(staff.data.saved.reviews),['calendar','quote','kitchen','guest']);
+  await first.request('/api/package/reply',{scenario_id:identity.scenario_id,text:'Can we change our date again?',role:'host'});
+  assert.equal((await first.request('/api/package/edit',{...identity,sequence:5,changes:{host_name:'Earlier event'},reason:''})).status,409);
+  assert.equal(system.calls(),0);
+});
+
+test('editing a saved AI result uses its receipt and needs no new provider request', async () => {
+  const system=setup(), owner=system.visitor();
+  await owner.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
+  await owner.request('/api/package/messages',{text:demoText});
+  const reply=await owner.request('/api/package/reply',{scenario_id:demoInput.id,text:demoReply,role:'host'});
+  const prepared=await owner.request('/api/package/analyze',{scenario_id:reply.data.input.id}); // In-memory fake provider only.
+  assert.equal(system.calls(),1);
+  const identity={scenario_id:reply.data.input.id,run_id:prepared.data.extraction.run_id};
+  const edited=await owner.request('/api/package/edit',{...identity,sequence:0,changes:{start_time:'18:30',end_time:'21:30'},reason:''});
+  assert.equal(edited.status,200,edited.data.error);
+  assert.equal(edited.data.data.record.fields.start_time.value,'18:30');
+  assert.equal(edited.data.data.extraction.run_id,identity.run_id);
+  assert.deepEqual(edited.data.data.original_record,prepared.data.original_record);
+  const receipt=await owner.request(`/api/package/attempts/${identity.run_id}`);
+  assert.deepEqual(receipt.data.parsed_output,prepared.data.original_record);
+  assert.equal((await owner.request('/api/package/scenarios')).data.events[0].summary.start_time,'18:30');
+  assert.equal(system.calls(),1);
 });

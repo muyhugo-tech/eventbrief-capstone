@@ -111,7 +111,7 @@ test('HTTP pasted messages reach five drafts, saved corrections and marks reopen
   const saved=await(await post('/api/package/review',{...identity,corrections,reviews,sequence:0})).json();assert.equal(saved.saved.sequence,1);
   const restarted=await serve();const reopened=await(await restarted.post('/api/package/review/load',identity)).json();
   assert.deepEqual(reopened.saved.reviews,reviews);assert.deepEqual(reopened.data.corrections,corrections);assert.equal(calls,1);
-  assert.equal((await post('/api/package/review',{...identity,corrections,reviews,sequence:0})).status,400);
+  assert.equal((await post('/api/package/review',{...identity,corrections,reviews,sequence:0})).status,409);
   assert.equal((await post('/api/package/review/load',{...identity,scenario_id:'patio-complete'})).status,200); // no saved review for that identity
   assert.equal((await post('/api/package/prepare',{...identity,scenario_id:'patio-complete',corrections:{}})).status,409);
   const newSource=await(await post('/api/package/messages',{text:text+'\nHost: Can we change the date?'})).json();

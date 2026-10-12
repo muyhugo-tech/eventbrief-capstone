@@ -25,6 +25,13 @@ let workspaceView = 'events';
 let eventLayout = 'board';
 let calendarViewMonth = null;
 let accessInitialized = false;
+let eventEdit = null;
+const editGroups = [
+  ['attendance', 'Guests and children', ['guest_13_plus_count', 'child_count']],
+  ['event_date', 'Event date', ['event_date']],
+  ['times', 'Event times', ['start_time', 'end_time']],
+  ...['host_name', 'venue', 'menu', 'beverage', 'dietary', 'setup', 'av', 'special', 'guest_notes', 'staff_notes', 'timezone', 'booking_status'].map(field => [field, FIELD_DEFINITIONS[field].label, [field]])
+];
 const viewNames = {events:'Events',calendar:'Calendar',quote:'Guest quotes',kitchen:'Kitchen sheets',staff:'Staff event plans',guest:'Guest event plans'};
 // Retain existing public/local browser drafts; private selections and unsent
 // text have separate keys and are never restored into the public sample.
@@ -208,6 +215,7 @@ function showOverview(value, view = 'events') {
 }
 async function chooseScenario(id, preferredRun = null) {
   if (busy) return;
+  closeEventEdit();
   currentId = id;
   const saved = history.find(entry => entry.scenario_id === id && entry.status === 'succeeded' && (!preferredRun || entry.run_id === preferredRun));
   currentMode = saved ? 'live' : referenceAvailable(id) ? 'reference' : 'live';
@@ -259,6 +267,8 @@ function setBusy(value) {
   for (const button of document.querySelectorAll('#package-history button')) button.disabled = value;
   $('#package-result').setAttribute('aria-busy', String(value));
   for (const button of document.querySelectorAll('#package-result button, #package-fields button')) button.disabled = value;
+  for (const control of document.querySelectorAll('#event-edit-form input, #event-edit-form select, #event-edit-form textarea')) control.disabled = value;
+  $('#save-event-edit').textContent = value && eventEdit ? 'Saving changes…' : 'Save changes';
   if (!value && session()?.data) renderSelected();
   if (isEarlier()) for (const button of document.querySelectorAll('#package-fields [data-edit], #package-fields [data-undo]')) button.disabled = true;
   renderAccess();
@@ -337,6 +347,7 @@ function renderSelected() {
   $('#package-summary').textContent = isEarlier() ? `Earlier version · ${data.record.fields.guest_count.value ?? 'Unknown'} people · saved for comparison` : `${ready} of 5 drafts ready for review · ${5 - ready} need details · ${data.record.fields.guest_count.value ?? 'Unknown'} people`;
   $('#review-progress').textContent = isEarlier() ? 'Read only' : `${reviewed} / 5 reviewed`;
   const fields = data.record.fields;
+  $('#edit-event').disabled = busy || isEarlier() || !workspace;
   $('#event-facts').innerHTML = [['Date', fields.event_date?.value], ['Guests', fields.guest_13_plus_count?.value], ['Children (0–12)', fields.child_count?.value], ['Venue', fields.venue?.value]].filter(([, value]) => value !== null && value !== undefined).map(([label, value]) => `<span>${esc(label)} <strong>${esc(value)}</strong></span>`).join('');
   renderEvents();
 }
@@ -485,6 +496,7 @@ $('#reply-form').addEventListener('submit', async event => {
   const text = $('#reply-text').value.trim();
   if (!text) { announce('Paste the new reply first.', true); $('#reply-text').focus(); return; }
   const previousId = currentId;
+  closeEventEdit();
   setBusy(true); announce('Saving the new reply…'); announce('', true);
   let saved = false;
   try {
@@ -501,6 +513,7 @@ $('#reply-form').addEventListener('submit', async event => {
 });
 async function openWorkspace(view) {
   if (busy) return;
+  closeEventEdit();
   setBusy(true);
   $('#workspace-error').hidden = true;
   try {
@@ -539,6 +552,7 @@ document.addEventListener('change', event => {
 });
 async function tryDemo() {
   if (busy) return;
+  closeEventEdit();
   setBusy(true); announce('Opening the guided example…'); announce('', true);
   try {
     if (hosted?.unlocked) {
@@ -575,6 +589,7 @@ function focusField(field) {
 }
 
 function editField(field) {
+  closeEventEdit();
   const definition = FIELD_DEFINITIONS[field];
   const detail = session().data.record.fields[field];
   const type = definition.type === 'integer' ? 'number' : definition.type;
@@ -587,9 +602,81 @@ function editField(field) {
   $(`#pkg-edit-${field} input`).focus();
 }
 
+function closeEventEdit() {
+  eventEdit = null;
+  $('#event-edit-form').hidden = true;
+  $('#edit-event').setAttribute('aria-expanded', 'false');
+}
+function editAttendanceTotal() {
+  const total = $('#event-edit-total');
+  if (!total) return;
+  const values = ['guest_13_plus_count', 'child_count'].map(field => $(`#event-edit-${field}`).value);
+  total.textContent = values.every(value => /^\d+$/.test(value)) ? `${Number(values[0]) + Number(values[1])} people in total. The quote updates when you save.` : 'Enter both counts. Use 0 if there are none.';
+}
+function renderEventEditInputs() {
+  const fields = editGroups.find(([key]) => key === $('#event-edit-detail').value)[2];
+  const profile = session().data.profile;
+  const options = {venue:Object.keys(profile.venues), menu:Object.keys(profile.menus), beverage:Object.keys(profile.beverages), setup:[...new Set(Object.values(profile.venues).flatMap(venue => venue.setups))]};
+  $('#event-edit-inputs').innerHTML = fields.map(field => {
+    const definition = FIELD_DEFINITIONS[field], value = eventEdit.fields[field].value ?? '';
+    const id = `event-edit-${field}`, type = definition.type === 'integer' ? 'number' : definition.type;
+    let control;
+    if (options[field]) {
+      const choices = [...new Set([...options[field], ...(value ? [value] : [])])];
+      control = `<select id="${id}" name="${field}"><option value="">Not yet known</option>${choices.map(option => `<option value="${esc(option)}"${value === option ? ' selected' : ''}>${esc(option)}</option>`).join('')}</select>`;
+    } else if (['dietary', 'special', 'guest_notes', 'staff_notes', 'av'].includes(field)) {
+      control = `<textarea id="${id}" name="${field}" rows="3" maxlength="1000">${esc(value)}</textarea>`;
+    } else control = `<input id="${id}" name="${field}" type="${type}" value="${esc(value)}" ${type === 'number' ? 'min="0" max="10000" step="1" required' : type === 'text' ? 'maxlength="1000"' : ''}>`;
+    return `<label for="${id}">${esc(definition.label)}${control}</label>`;
+  }).join('') + (fields.includes('child_count') ? '<p id="event-edit-total" class="event-edit-total" aria-live="polite"></p>' : fields.includes('start_time') ? '<p class="event-edit-total">The schedule updates in each draft. Check any arrival or staff notes that mention the old time, too.</p>' : '');
+  $('#event-edit-error').hidden = true;
+  editAttendanceTotal();
+}
+$('#edit-event').addEventListener('click', async () => {
+  if (eventEdit) { $('#event-edit-detail').focus(); return; }
+  if (!workspace || !await checkLatest()) return;
+  const s = session();
+  eventEdit = {scenario_id:currentId, run_id:s.data.extraction?.run_id??null, sequence:s.sequence, fields:structuredClone(s.data.record.fields)};
+  $('#event-edit-note').value = '';
+  $('#event-edit-detail').innerHTML = editGroups.map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('');
+  renderEventEditInputs();
+  $('#event-edit-form').hidden = false;
+  $('#edit-event').setAttribute('aria-expanded', 'true');
+  $('#event-edit-detail').focus();
+});
+$('#event-edit-detail').addEventListener('change', renderEventEditInputs);
+$('#event-edit-inputs').addEventListener('input', editAttendanceTotal);
+$('#cancel-event-edit').addEventListener('click', () => { closeEventEdit(); $('#edit-event').focus(); });
+$('#event-edit-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (busy || !eventEdit || isEarlier()) return;
+  const changes = {};
+  for (const control of $('#event-edit-inputs').querySelectorAll('[name]')) {
+    const raw = control.value.trim();
+    changes[control.name] = raw === '' ? null : FIELD_DEFINITIONS[control.name].type === 'integer' ? Number(raw) : raw;
+  }
+  const {scenario_id,run_id,sequence} = eventEdit;
+  setBusy(true); $('#event-edit-error').hidden = true; announce(''); announce('', true);
+  try {
+    const result = await post('/api/package/edit', {scenario_id,run_id,sequence,changes,reason:$('#event-edit-note').value.trim()});
+    const s = session();
+    s.data = result.data; s.corrections = result.saved.corrections; s.reviews = result.saved.reviews; s.sequence = result.saved.sequence;
+    closeEventEdit(); rememberSelection(); renderPackage();
+    $('#save-status').textContent = storageMessage();
+    const changed = result.changed_documents;
+    const blocked = changed.some(doc => doc.state === 'blocked');
+    announce(changed.length ? `Changes saved. Updated: ${changed.map(doc => doc.title.toLowerCase()).join(', ')}. ${blocked ? 'Some drafts need details. Open them to see what is missing.' : 'Check these drafts again.'}` : 'Saved. These details were already up to date.');
+    try { await refreshListing(); } catch { /* The save succeeded; sidebar views refresh when opened. */ }
+  } catch (error) {
+    $('#event-edit-error').textContent = `${error.message} Your entries are still here.`;
+    $('#event-edit-error').hidden = false;
+  } finally { setBusy(false); if (!eventEdit) $('#edit-event').focus(); }
+});
+
 $('#prepare').addEventListener('click', () => prepare(undefined, null, true));
 $('#add-update').addEventListener('click', async () => {
   if (busy || !updates?.available || currentId !== 'patio-complete' || !session()?.data) return;
+  closeEventEdit();
   setBusy(true); announce('Adding the demo messages…'); announce('',true);
   try {
     applyListing(await request('/api/package/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario_id:currentId})}));
@@ -600,6 +687,7 @@ $('#add-update').addEventListener('click', async () => {
 });
 $('#package-history').addEventListener('click', async event => {
   const button=event.target.closest('[data-saved-run]');if(!button||busy)return;
+  closeEventEdit();
   setBusy(true); announce('',true);
   try {
     await refreshListing();currentId=button.dataset.scenario;currentMode='live';$('#package-mode').value=currentMode;$('#package-scenario').value=currentId;openSession();
@@ -635,6 +723,7 @@ $('#package-scenario').addEventListener('change', async event => {
   await chooseScenario(event.target.value);
 });
 $('#package-mode').addEventListener('change', async event => {
+  closeEventEdit();
   currentMode = event.target.value;
   openSession(); announce(''); announce('', true); setBusy(true);
   try {const saved=history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded');if(currentMode==='reference'||saved)await openSaved(currentMode==='live'?saved.run_id:null);rememberSelection();renderPackage();}

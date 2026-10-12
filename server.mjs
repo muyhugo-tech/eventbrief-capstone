@@ -17,6 +17,7 @@ import { createFlexiblePackageAllowance } from './lib/package-flexible-allowance
 import { createExtensionPackageAllowance } from './lib/package-extension-allowance.mjs';
 import { demoText, demoReply, demoRecord } from './lib/package-demo.mjs';
 import { packageSummary } from './lib/package-summary.mjs';
+import { eventEditCorrections } from './lib/package-edits.mjs';
 
 const root = new URL('./', import.meta.url);
 const fixtures = new Map();
@@ -132,7 +133,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       if (req.method === 'GET' && pathname === '/api/package/scenarios') {
         return send(200, await packageListing());
       }
-      if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load'].includes(pathname)) {
+      if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load','/api/package/edit'].includes(pathname)) {
         if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site']==='cross-site') return send(403,{error:'Open the app locally first.'});
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'JSON is required.'});
         if (!packageWorkspace) return send(503,{error:'Saved conversations are not available.'});
@@ -163,11 +164,12 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             } finally {busy=false;}
           }
           const loading=pathname.endsWith('/load');
-          const keys=loading?'run_id|scenario_id':'corrections|reviews|run_id|scenario_id|sequence';
+          const editing=pathname==='/api/package/edit';
+          const keys=loading?'run_id|scenario_id':editing?'changes|reason|run_id|scenario_id|sequence':'corrections|reviews|run_id|scenario_id|sequence';
           if(Object.keys(data).sort().join('|')!==keys || typeof data.scenario_id!=='string' || (data.run_id!==null && typeof data.run_id!=='string'))throw new Error('Invalid saved review request.');
           const bundle=await getBundle(data.scenario_id);if(!bundle)throw new Error('Saved conversation not found.');
           const state=await updateState();if(!available(data.scenario_id,state))throw new Error('Choose available messages.');
-          const saved=loading?await packageWorkspace.loadReview(data.scenario_id,data.run_id):null;
+          const saved=loading||editing?await packageWorkspace.loadReview(data.scenario_id,data.run_id):null;
           if(loading&&!saved)return send(200,{saved:null});
           let original=bundle.original,extraction=null;
           if(data.run_id) {
@@ -176,6 +178,19 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             original=receipt.parsed_output;extraction={run_id:receipt.run_id,mode:receipt.mode,meta:receipt.meta,receipt_saved:true};
           }
           if(!original)throw new Error('Prepare these messages with AI first.');
+          if(editing) {
+            if(isSuperseded(data.scenario_id,state))throw new SourceConflictError('New messages have arrived. Open the latest event before editing.');
+            if(!Number.isSafeInteger(data.sequence)||data.sequence!==(saved?.sequence??0))throw new SourceConflictError('This event changed in another browser. Cancel this edit, open the event again, and try your change on the latest details.');
+            const before=prepareEventPackage({...bundle,original,extraction,corrections:saved?.corrections??{}});
+            const corrections=eventEditCorrections(original,before.corrections,data.changes,data.reason);
+            const prepared=prepareEventPackage({...bundle,original,extraction,corrections});
+            const finalState=await updateState();
+            if(isSuperseded(data.scenario_id,finalState))throw new SourceConflictError('New messages have arrived. Open the latest event before editing.');
+            const changed=prepared.documents.filter(doc=>before.documents.find(old=>old.id===doc.id)?.revision!==doc.revision).map(doc=>({id:doc.id,title:doc.title,state:doc.state}));
+            const reviews=Object.fromEntries(Object.entries(saved?.reviews??{}).filter(([id,review])=>prepared.documents.some(doc=>doc.id===id&&doc.revision===review.revision&&doc.state==='ready_for_review')));
+            const result=await packageWorkspace.saveReview(prepared,reviews,data.sequence);
+            return send(200,{saved:result,data:withVersion(prepared,finalState),changed_documents:changed});
+          }
           const prepared=prepareEventPackage({...bundle,original,extraction,corrections:loading?saved.corrections:data.corrections});
           const finalState=await updateState();
           if(loading) {

@@ -274,6 +274,23 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 }
 
 /* Workspace tools share the existing record and review actions. */
+.event-heading-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; }
+.event-heading-actions .small-button { white-space: nowrap; }
+.event-edit-form { display: grid; gap: 17px; margin: 0 0 22px; padding: 22px; border: 1px solid #baccc0; border-radius: 7px; background: #f4f7f5; max-width: 740px; }
+.event-edit-form h3 { font-size: 1rem; margin: 0 0 6px; }
+.event-edit-form p { font-size: .83rem; line-height: 1.6; margin: 0; }
+.event-edit-form label { display: grid; gap: 7px; font-size: .8rem; font-weight: 600; min-width: 0; }
+.event-edit-form label span { font-weight: 400; color: var(--muted); display: contents; }
+.event-edit-form input, .event-edit-form select, .event-edit-form textarea { min-width: 0; width: 100%; border: 1px solid #baccc0; border-radius: 6px; background: white; color: var(--ink); padding: 11px; font: inherit; font-weight: 400; }
+.event-edit-form textarea { resize: vertical; min-height: 88px; }
+.event-edit-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 16px; }
+.event-edit-total { grid-column: 1 / -1; color: var(--muted); }
+.event-edit-form .error { color: #8c2525; }
+@media (max-width: 800px) {
+  .package-result-heading { flex-wrap: wrap; }
+  .event-heading-actions { justify-content: flex-start; }
+  .event-edit-form { padding: 16px; }
+}
 .workspace-access-settings { border-bottom: 1px solid var(--line); padding: 12px 0; font-size: .8rem; }
 .workspace-access-settings > summary { cursor: pointer; color: var(--muted); width: fit-content; padding: 5px 0; }
 .workspace-access-settings .hosted-access { margin: 14px 0 4px; }

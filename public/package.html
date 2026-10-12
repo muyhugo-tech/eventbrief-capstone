@@ -90,9 +90,17 @@
     <section id="package-result" aria-labelledby="package-heading" aria-busy="false" hidden>
       <div class="package-result-heading">
         <div><h2 id="package-heading">Alex Morgan’s birthday dinner</h2><p id="package-summary"></p></div>
-        <span id="review-progress" class="review-progress"></span>
+        <div class="event-heading-actions"><span id="review-progress" class="review-progress"></span><button id="edit-event" class="small-button" aria-expanded="false" aria-controls="event-edit-form">Edit event details</button></div>
       </div>
       <div id="event-facts" class="event-facts"></div>
+      <form id="event-edit-form" class="event-edit-form" aria-labelledby="event-edit-heading" hidden>
+        <div><h3 id="event-edit-heading">Edit event details</h3><p>Use details you have confirmed. Save once to update the affected drafts.</p></div>
+        <label for="event-edit-detail">What changed?<select id="event-edit-detail"></select></label>
+        <div id="event-edit-inputs" class="event-edit-inputs"></div>
+        <label for="event-edit-note">Note about this change <span>(optional)</span><input id="event-edit-note" type="text" maxlength="1000" placeholder="For example: the host confirmed the new date"></label>
+        <p id="event-edit-error" class="error" role="alert" hidden></p>
+        <div class="item-actions"><button id="save-event-edit" type="submit" class="button primary">Save changes</button><button id="cancel-event-edit" type="button" class="text-button">Cancel</button><span class="live-note">No AI call. Changed drafts need review again.</span></div>
+      </form>
       <p class="review-instruction">Open each draft. Check its details, then mark it reviewed.</p>
       <section id="reply-panel" class="reply-panel" hidden aria-labelledby="reply-heading">
         <div class="reply-heading"><div><h3 id="reply-heading">Got a new reply?</h3><p>Add it here. Earlier messages and versions stay saved.</p></div><button id="show-reply" class="small-button" aria-expanded="false" aria-controls="reply-form">Add a reply</button></div>
