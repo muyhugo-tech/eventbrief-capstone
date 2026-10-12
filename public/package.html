@@ -7,6 +7,8 @@
   <title>EventBrief — Event package</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/package.css">
+  <link rel="stylesheet" href="/workspace-board.css">
+  <link rel="stylesheet" href="/workspace-calendar.css">
   <script type="module" src="/package.js"></script>
 </head>
 <body class="package-page">
@@ -17,6 +19,11 @@
     <nav class="workspace-nav" aria-label="Workspaces">
       <!-- Icon geometry adapted from Yanni's components/AppSidebar.tsx. -->
       <button id="show-events" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="4" width="17" height="4.5" rx="1.5"/><rect x="3.5" y="11" width="17" height="4.5" rx="1.5"/><path d="M3.5 19.5h17" stroke-linecap="round"/></svg>Events <span id="rail-event-count"></span></button>
+      <button data-workspace="calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg>Calendar</button>
+      <button data-workspace="quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z M9 8h6m-6 4h6"/></svg>Guest quotes</button>
+      <button data-workspace="kitchen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 3v7m3-7v7m3-7v7M5 7h6M8 10v11M18 3v18m0-18c-4 3-4 9 0 9"/></svg>Kitchen sheets</button>
+      <button data-workspace="staff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6m2 4c3 1 3 3 3 6"/></svg>Staff event plans</button>
+      <button data-workspace="guest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6m-6 4h6m-6 4h4"/></svg>Guest event plans</button>
       <button id="new-event"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>New event</button>
     </nav>
     <div class="recent-events"><h2>Recent events</h2><nav id="recent-events" aria-label="Recent events"></nav></div>
@@ -27,6 +34,7 @@
       <div class="header-title"><h1 id="page-title">Event workspace</h1><span class="demo-badge">Local demo</span></div>
       <button id="header-new-event" class="button secondary">New event</button>
     </header>
+    <details id="workspace-access-settings" class="workspace-access-settings" hidden><summary>Public sample &amp; private workspace</summary>
     <section id="hosted-access" class="hosted-access" hidden aria-label="Try EventBrief">
       <div class="hosted-sample">
         <h2>Public sample</h2>
@@ -46,13 +54,19 @@
         <p id="hosted-access-error" class="error" role="alert" hidden></p>
       </div>
     </section>
+    </details>
     <section id="events-overview" class="events-overview" hidden aria-labelledby="events-heading">
-      <div class="overview-heading"><div><h2 id="events-heading">Your events</h2><p>Open an event to check its drafts or add the next reply.</p></div><span id="events-count"></span></div>
-      <label class="event-search" for="event-search">Find an event<input id="event-search" type="search" placeholder="Search by event name" autocomplete="off"></label>
-      <div class="events-table-wrap"><table class="events-table"><thead><tr><th>Event</th><th>Progress</th><th>Version</th><th>Source</th></tr></thead><tbody id="event-rows"></tbody></table></div>
+      <div class="overview-heading"><div><h2 id="events-heading">Your events</h2><p>Messages become five drafts. Each event moves forward as you review.</p></div><span id="events-count"></span></div>
+      <div class="overview-tools"><label class="event-search" for="event-search">Find an event<input id="event-search" type="search" placeholder="Search by event name" autocomplete="off"></label><div class="view-switch" aria-label="Event view"><button data-event-layout="board" aria-pressed="true">Board</button><button data-event-layout="list" aria-pressed="false">List</button></div></div>
+      <div id="event-board"></div>
+      <div id="events-table-wrap" class="events-table-wrap" hidden><table class="events-table"><thead><tr><th>Event</th><th>Progress</th><th>Version</th><th>Source</th></tr></thead><tbody id="event-rows"></tbody></table></div>
       <p id="events-empty" class="empty" hidden>No events match. Try a different name.</p>
     </section>
+    <section id="calendar-overview" class="tool-overview" hidden aria-label="Event calendar"><div class="overview-heading"><div><h2>Event calendar</h2><p>Open a date to check its event. Entries are drafts, not reservations.</p></div></div><div id="calendar-content"></div></section>
+    <section id="assets-overview" class="tool-overview" hidden aria-labelledby="assets-heading"><div class="overview-heading"><div><h2 id="assets-heading">Guest quotes</h2><p id="assets-help">Open a quote, check the details, then download or print it.</p></div></div><label class="event-search" for="asset-search">Find an event<input id="asset-search" type="search" placeholder="Search by event name" autocomplete="off"></label><div id="asset-library"></div></section>
+    <p id="workspace-error" class="error" role="alert" hidden></p>
     <div id="event-workbench">
+    <button class="text-button back-to-events" data-workspace="events">← Back to events</button>
     <div class="workbench-heading"><p id="workbench-help">Paste a conversation. Get five drafts. Check the details.</p><span id="package-mode-label" class="mode-label">Authored demo · no AI call</span></div>
     <div class="package-controls">
       <label for="package-scenario">Choose a conversation<select id="package-scenario" disabled><option>Loading…</option></select></label>
@@ -93,7 +107,7 @@
       <div class="package-grid">
         <nav id="document-list" class="document-list" aria-label="Event drafts"></nav>
         <section class="document-pane" aria-label="Selected draft">
-          <div class="draft-actions"><button id="review-document" class="small-button">Mark this draft reviewed</button><button id="download-document" class="text-button">Download this draft</button></div>
+          <div class="draft-actions"><button id="review-document" class="small-button">Mark this draft reviewed</button><button id="print-document" class="text-button">Print / Save PDF</button><button id="download-document" class="text-button">Download this draft</button></div>
           <div id="document-preview"></div>
         </section>
       </div>

@@ -1,5 +1,8 @@
 import { FIELD_DEFINITIONS, PACKAGE_STATUSES } from '/package-contract.mjs';
 import { escapeHtml as esc, renderDocument, standaloneDocument } from '/package-render.mjs';
+import { assetFilename } from '/package-export.mjs';
+import { renderBoard, renderAssetLibrary } from '/workspace-board.mjs';
+import { renderCalendar, calendarMonth, shiftMonth, calendarFile } from '/workspace-calendar.mjs';
 
 const $ = selector => document.querySelector(selector);
 const sessions = new Map();
@@ -18,6 +21,11 @@ let demo = null;
 let overview = false;
 let hosted = null;
 let accessBusy = false;
+let workspaceView = 'events';
+let eventLayout = 'board';
+let calendarViewMonth = null;
+let accessInitialized = false;
+const viewNames = {events:'Events',calendar:'Calendar',quote:'Guest quotes',kitchen:'Kitchen sheets',staff:'Staff event plans',guest:'Guest event plans'};
 // Retain existing public/local browser drafts; private selections and unsent
 // text have separate keys and are never restored into the public sample.
 const browserKey = suffix => `eventbrief.package.${hosted?.workspace === 'private' ? 'private.' : ''}${suffix}`;
@@ -25,7 +33,7 @@ const storageMessage = () => hosted?.workspace === 'private' ? 'Saved in your pr
 const isPasted = () => currentId === 'new' || currentId?.startsWith('pasted-');
 const post = (path, body) => request(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 function rememberSelection() {
-  try { localStorage.setItem(browserKey('selection'), JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, run_id:session()?.data?.extraction?.run_id??null})); }
+  try { localStorage.setItem(browserKey('selection'), JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, view:overview?workspaceView:'event', layout:eventLayout, run_id:session()?.data?.extraction?.run_id??null})); }
   catch { $('#save-status').textContent = hosted ? 'Your place could not be saved in this browser. Your completed reviews are still saved.' : 'Your place could not be saved in this browser. Completed reviews still save on this computer.'; }
 }
 const session = () => sessions.get(`${currentMode}:${currentId}`);
@@ -57,7 +65,9 @@ function applyListing(data) {
 async function refreshListing() { applyListing(await request('/api/package/scenarios')); }
 function renderAccess() {
   $('#hosted-access').hidden = !hosted;
+  $('#workspace-access-settings').hidden = !hosted;
   if (!hosted) return;
+  if(!accessInitialized) {$('#workspace-access-settings').open=!hosted.unlocked;accessInitialized=true;}
   $('.demo-badge').textContent = hosted.unlocked ? 'Private workspace' : 'Public sample';
   $('.rail-intro span').textContent = hosted.unlocked ? 'Shared private workspace' : 'This browser’s samples';
   $('.storage-note').textContent = `${storageMessage()} Nothing is sent or booked.`;
@@ -150,13 +160,51 @@ function renderEvents() {
     const display = eventDisplay(item);
     return `<button class="recent-event" data-open-event="${esc(item.current_scenario_id)}" aria-current="${item.scenario_ids?.includes(currentId) ?? item.current_scenario_id === currentId}"${busy ? ' disabled' : ''}><strong>${esc(display.title)}</strong><span>${esc(display.state)}</span></button>`;
   }).join('');
+  const items = workspaceItems();
+  $('#event-board').innerHTML = renderBoard(items.filter(item => item.title.toLowerCase().includes(needle)), {busy});
+  $('#event-board').hidden = eventLayout !== 'board';
+  $('#events-table-wrap').hidden = eventLayout !== 'list';
+  for (const button of document.querySelectorAll('[data-event-layout]')) button.setAttribute('aria-pressed', String(button.dataset.eventLayout === eventLayout));
+  if (!calendarViewMonth && overview && workspaceView==='calendar') calendarViewMonth = calendarMonth(items);
+  $('#calendar-content').innerHTML = renderCalendar(items, {month:calendarViewMonth??calendarMonth(items),busy});
+  if (['quote','kitchen','staff','guest'].includes(workspaceView)) {
+    const search = $('#asset-search').value.trim().toLowerCase();
+    $('#asset-library').innerHTML = renderAssetLibrary(items.filter(item => item.title.toLowerCase().includes(search)),workspaceView,{busy});
+  }
 }
-function showOverview(value) {
+function workspaceItems() {
+  return eventRows().map(item => {
+    const id = item.current_scenario_id;
+    const captured = sessions.get(`live:${id}`) ?? sessions.get(`reference:${id}`);
+    const data = !item.pending_update ? captured?.data : null;
+    const summary = item.summary ?? {};
+    const value = field => data?.record.fields[field]?.value ?? summary[field] ?? null;
+    const documents = data ? data.documents.map(doc => ({id:doc.id,title:doc.title,state:doc.state,reviewed:doc.state==='ready_for_review'&&captured.reviews[doc.id]?.revision===doc.revision})) : summary.documents ?? [];
+    return {id,event_id:item.event_id,title:value('host_name') ? `${value('host_name')}’s event` : item.title,
+      event_date:value('event_date'),start_time:value('start_time'),end_time:value('end_time'),timezone:value('timezone'),venue:value('venue'),
+      guest_count:value('guest_13_plus_count'),child_count:value('child_count'),total_count:value('guest_count'),
+      ready_count:data?documents.filter(doc=>doc.state==='ready_for_review').length:summary.ready_count,
+      reviewed_count:data?documents.filter(doc=>doc.reviewed).length:summary.reviewed_count,
+      documents,quote_total_cents:data?data.documents.find(doc=>doc.id==='quote')?.quote?.total_cents??null:summary.quote_total_cents,
+      pending_update:item.pending_update,source:eventDisplay(item).source,revision:item.revision??1};
+  });
+}
+function showOverview(value, view = 'events') {
   overview = value;
-  $('#events-overview').hidden = !value;
+  if (value) workspaceView = view;
+  $('#events-overview').hidden = !value || workspaceView !== 'events';
+  $('#calendar-overview').hidden = !value || workspaceView !== 'calendar';
+  $('#assets-overview').hidden = !value || ['events','calendar'].includes(workspaceView);
   $('#event-workbench').hidden = value;
-  $('#page-title').textContent = value ? 'Events' : currentId === 'new' ? 'New event' : 'Event workspace';
+  $('#page-title').textContent = value ? viewNames[workspaceView] : currentId === 'new' ? 'New event' : 'Event workspace';
+  $('#assets-heading').textContent = viewNames[workspaceView];
+  $('#assets-help').textContent = {quote:'Open a quote. Check the price and details, then download or print it.',kitchen:'Open a kitchen sheet. Check the menu, numbers and dietary details.',staff:'Open a staff plan. Check the schedule, setup and team instructions.',guest:'Open a guest plan. Check what the host and their guests need to know.'}[workspaceView] ?? '';
+  for (const button of document.querySelectorAll('.workspace-nav button')) {
+    const active = button.id==='show-events' ? !value || workspaceView==='events' : button.dataset.workspace===workspaceView && value;
+    if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+  }
   renderEvents();
+  rememberSelection();
 }
 async function chooseScenario(id, preferredRun = null) {
   if (busy) return;
@@ -203,8 +251,9 @@ function setBusy(value) {
   $('#paste-example').disabled = value;
   $('#download-attempt').disabled = value;
   $('#add-update').disabled = value || !updates?.available || currentId !== 'patio-complete' || !session()?.data;
-  for (const button of document.querySelectorAll('#recent-events button, #event-rows button, #new-event, #header-new-event, #show-events, #try-demo, #show-reply, #submit-reply, #cancel-reply, #fill-demo-reply, #open-current')) button.disabled = value;
+  for (const button of document.querySelectorAll('#recent-events button, #event-rows button, #event-board button, #calendar-content button, #asset-library button, [data-workspace], [data-event-layout], #new-event, #header-new-event, #show-events, #try-demo, #show-reply, #submit-reply, #cancel-reply, #fill-demo-reply, #open-current')) button.disabled = value;
   $('#reply-role').disabled = value;
+  $('[data-calendar-month]').disabled = value;
   $('#reply-text').disabled = value;
   renderReplyCost();
   for (const button of document.querySelectorAll('#package-history button')) button.disabled = value;
@@ -281,7 +330,8 @@ function renderSelected() {
   $('#review-document').disabled = busy || isEarlier() || selected.state === 'blocked';
   $('#review-document').textContent = isReviewed(selected) ? 'Undo draft review' : 'Mark this draft reviewed';
   $('#download-document').disabled = busy || isEarlier() || selected.state === 'blocked';
-  $('#download-document').textContent = isEarlier() ? 'Earlier draft · download off' : isReviewed(selected) ? 'Download reviewed draft' : 'Download unreviewed draft';
+  $('#print-document').disabled = busy || isEarlier() || selected.state === 'blocked';
+  $('#download-document').textContent = isEarlier() ? 'Earlier draft · download off' : selected.id==='calendar' ? 'Download calendar file (.ics)' : isReviewed(selected) ? 'Download reviewed draft' : 'Download unreviewed draft';
   const ready = data.documents.filter(doc => doc.state === 'ready_for_review').length;
   const reviewed = data.documents.filter(isReviewed).length;
   $('#package-summary').textContent = isEarlier() ? `Earlier version · ${data.record.fields.guest_count.value ?? 'Unknown'} people · saved for comparison` : `${ready} of 5 drafts ready for review · ${5 - ready} need details · ${data.record.fields.guest_count.value ?? 'Unknown'} people`;
@@ -308,7 +358,7 @@ function renderPackage() {
   $('#fill-demo-reply').hidden = !sourceVersions[currentId]?.reference_available || !demo?.reply || version?.revision !== 1;
   $('#try-demo').hidden = Boolean(hosted) || !demo?.available;
   $('#demo-help').hidden = Boolean(hosted) || !demo?.available;
-  $('#page-title').textContent = overview ? 'Events' : currentId === 'new' ? 'New event' : 'Event workspace';
+  $('#page-title').textContent = overview ? viewNames[workspaceView] : currentId === 'new' ? 'New event' : 'Event workspace';
   $('#workbench-help').textContent = currentId === 'new' ? 'Paste a conversation. Get five drafts. Check the details.' : `One event. One shared record. Five drafts.${version?.revision ? ` Version ${version.revision}.` : ''}`;
   renderHistory();
   $('#package-mode-label').textContent = data?.label ?? (currentMode === 'reference' ? 'Authored demo · no AI call' : live.mode === 'simulated' ? 'Simulated provider · no AI call' : 'AI extraction · not yet run');
@@ -449,23 +499,43 @@ $('#reply-form').addEventListener('submit', async event => {
   if (saved && (referenceAvailable() || canAnalyze())) await prepare(undefined, 'Reply added. Check the updated drafts and review them again.', true);
   else if (saved) announce('Your reply is saved as a new version. AI preparation is unavailable; earlier drafts remain in the version history.');
 });
-$('#show-events').addEventListener('click', async () => {
+async function openWorkspace(view) {
   if (busy) return;
   setBusy(true);
+  $('#workspace-error').hidden = true;
   try {
     await refreshListing();
     sessions.clear(); openSession();
-    showOverview(true);
-  } catch (error) { announce(error.message, true); }
+    showOverview(true, view);
+  } catch (error) { $('#workspace-error').textContent = error.message; $('#workspace-error').hidden = false; }
   finally { setBusy(false); }
-});
+}
+$('#show-events').addEventListener('click', () => openWorkspace('events'));
 $('#new-event').addEventListener('click', () => chooseScenario('new'));
 $('#header-new-event').addEventListener('click', () => chooseScenario('new'));
 $('#event-search').addEventListener('input', renderEvents);
+$('#asset-search').addEventListener('input', renderEvents);
 $('#open-current').addEventListener('click', () => chooseScenario(versionFor()?.current_scenario_id ?? updates?.active_scenario_id));
-document.addEventListener('click', event => {
+document.addEventListener('click', async event => {
+  if (busy) return;
+  const nav = event.target.closest('[data-workspace]');
+  if(nav) { await openWorkspace(nav.dataset.workspace); return; }
+  const layout = event.target.closest('[data-event-layout]');
+  if(layout) { eventLayout=layout.dataset.eventLayout;renderEvents();rememberSelection();return; }
+  const month = event.target.closest('[data-calendar-shift]');
+  if(month) { calendarViewMonth=shiftMonth(calendarViewMonth,Number(month.dataset.calendarShift));renderEvents();return; }
+  if(event.target.closest('[data-calendar-today]')) { calendarViewMonth=calendarMonth([]);renderEvents();return; }
+  if(event.target.closest('[data-create-event]')) { await chooseScenario('new');return; }
   const button = event.target.closest('[data-open-event]');
-  if (button && !busy) chooseScenario(button.dataset.openEvent);
+  if (button) {
+    if(button.dataset.openDocument) selectedDocument=button.dataset.openDocument;
+    await chooseScenario(button.dataset.openEvent);
+    if(button.dataset.openDocument && session()?.data) $('#document-preview').scrollIntoView({block:'start',behavior:'instant'});
+  }
+});
+document.addEventListener('change', event => {
+  if(busy)return;
+  if(event.target.matches('[data-calendar-month]') && /^\d{4}-\d{2}$/.test(event.target.value)) {calendarViewMonth=event.target.value;renderEvents();}
 });
 async function tryDemo() {
   if (busy) return;
@@ -649,8 +719,23 @@ $('#download-document').addEventListener('click', async () => {
   const data = session().data;
   const doc = data.documents.find(item => item.id === selectedDocument);
   if (busy || doc.state !== 'ready_for_review') return;
-  download(standaloneDocument(doc, data, isReviewed(doc)), `${currentId}-${doc.id}-draft.html`, 'text/html');
-  announce('A standalone fictional draft was downloaded. Open it to present or print; its review status is included.');
+  try {
+    if(doc.id==='calendar') {
+      download(calendarFile(doc,data,{reviewed:isReviewed(doc),eventId:versionFor()?.event_id??currentId}),assetFilename(doc,data,'ics'),'text/calendar;charset=utf-8');
+      announce('Calendar file downloaded. Open it in your calendar app if you want to add this draft. Nothing was booked or sent.');
+    } else {
+      download(standaloneDocument(doc, data, isReviewed(doc)), assetFilename(doc,data), 'text/html');
+      announce('Draft downloaded. Open the file to present it or print it. Its review status is included.');
+    }
+  } catch(error) {announce(error.message,true);}
+});
+$('#print-document').addEventListener('click', async () => {
+  if(!await checkLatest())return;
+  const doc=session().data.documents.find(item=>item.id===selectedDocument);
+  if(busy || doc.state!=='ready_for_review')return;
+  announce('In the print window, choose your printer or Save as PDF.');
+  document.body.classList.add('printing-draft');
+  try { window.print(); } finally { document.body.classList.remove('printing-draft'); }
 });
 $('#download-package').addEventListener('click', async () => {
   if (busy || !session().data) return;
@@ -684,6 +769,7 @@ async function init() {
     currentId = selection && (selection.id==='new'||scenarios.some(input=>input.id===selection.id)) ? selection.id : workspace || hosted ? 'new' : updates?.active_scenario_id ?? scenarios[0].id;
     currentMode = sourceVersions[currentId]?.reference_available ? 'reference' : isPasted() ? 'live' : selection?.mode==='reference' ? 'reference' : live.ready ? 'live' : 'reference';
     selectedDocument=['calendar','quote','kitchen','staff','guest'].includes(selection?.document)?selection.document:'calendar';
+    eventLayout=selection?.layout==='list'?'list':'board';
     const saved=history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded'&&entry.run_id===selection?.run_id) ?? history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded') ?? (live.last_successful?.scenario_id===currentId?live.last_successful:null);
     $('#package-mode').value = currentMode;
     openSession();
@@ -701,7 +787,8 @@ async function init() {
     if(currentId!=='new' && updates?.active_scenario_id && !session().data) announce('Messages are saved. Click Prepare five drafts. Earlier AI results are available below.');
     restoreReplyDraft(); renderPackage();
     setBusy(false);
-    if (hosted?.unlocked && currentId === 'new') showOverview(true);
+    if (selection?.view && Object.hasOwn(viewNames,selection.view)) showOverview(true,selection.view);
+    else if ((hosted?.unlocked && currentId === 'new') || (!selection && eventRows().length)) showOverview(true);
     if (hosted && !hosted.unlocked && new URLSearchParams(window.location.search).get('sample') === '1') {
       window.history.replaceState(null, '', window.location.pathname);
       await tryDemo();

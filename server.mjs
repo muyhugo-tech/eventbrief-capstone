@@ -16,6 +16,7 @@ import { createPackageWorkspace, pastedPrompt, SourceConflictError } from './lib
 import { createFlexiblePackageAllowance } from './lib/package-flexible-allowance.mjs';
 import { createExtensionPackageAllowance } from './lib/package-extension-allowance.mjs';
 import { demoText, demoReply, demoRecord } from './lib/package-demo.mjs';
+import { packageSummary } from './lib/package-summary.mjs';
 
 const root = new URL('./', import.meta.url);
 const fixtures = new Map();
@@ -33,6 +34,10 @@ assets.set('/package.js', ['public/package.js', 'text/javascript; charset=utf-8'
 assets.set('/package.css', ['public/package.css', 'text/css; charset=utf-8']);
 assets.set('/package-render.mjs', ['public/package-render.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/package-export.mjs', ['public/package-export.mjs', 'text/javascript; charset=utf-8']);
+for (const name of ['workspace-board', 'workspace-calendar']) {
+  assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
+  assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);
+}
 assets.set('/lib/reused-yannis/templates/kitchen.mjs', ['lib/reused-yannis/templates/kitchen.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/lib/reused-yannis/templates/event.mjs', ['lib/reused-yannis/templates/event.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/package-contract.mjs', ['lib/package-contract.mjs', 'text/javascript; charset=utf-8']);
@@ -81,7 +86,8 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       const current = pasted.find(bundle => bundle.input.id === event.current_scenario_id);
       const entry = history.find(item => item.status === 'succeeded' && item.scenario_id === event.current_scenario_id)
         ?? history.find(item => item.status === 'succeeded' && event.scenario_ids.includes(item.scenario_id));
-      let original = current && demoRecord(current.input), summary = null;
+      const authored = current && demoRecord(current.input);
+      let original = authored, summary = null;
       if (entry) {
         const receipt = await packageStore.read(entry.run_id), source = pasted.find(bundle => bundle.input.id === entry.scenario_id);
         if (receipt.status !== 'succeeded' || receipt.scenario_id !== entry.scenario_id || !source || receipt.input_hash !== fingerprint(source.input)) throw new Error('The saved result does not match its source messages.');
@@ -89,18 +95,17 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
         if (entry.scenario_id === event.current_scenario_id) {
           const saved = await packageWorkspace.loadReview(entry.scenario_id,entry.run_id);
           const prepared = prepareEventPackage({...current,original,corrections:saved?.corrections??{},extraction:{run_id:entry.run_id,mode:receipt.mode}});
-          summary = {ready_count:prepared.documents.filter(doc=>doc.state==='ready_for_review').length,
-            reviewed_count:prepared.documents.filter(doc=>doc.state==='ready_for_review'&&saved?.reviews?.[doc.id]?.revision===doc.revision).length};
+          summary = packageSummary(prepared, saved?.reviews);
         }
-      } else if (original) {
-        const saved = await packageWorkspace.loadReview(current.input.id,null), prepared = prepareEventPackage({...current,original,corrections:saved?.corrections??{}});
-        summary = {ready_count:prepared.documents.filter(doc=>doc.state==='ready_for_review').length,
-          reviewed_count:prepared.documents.filter(doc=>doc.state==='ready_for_review'&&saved?.reviews?.[doc.id]?.revision===doc.revision).length};
       }
-      const fields = original?.fields;
-      return { ...event, title: fields?.host_name?.value ? `${fields.host_name.value} · ${fields.event_date?.value??'Date needed'}` : event.title,
+      if (!summary && authored) {
+        const saved = await packageWorkspace.loadReview(current.input.id,null), prepared = prepareEventPackage({...current,original:authored,corrections:saved?.corrections??{}});
+        summary = packageSummary(prepared, saved?.reviews);
+      }
+      const host = summary?.host_name ?? original?.fields.host_name?.value;
+      return { ...event, title: host ? `${host} · ${summary?.event_date??'Date needed'}` : event.title,
         pending_update: sourceVersions[event.current_scenario_id]?.pending_update ?? true,
-        summary: fields ? {host_name:fields.host_name.value,event_date:fields.event_date.value,guest_count:fields.guest_count.value,...summary} : null };
+        summary };
     }));
     return { mode: 'authored_reference', ...(hosted ? {hosted} : {}), workspace: Boolean(packageWorkspace), scenarios: [...bundles.values(), ...pasted].filter(({input}) => available(input.id,state)).map(({input}) => input),
       live: await packageLive(state?.active_scenario_id), updates: state,

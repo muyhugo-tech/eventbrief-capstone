@@ -269,3 +269,25 @@ test('stale workspace pages cannot write across a lock, unlock, or access-code r
   assert.equal(oldPrivate.status, 409);
   assert.equal(system.calls(), 0);
 });
+
+test('shared asset summaries follow saved corrections and clear stale schedules after new messages', async () => {
+  const system=setup(), first=system.visitor(), second=system.visitor();
+  for(const client of [first,second]) await client.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
+  await first.request('/api/package/messages',{text:demoText});
+  const reply=await first.request('/api/package/reply',{scenario_id:demoInput.id,text:demoReply,role:'host'});
+  const id=reply.data.input.id;
+  const corrections={event_date:{value:'2027-12-03',status:'agreed',reason:'Fictional schedule change for this test.'}};
+  const prepared=await first.request('/api/package/prepare',{scenario_id:id,corrections});
+  const marks=marksFor(prepared.data);
+  await first.request('/api/package/review',{scenario_id:id,run_id:null,corrections,reviews:{quote:marks.quote},sequence:0});
+  const listing=await second.request('/api/package/scenarios');
+  const summary=listing.data.events[0].summary;
+  assert.equal(summary.event_date,'2027-12-03');assert.equal(summary.ready_count,5);
+  assert.equal(summary.documents.find(doc=>doc.id==='quote').reviewed,true);
+  assert.equal(summary.quote_total_cents,228000);assert.equal(summary.guest_13_plus_count,30);
+  assert.ok(!Object.hasOwn(summary,'staff_notes'));assert.ok(!Object.hasOwn(summary,'dietary'));
+  await first.request('/api/package/reply',{scenario_id:id,text:'We may need a different date. I will confirm tomorrow.',role:'host'});
+  const changed=await second.request('/api/package/scenarios');
+  assert.equal(changed.data.events[0].pending_update,true);assert.equal(changed.data.events[0].summary,null);
+  assert.equal(system.calls(),0);
+});

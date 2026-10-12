@@ -1,0 +1,73 @@
+/* The user's board reference supplies the white canvas, outlined markers,
+   small count pills, fine borders and horizontally scrolling columns. */
+.wb-board { --wb-muted: #707773; --wb-line: #e1e5e3; display: grid; grid-template-columns: repeat(5, minmax(236px, 1fr)); gap: 20px; overflow-x: auto; padding: 2px 2px 16px; margin: 0 -2px; scrollbar-width: thin; scroll-snap-type: x proximity; min-height: 410px; }
+.wb-column { display: flex; flex-direction: column; min-width: 0; scroll-snap-align: start; --wb-stage: #707773; }
+.wb-stage-messages { --wb-stage: #77817b; }
+.wb-stage-needs-details { --wb-stage: #b87512; }
+.wb-stage-ready { --wb-stage: #3984ca; }
+.wb-stage-reviewing { --wb-stage: #8364b2; }
+.wb-stage-reviewed { --wb-stage: #23815c; }
+.wb-column-heading { display: flex; align-items: center; gap: 8px; min-height: 40px; }
+.wb-column-heading h2 { font-size: .84rem; font-weight: 600; letter-spacing: -.015em; white-space: nowrap; }
+.wb-stage-marker { width: 12px; height: 12px; flex: 0 0 12px; border: 1.5px solid var(--wb-stage); border-radius: 50%; position: relative; }
+.wb-stage-messages .wb-stage-marker { border-style: dashed; }
+.wb-stage-needs-details .wb-stage-marker::after, .wb-stage-reviewing .wb-stage-marker::after { content: ''; position: absolute; inset: 3px; background: var(--wb-stage); border-radius: 50%; }
+.wb-stage-reviewed .wb-stage-marker::after { content: ''; position: absolute; top: 2px; left: 3px; width: 3px; height: 5px; border: solid var(--wb-stage); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.wb-count { display: inline-grid; place-items: center; min-width: 21px; height: 21px; padding: 0 5px; color: var(--wb-muted); background: #f3f4f3; border-radius: 4px; font-size: .75rem; font-variant-numeric: tabular-nums; }
+.wb-add { display: inline-grid; place-items: center; width: 32px; min-height: 32px; padding: 5px; margin-left: auto; border: 0; background: transparent; color: var(--wb-muted); border-radius: 5px; }
+.wb-add svg, .wb-empty button svg, .wb-open-asset svg { width: 16px; height: 16px; }
+.wb-column-hint { font-size: .7rem; color: var(--wb-muted); min-height: 30px; padding: 0 0 12px; line-height: 1.5; }
+.wb-column-cards { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 280px; }
+.wb-card { border: 1px solid var(--wb-line); border-radius: 10px; background: #fff; padding: 15px 14px 12px; box-shadow: 0 1px 2px #1a352009; min-width: 0; }
+.wb-card-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; width: 100%; border: 0; background: transparent; color: var(--ink, #202927); text-align: left; font: inherit; font-size: .9rem; font-weight: 550; line-height: 1.45; padding: 0; overflow-wrap: anywhere; }
+.wb-card-title svg { flex: 0 0 14px; width: 14px; height: 14px; color: #939b96; margin-top: 3px; }
+.wb-card-title:hover { color: var(--accent, #275a48); }
+.wb-card-facts { display: grid; gap: 10px; margin: 15px 0 13px; }
+.wb-card-facts > div { display: flex; align-items: flex-start; gap: 8px; color: var(--wb-muted); font-size: .77rem; line-height: 1.4; }
+.wb-card-facts dt { flex: 0 0 15px; }
+.wb-card-facts dt svg { display: block; width: 15px; height: 15px; margin-top: 1px; }
+.wb-card-facts dd { margin: 0; overflow-wrap: anywhere; }
+.wb-card-facts .wb-card-value { color: var(--ink, #202927); font-variant-numeric: tabular-nums; }
+.wb-card-value span { color: var(--wb-muted); font-size: .68rem; }
+.wb-card-progress { font-size: .7rem; line-height: 1.5; color: #68736c; }
+.wb-card-assets { display: flex; flex-wrap: wrap; gap: 2px 8px; border-top: 1px solid #eef0ef; margin-top: 11px; padding-top: 7px; }
+.wb-asset-link { display: inline-flex; align-items: center; gap: 4px; color: var(--wb-muted); border: 0; background: transparent; padding: 5px 0; min-height: 30px; font-size: .65rem; }
+.wb-status-dot { display: inline-block; flex: 0 0 5px; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.wb-status-missing { color: #727b76; }
+.wb-status-blocked { color: #9a630e; }
+.wb-status-ready { color: #367aa9; }
+.wb-status-reviewed { color: #28744f; }
+.wb-card-source { margin-top: 6px; font-size: .65rem; color: #858c87; line-height: 1.5; }
+.wb-column-footer { padding: 12px 3px 0; border-top: 1px solid var(--wb-line); margin-top: 20px; font-size: .72rem; color: var(--wb-muted); }
+.wb-empty-column { margin: 0; border: 1px dashed #e5e9e6; border-radius: 7px; padding: 20px 14px; font-size: .75rem; color: #8b928e; }
+.wb-empty { margin: 0 0 25px; padding: 30px 22px; border: 1px solid var(--line, #e2e7e5); border-radius: 9px; background: #fafbfa; }
+.wb-empty h2 { font-size: 1rem; font-weight: 600; margin: 0 0 8px; }
+.wb-empty p { max-width: 58ch; font-size: .84rem; color: var(--muted, #66706d); line-height: 1.6; margin: 0 0 16px; }
+.wb-empty button, .wb-open-asset { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.wb-library-intro { color: var(--muted, #66706d); font-size: .85rem; line-height: 1.6; margin-bottom: 22px; }
+.wb-asset-list { border-top: 1px solid var(--line, #e2e7e5); }
+.wb-asset-row { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(145px, .45fr) auto; align-items: center; gap: 20px; border-bottom: 1px solid var(--line, #e2e7e5); padding: 20px 2px; }
+.wb-asset-main h2 { font-size: .95rem; line-height: 1.4; font-weight: 550; margin: 0 0 7px; overflow-wrap: anywhere; }
+.wb-asset-main p { color: var(--muted, #66706d); font-size: .78rem; line-height: 1.6; overflow-wrap: anywhere; }
+.wb-asset-main .wb-asset-source { font-size: .69rem; color: #858c87; margin-top: 3px; }
+.wb-asset-state { display: grid; gap: 9px; font-size: .76rem; }
+.wb-state-label { display: inline-flex; align-items: center; gap: 6px; }
+.wb-asset-amount { font-size: .9rem; font-variant-numeric: tabular-nums; }
+.wb-asset-amount small { color: var(--muted, #66706d); font-size: .67rem; padding-left: 3px; }
+.wb-open-asset { white-space: nowrap; }
+.wb-board button:focus-visible, .wb-library button:focus-visible, .wb-empty button:focus-visible, .wb-board:focus-visible { outline: 2px solid var(--focus, #397b63); outline-offset: 3px; }
+.wb-add:hover, .wb-asset-link:hover { background: #f2f5f3; }
+.wb-board button:disabled, .wb-library button:disabled, .wb-empty button:disabled { opacity: .55; cursor: wait; }
+.wb-board button, .wb-library button, .wb-empty button { touch-action: manipulation; }
+.wb-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 800px) {
+  .wb-board { grid-template-columns: repeat(5, minmax(250px, 78vw)); gap: 14px; min-height: 370px; }
+  .wb-column-cards { min-height: 240px; }
+  .wb-asset-link { min-height: 36px; font-size: .7rem; }
+  .wb-card-assets { column-gap: 10px; }
+  .wb-asset-row { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
+  .wb-asset-main { grid-column: 1 / -1; }
+  .wb-asset-state { align-self: start; }
+  .wb-open-asset { min-height: 42px; }
+}
+@media (prefers-reduced-motion: reduce) { .wb-board { scroll-behavior: auto; } }

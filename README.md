@@ -21,7 +21,7 @@ Open [the event workspace](http://127.0.0.1:3135/package). Choose **New event**,
 2. Select **Add a reply**, then **Fill with the sample reply**.
 3. Select **Update drafts**. The five drafts are now ready for review.
 4. Check each draft and mark it reviewed. Refresh to see the saved progress.
-5. Use **Download reviewed draft** when you want a printable copy.
+5. Open **Calendar**, **Guest quotes**, **Kitchen sheets**, **Staff event plans**, or **Guest event plans** in the sidebar. Download a draft or choose **Print / Save PDF**.
 
 This guided example uses explicitly authored records for one exact conversation and reply. New arbitrary messages or different replies require real AI; the example is never a fallback for a failed request.
 
@@ -33,7 +33,7 @@ The workspace keeps these states separate:
 - **Reviewed:** a person checked this particular draft version.
 - **Blocked:** a required detail is missing, unresolved, conflicting, or outside the fictional restaurant rules.
 
-[Simple setup](docs/SETUP.md) · [Hosting and maintenance](docs/HOSTING.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
+[Simple setup](docs/SETUP.md) · [Using the calendar and assets](docs/ASSET-WORKFLOW.md) · [Hosting and maintenance](docs/HOSTING.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
 
 ## How it works
 
@@ -43,6 +43,8 @@ Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, 
 
 **Add a reply** appends a message to the same event without replacing earlier messages. Updating drafts uses the full revised conversation and starts a fresh review. Earlier versions remain readable and are marked as superseded; they cannot be reviewed or exported as the current version. The searchable **Events** view and **Earlier versions & saved results** let you return to saved work without another AI call.
 
+The **Events** board groups events by actual preparation and review progress; a list view is also available. The calendar shows dated drafts and keeps undated events in **Date needed**. Each document section opens its own draft from the same saved event. Date, count, price and review summaries follow saved corrections across browsers. Unprepared new messages clear stale schedule and quote summaries until the updated drafts are prepared.
+
 | Draft | Main check |
 | --- | --- |
 | Calendar entry | Supported date, times, place, and booking details |
@@ -51,7 +53,7 @@ Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, 
 | Staff event plan | Operational arrangements and resolved dietary information |
 | Guest event plan | Guest-facing arrangements; unresolved dietary information blocks it when the host raises that topic |
 
-The visible attendance labels are **Guests** and **Children (0–12)**. The guest plan excludes internal staff notes. An internal JSON review package contains the full conversation and review record; it is not a guest handout. Calendar export is HTML, not a calendar integration.
+The visible attendance labels are **Guests** and **Children (0–12)**. Guest documents exclude internal staff notes and individual dietary details. An internal JSON review package contains the full conversation and review record; it is not a guest handout. Calendar downloads are tentative `.ics` files for manual import. They do not sync, book space, or invite anyone. The four document downloads are standalone HTML; **Print / Save PDF** uses the browser's print window.
 
 ## Real AI is optional
 

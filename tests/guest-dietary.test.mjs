@@ -68,7 +68,7 @@ test('resolved dietary details allow progress; outstanding questions and request
   assert.equal(guest(prepareEventPackage(request)).state, 'blocked');
   const correction = { dietary: { value: null, status: 'unknown', reason: 'The reply was not complete.' } };
   assert.equal(guest(prepareEventPackage({ ...complete, corrections: correction })).state, 'blocked');
-  assert.deepEqual(guest(prepareEventPackage(complete)).rows.map(r => r.field), complete.profile.readiness.guest.required, 'Readiness does not expose individual dietary details in the guest handout');
+  assert.deepEqual(guest(prepareEventPackage(complete)).rows.map(r => r.field), [...complete.profile.readiness.guest.required, 'guest_13_plus_count', 'child_count'], 'Guest handout adds the guest breakdown without exposing individual dietary details');
 });
 
 test('new guest readiness invalidates only the affected review; frozen scoring rules remain reproducible', () => {

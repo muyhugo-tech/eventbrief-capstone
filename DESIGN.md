@@ -17,6 +17,11 @@ colors:
   blocked-ground: "#fff9ed"
   evidence: "#f5d37f"
   focus: "#397b63"
+  stage-messages: "#77817b"
+  stage-needs-details: "#b87512"
+  stage-ready: "#3984ca"
+  stage-reviewing: "#8364b2"
+  stage-reviewed: "#23815c"
 typography:
   body:
     fontFamily: "Segoe UI, Arial, sans-serif"
@@ -43,6 +48,7 @@ rounded:
   control: "6px"
   surface: "7px"
   paste-panel: "8px"
+  event-card: "10px"
 spacing:
   compact: "8px"
   group: "16px"
@@ -78,11 +84,11 @@ components:
 
 **Creative North Star: "A working event record"**
 
-A quiet CRM shell puts the event, its current drafts, and the next action ahead of decoration. Pale navigation, compact controls, thin dividers, and white reading surfaces carry the workspace. The coordinator can open source evidence without losing the current draft.
+A quiet CRM shell puts the event, its current drafts, and the next action ahead of decoration. The event board, calendar, and four asset lists are views of the same saved event record. Pale navigation, compact controls, thin dividers, and white reading surfaces carry the workspace. The coordinator can open source evidence without losing the current draft.
 
-The owner supplied the [AI CRM dashboard reference](https://21st.dev/@larsen66/templates/ai-crm-dashboard) and [opportunities preview](https://21st-crm.vercel.app/opportunities). This is a code-led visual adaptation, not copied template source. No paid template was purchased or downloaded. Existing Yanni's sidebar SVG geometry, event-list count behavior, and EventBrief's evidence interaction remain part of the implemented system. [Attribution](docs/ATTRIBUTION.md) records the reuse boundary.
+The owner supplied a CRM board screenshot, the [AI CRM dashboard reference](https://21st.dev/@larsen66/templates/ai-crm-dashboard), and [opportunities preview](https://21st-crm.vercel.app/opportunities). This is a code-led visual adaptation, not copied template source. No paid template was purchased or downloaded. Existing Yanni's sidebar SVG geometry, event-list count behavior, and EventBrief's evidence interaction remain part of the implemented system. [Attribution](docs/ATTRIBUTION.md) records the reuse boundary.
 
-This system describes the `/package` workspace. The older three-field extraction page and the copied printable document templates have their own retained styles; their values do not become dashboard defaults.
+This system describes the event workspace at the [public demo](https://eventbrief-capstone.vercel.app/) and its `/package` route. The older three-field extraction page and the copied printable document templates have their own retained styles; their values do not become dashboard defaults.
 
 **Key Characteristics:**
 
@@ -92,9 +98,26 @@ This system describes the `/package` workspace. The older three-field extraction
 - Source-linked facts
 - Simple next actions
 
+## Reference lock and decisions
+
+The owner's screenshot governs the dashboard composition. It supplies five white columns, concise cards, small outlined stage markers, numeric count pills, fine gray borders, and horizontal scrolling. Yanni's event calendar and quote pages supply functional patterns for finding an event and producing a usable asset. They do not replace the screenshot's dashboard styling.
+
+| Decision | Reference and purpose | Implemented boundary |
+| --- | --- | --- |
+| Five-column event board | Owner's CRM screenshot; show progress at a glance. | Columns are Messages, Needs details, Ready to review, In review, and Reviewed. Their positions come from saved readiness and review counts; no drag action invents progress. |
+| Concise event cards | Screenshot's title and short metadata rows. | Cards show supplied venue, date, Guests, Children (0–12), a ready quote's draft total, and links to four document drafts. Missing values are labeled. |
+| Outlined stage markers and count pills | Screenshot's compact column headers. | Color is paired with a written stage. Counts describe events in the current filtered view. |
+| White surfaces and fine outlines | Screenshot's quiet column and card treatment. | Cards have a restrained one-pixel shadow; other workspace panels retain fills and borders. Five columns scroll horizontally when needed. |
+| Month calendar with a narrow-screen agenda | Yanni's event calendar behavior. | Entries open the saved event's calendar draft. Undated events remain visible. No reservation or external calendar connection is created. |
+| Dedicated asset lists | Yanni's event-to-document and quote workflows. | Each row opens the selected event's guest quote, kitchen sheet, staff plan, or guest plan, with its saved readiness and review state. |
+| Itemized quote and clear total | Yanni's quote preview and printable document pattern. | EventBrief's fictional prices and deterministic cents calculation remain authoritative. No production commercial terms are copied. |
+| Useful print outputs | Existing kitchen and event-order builders. | Kitchen and staff HTML reuse those builders through an audience filter. Quote and guest HTML use EventBrief's renderer. The browser provides Print / Save PDF. |
+
+The UI uses ordinary words and visible actions: **New event**, **Prepare five drafts**, **Mark this draft reviewed**, and **Download reviewed draft**. It does not present a board stage as a booking status. Exact controls and current boundaries are recorded in [the asset workflow](docs/ASSET-WORKFLOW.md).
+
 ## Colors
 
-Forest green identifies the primary action; amber and warm yellow distinguish unresolved details and cited source text. Quiet neutral tones carry the rest of the workspace.
+Forest green identifies the primary action; amber and warm yellow distinguish unresolved details and cited source text. Blue, purple, and green stage markers distinguish review progress on the event board. Quiet neutral tones carry the rest of the workspace.
 
 ### Primary
 
@@ -126,19 +149,23 @@ Canvas white carries the main workspace. Navigation and reading-well neutrals se
 
 The desktop workspace has a fixed pale sidebar and an independently scrolling main document. The rail is 222px wide, narrowing to 196px at 1100px. The main surface uses 32px horizontal padding, 24px in the compact layout, and 46px above 1600px. Its maximum width is 1800px.
 
+The event board uses five columns with a 236px minimum and 20px gaps. The board owns horizontal overflow. Below 800px, columns use a 250px minimum or 78vw width with 14px gaps so the next column remains reachable. The **List** option retains the compact event-table view. Asset lists use event details, state, and one action per row; below 800px, the event details span the row.
+
+The calendar uses a seven-day month grid with month navigation and a picker. Below 700px it switches to a dated agenda. Events without usable dates occupy a separate **Date needed** section.
+
 The draft selector and preview use a 190px/minmax grid, narrowing the selector to 165px at 1100px. Source messages and the shared record use two reading columns inside a disclosure. Document text is bounded to 78ch; source-message bodies to 70ch.
 
 At 800px and below, the rail becomes a top row, the recent list hides, controls stack, draft choices wrap, and the source/record panes become one column. Main padding becomes 18px. Event-table rows become labeled stacked blocks rather than forcing horizontal scrolling. The primary preparation button fills the available width.
 
 ## Elevation & Depth
 
-The workspace uses tonal separation and single-pixel borders, without decorative shadows. Selection adds a pale fill and a border. A focused control receives a 3px outline with a 3px offset. An active source excerpt receives a warm highlight and outline; this is an evidence state rather than elevation.
+The workspace uses tonal separation and single-pixel borders. Event cards add only the subtle one-pixel shadow from the screenshot reference. Selection adds a pale fill and a border. A focused control receives a visible green outline with an offset. An active source excerpt receives a warm highlight and outline; this is an evidence state rather than elevation.
 
-**The Flat Workspace Rule.** Use existing fills, borders, and focus treatment to distinguish states instead of introducing shadow-based cards.
+**The Quiet Workspace Rule.** Use existing fills, borders, and focus treatment to distinguish states. Do not expand the event card's slight separation into heavy shadows or decorative elevation across the app.
 
 ## Shapes
 
-Controls use modest rounding. The primary buttons and main surfaces follow the surface radius; draft choices and text fields follow the control radius. Small labels use the compact radius. The paste panel has its own larger radius. Navigation icons are inline SVG with a consistent 1.7 stroke; status dots accompany text and are not standalone controls.
+Controls use modest rounding. The primary buttons and main surfaces follow the surface radius; draft choices and text fields follow the control radius. Small labels use the compact radius. The paste panel and event cards have their own radii. Navigation icons are inline SVG with a consistent 1.7 stroke; status dots accompany text and are not standalone controls.
 
 ## Components
 
@@ -152,11 +179,21 @@ Search, selects, and reply fields are white with thin muted green-gray borders. 
 
 ### Navigation and draft choices
 
-The selected navigation row has a pale green fill and a written label. Recent events truncate long titles while keeping the event state visible. Draft choices show a title and one explicit readiness/review line. Below the mobile breakpoint they wrap into multiple rows.
+The selected navigation row has a pale green fill and a written label. The sidebar exposes Events, Calendar, Guest quotes, Kitchen sheets, Staff event plans, Guest event plans, and New event. Recent events truncate long titles while keeping the event state visible. Draft choices show a title and one explicit readiness/review line. Below the mobile breakpoint they wrap into multiple rows.
 
 ### Labels and reading surfaces
 
 Source mode, local-demo status, and draft review labels are small contextual tags. Draft and message surfaces are bordered reading areas, not decorative metric cards. Preparation details, source records, policy, history, and internal export remain disclosures.
+
+### Asset previews and copies
+
+Previews group approved facts for their audience. Quotes lead into an itemized estimate and draft total. Kitchen sheets emphasize courses and dietary requirements. Staff plans expose schedule, setup, and internal instructions. Guest plans show the host's schedule, food, drinks, and arrival information without internal notes, prices, or individual dietary details.
+
+Standalone HTML preserves source-mode, fictional-data, and review labels. The kitchen and staff exports retain their reused template typography; that print styling does not alter dashboard styles. Print / Save PDF isolates the selected draft. The calendar download is a tentative `.ics` import file; it does not synchronize a calendar or confirm a booking.
+
+### Public and private scope
+
+The header names the current scope: public sample or private workspace. The access disclosure explains the switch. A private code opens the same saved cloud record across browsers; public samples remain in a separate visitor area. Changes in another browser are fetched when a workspace listing is reopened and before a current draft is reviewed, printed, or downloaded. The interface does not claim live collaboration.
 
 ### Evidence interaction
 
