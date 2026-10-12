@@ -6,7 +6,7 @@ This is a **capstone prototype with fictional messages and prices**, with local 
 
 ## Try it
 
-Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Its **Try a sample** button needs no API key or access code. **Unlock AI** accepts the private access code for real model requests. The sample is a written demonstration, not an AI result. The hosted workflow and one real AI request were verified on October 12, 2026; see [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
+Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Its **Try a sample** button needs no API key or access code. **Open private workspace** accepts the access code for shared private events and real model requests. The same code opens the same private events and saved reviews in any browser; public samples stay separate. The sample is a written demonstration, not an AI result. The hosted workflow and one real AI request were verified on October 12, 2026; see [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
 
 To run on your computer, use **Node.js 24**:
 
@@ -39,7 +39,7 @@ The workspace keeps these states separate:
 
 The LLM reads the messages once and produces a shared event record with source excerpts. Ordinary code checks the record, calculates the fictional quote, and builds the five drafts. This keeps the drafts consistent and makes the calculations inspectable.
 
-Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download printable HTML. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Local runs save under ignored `out/`. Hosted runs save in a separate private Blob store, associated with a signed browser cookie. Both preserve progress across refresh; hosted records also survive redeployment. There is no account or cross-device recovery. See [storage limits](docs/HOSTING.md#saved-progress).
+Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download printable HTML. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Local runs save under ignored `out/`. Hosted runs save in a separate private Blob store: unlocked browsers share one private workspace, while public samples use isolated browser workspaces. Both preserve progress across refresh and redeployment. There are no individual accounts or roles. See [storage limits](docs/HOSTING.md#saved-progress).
 
 **Add a reply** appends a message to the same event without replacing earlier messages. Updating drafts uses the full revised conversation and starts a fresh review. Earlier versions remain readable and are marked as superseded; they cannot be reviewed or exported as the current version. The searchable **Events** view and **Earlier versions & saved results** let you return to saved work without another AI call.
 

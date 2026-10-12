@@ -25,7 +25,9 @@ Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). T
 3. Click **Add a reply**, **Fill with the sample reply**, then **Update drafts**.
 4. Check the five drafts and mark them reviewed.
 
-For real AI, enter the privately supplied **Access code**, then click **Unlock AI**. Choose **New event**, paste fictional messages, and click **Prepare five drafts**. **Lock AI** turns off paid generation for this browser without removing saved work. The code unlock lasts 12 hours.
+Enter your **Access code**, then click **Open private workspace**. Use the same code in Chrome or another browser to see the same private events. Click **Events** to refresh the list, then open an event to see its saved reviews. Everyone with the code shares this workspace.
+
+To make drafts, choose **New event**, paste fictional messages, and click **Prepare five drafts**. **Lock private workspace** hides those events and returns to this browser's samples. **Open public sample** does the same and opens the example. The unlock lasts 12 hours; enter the code again to return. Earlier browser events stay in the sample area and are not automatically copied into the private workspace.
 
 The public sample uses written results. Real AI requires the access code and available allowance. If AI is off or the limit is reached, the sample and saved drafts remain usable. Hosting setup is in [HOSTING.md](HOSTING.md).
 
@@ -54,7 +56,7 @@ The configured model and price constants are part of the recorded experiment. A 
 
 On your computer, completed conversations, AI receipts, source versions, corrections, and review marks are stored under `out/`. Browser storage remembers the current selection and unfinished message text.
 
-On the hosted demo, completed work is stored privately in Blob storage and stays associated with this browser for up to 30 days through a signed cookie. Keep using the same browser to return to it. Redeploying the app does not remove the records. Clearing the cookie or letting it expire loses access; it does not automatically delete the stored records. There is no account, cross-device recovery, or progress transfer between local and hosted versions.
+On the hosted demo, completed work is stored in private Blob storage. Events created in the private workspace are available in any browser after entering the access code. Public samples stay with the browser that created them through a 30-day cookie. Losing that cookie loses access to those samples; it does not delete their stored records. Redeployment preserves both workspaces. Unfinished text is saved only in the browser where you typed it. There is no automatic transfer between local and hosted versions.
 
 - **Download draft:** printable HTML for that audience.
 - **Download review package:** internal JSON containing sources, original facts, corrections, and review marks.

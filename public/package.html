@@ -29,19 +29,19 @@
     </header>
     <section id="hosted-access" class="hosted-access" hidden aria-label="Try EventBrief">
       <div class="hosted-sample">
-        <h2>Try EventBrief</h2>
+        <h2>Public sample</h2>
         <p>Start with a sample event. Open the drafts, add a reply, and save your review.</p>
         <button id="hosted-try-demo" class="button primary" disabled>Try a sample</button>
         <p class="live-note">Written sample results. No AI call or access code needed.</p>
       </div>
       <div class="hosted-unlock">
-        <h2>Use real AI</h2>
-        <p id="hosted-access-help">Have an access code? Unlock AI to make drafts from your own fictional event messages.</p>
+        <h2>Private workspace</h2>
+        <p id="hosted-access-help">Enter your access code to open the same events in any browser and use real AI. Everyone with the code shares this workspace.</p>
         <form id="hosted-unlock-form">
           <label for="hosted-access-code">Access code</label>
-          <div class="hosted-code-row"><input id="hosted-access-code" name="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="256" required aria-describedby="hosted-access-help hosted-access-error"><button id="hosted-unlock-button" type="submit" class="button secondary">Unlock AI</button></div>
+          <div class="hosted-code-row"><input id="hosted-access-code" name="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="256" required aria-describedby="hosted-access-help hosted-access-error"><button id="hosted-unlock-button" type="submit" class="button secondary">Open private workspace</button></div>
         </form>
-        <button id="hosted-lock-button" type="button" class="small-button" hidden>Lock AI</button>
+        <button id="hosted-lock-button" type="button" class="small-button" hidden>Lock private workspace</button>
         <p id="hosted-access-status" class="live-note" role="status" aria-live="polite"></p>
         <p id="hosted-access-error" class="error" role="alert" hidden></p>
       </div>

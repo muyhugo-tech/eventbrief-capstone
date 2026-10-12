@@ -7,9 +7,9 @@ Pushing to that branch automatically deploys EventBrief. A Git-triggered deploym
 ## What visitors can do
 
 - **Try a sample:** a public written example, including the missing-detail and reply workflow. No access code or model request.
-- **Unlock AI:** enter a private access code to prepare drafts from fictional messages. The browser receives a signed, HttpOnly cookie, never the API key.
+- **Open private workspace:** enter the access code to see the same private events, saved AI results, and review progress in any browser. Everyone with the code shares this synthetic workspace. The browser receives a signed, HttpOnly cookie, never the API key.
 - **Review and download:** inspect source evidence, correct details, mark drafts reviewed, and download them. Reopening saved drafts makes no model request.
-- **Lock AI:** remove AI access while keeping this browser's workspace.
+- **Lock private workspace:** hide the shared events and return to this browser's separate public sample area. **Open public sample** also locks the private workspace before opening the example.
 
 ## Set up the separate project
 
@@ -40,9 +40,13 @@ Build future features in the shared core or extend these adapters. A new dashboa
 
 ## Saved progress
 
-Each browser receives a signed visitor cookie lasting **30 days**. An AI unlock cookie lasts **12 hours** and is tied to that visitor. Both are secure and HttpOnly. The access code itself is not saved in browser storage. Saved records live in a private visitor-specific Blob namespace and survive redeployment.
+Each browser receives a signed visitor cookie lasting **30 days**. A private-workspace unlock cookie lasts **12 hours** and is tied to that visitor. Both are secure and HttpOnly. The access code itself is not saved in browser storage. Records survive redeployment.
 
-This is browser access, not a user account. Clearing cookies, changing browsers or devices, expiration, or rotating the session secret prevents the browser from reopening its old workspace. There is no account recovery or cross-device sync. Rotating the access code revokes AI unlocks without changing the visitor identity.
+Unlocked requests use the fixed private Blob namespace `eventbrief/v1/visitors/shared-private-workspace-v1/`. Entering the code in another browser reopens that same workspace. Locking, cookie expiry, code rotation, and session-secret rotation do not delete private records: unlock again with the current code. There are no individual accounts or roles; everyone with the code can read and edit all private demo events. Click **Events** to fetch the latest list from another browser; opening an event loads its latest saved review. This is refresh-based sharing, not live collaborative editing. Concurrent stale saves are rejected.
+
+Locked requests continue to use the browser's original visitor-specific namespace. Existing browser events remain there; opening the private workspace does not copy or delete them. Public samples and their review marks are separate from the shared private events. Losing the visitor cookie loses access to that browser's samples, but not to the private workspace once unlocked again. There is no automatic transfer between these workspaces or between local and hosted runs.
+
+The server chooses the namespace only after validating the cookie. Package mutations also declare the workspace the page displayed; a mismatch after locking, unlocking, or expiration rejects the request before writing. The interface reloads when switching workspaces and uses separate browser-storage keys for their selections and unfinished text.
 
 Cookie expiry does **not** automatically delete saved Blob data. An administrator must manage retention separately. Keep the demo synthetic. Local and hosted workspaces are separate, and download/import recovery is not implemented.
 
@@ -67,8 +71,8 @@ On the deployed site:
 1. Open a fresh browser session. Confirm **Try a sample** works while AI is locked.
 2. Open a blocked draft, add the exact sample reply, and confirm all five drafts become ready.
 3. Mark a draft reviewed and refresh. Confirm the review is still saved.
-4. Confirm a different browser session cannot see the first session's work.
-5. Try a wrong access code, then the correct one. Confirm AI access changes as expected. Lock AI and confirm the drafts remain available.
+4. Confirm a different locked browser cannot see the first browser's samples or any private events. Unlock both browsers with the code and confirm their private events and reviews match.
+5. Try a wrong access code, then the correct one. Lock the private workspace and confirm only this browser's samples remain visible. Unlock again and confirm private drafts return.
 6. Confirm a redeployment preserves the same browser's progress and the spent AI slots. Any real model test consumes a slot from the existing budget.
 
 The repository intentionally has no license at the owner's request.

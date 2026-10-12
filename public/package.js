@@ -18,10 +18,14 @@ let demo = null;
 let overview = false;
 let hosted = null;
 let accessBusy = false;
+// Retain existing public/local browser drafts; private selections and unsent
+// text have separate keys and are never restored into the public sample.
+const browserKey = suffix => `eventbrief.package.${hosted?.workspace === 'private' ? 'private.' : ''}${suffix}`;
+const storageMessage = () => hosted?.workspace === 'private' ? 'Saved in your private workspace. Open Events to see changes from another browser.' : hosted ? 'Saved in this browser’s public sample area. Private events are separate.' : 'Progress saved on this computer.';
 const isPasted = () => currentId === 'new' || currentId?.startsWith('pasted-');
 const post = (path, body) => request(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 function rememberSelection() {
-  try { localStorage.setItem('eventbrief.package.selection', JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, run_id:session()?.data?.extraction?.run_id??null})); }
+  try { localStorage.setItem(browserKey('selection'), JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, run_id:session()?.data?.extraction?.run_id??null})); }
   catch { $('#save-status').textContent = hosted ? 'Your place could not be saved in this browser. Your completed reviews are still saved.' : 'Your place could not be saved in this browser. Completed reviews still save on this computer.'; }
 }
 const session = () => sessions.get(`${currentMode}:${currentId}`);
@@ -54,17 +58,19 @@ async function refreshListing() { applyListing(await request('/api/package/scena
 function renderAccess() {
   $('#hosted-access').hidden = !hosted;
   if (!hosted) return;
-  $('.demo-badge').textContent = 'Public demo';
-  $('.storage-note').textContent = 'Saved for this browser. Keep using this browser to return to your drafts. Nothing is sent or booked.';
+  $('.demo-badge').textContent = hosted.unlocked ? 'Private workspace' : 'Public sample';
+  $('.rail-intro span').textContent = hosted.unlocked ? 'Shared private workspace' : 'This browser’s samples';
+  $('.storage-note').textContent = `${storageMessage()} Nothing is sent or booked.`;
   $('footer span').textContent = 'Capstone prototype · all data fictional';
-  $('#hosted-unlock-form').hidden = hosted.unlocked || !hosted.ai_configured;
+  $('#hosted-unlock-form').hidden = hosted.unlocked;
   $('#hosted-lock-button').hidden = !hosted.unlocked;
   $('#hosted-lock-button').disabled = busy || accessBusy;
   $('#hosted-access-code').disabled = busy || accessBusy;
   $('#hosted-unlock-button').disabled = busy || accessBusy;
-  $('#hosted-unlock-button').textContent = accessBusy ? 'Checking…' : 'Unlock AI';
+  $('#hosted-unlock-button').textContent = accessBusy ? 'Checking…' : 'Open private workspace';
   $('#hosted-try-demo').disabled = busy || accessBusy || !demo?.available;
-  $('#hosted-access-status').textContent = accessBusy ? 'Please wait…' : !hosted.ai_configured ? 'Real AI is not connected yet. You can still try the sample.' : hosted.unlocked ? 'AI unlocked. You can now prepare drafts from your messages.' : 'AI is locked. The sample is ready to try.';
+  $('#hosted-try-demo').textContent = hosted.unlocked ? 'Open public sample' : 'Try a sample';
+  $('#hosted-access-status').textContent = accessBusy ? 'Please wait…' : hosted.unlocked ? `Your private workspace is open. Events and reviews are shared across browsers.${hosted.ai_configured ? '' : ' AI is currently unavailable.'}` : 'Private events are locked. The public sample is ready to try.';
   $('#package-mode option[value="live"]').disabled = !live.ready || !hosted.unlocked;
 }
 function accessError(message) {
@@ -81,14 +87,15 @@ async function changeAccess(unlock) {
   $('#hosted-access-code').value = '';
   try {
     await post(unlock ? '/api/hosted/unlock' : '/api/hosted/lock', unlock ? {code} : {});
-    await refreshListing();
-    renderPackage();
+    // A full reload discards rendered documents, sessions and edits from the
+    // previous scope before loading the other workspace's saved selection.
+    window.location.reload();
   } catch (error) {
     accessError(error.message || 'Could not change AI access. Please try again.');
   } finally {
     accessBusy = false; setBusy(false);
     if (hosted.unlocked) $('#hosted-lock-button').focus();
-    else if (hosted.ai_configured) $('#hosted-access-code').focus();
+    else $('#hosted-access-code').focus();
   }
 }
 $('#hosted-unlock-form').addEventListener('submit', event => { event.preventDefault(); changeAccess(true); });
@@ -134,6 +141,7 @@ function renderEvents() {
   $('#rail-event-count').textContent = rows.length;
   $('#events-count').textContent = countLabel(filtered.length, rows.length);
   $('#events-empty').hidden = filtered.length > 0;
+  $('#events-empty').textContent = rows.length ? 'No events match. Try a different name.' : 'No saved events yet. Click New event to start.';
   $('#event-rows').innerHTML = filtered.map(item => {
     const display = eventDisplay(item);
     return `<tr><td><button class="event-open" data-open-event="${esc(item.current_scenario_id)}"${busy ? ' disabled' : ''}>${esc(display.title)}</button><p class="event-row-note">${esc(display.note)}</p></td><td data-label="Progress"><span class="event-state ${display.tone}">${esc(display.state)}</span></td><td data-label="Version">${item.revision ?? 1}</td><td data-label="Source">${esc(display.source)}</td></tr>`;
@@ -174,8 +182,11 @@ function announce(message, error = false) {
 }
 
 async function request(path, options) {
-  const response = await fetch(path, options);
+  const headers = new Headers(options?.headers);
+  if (hosted && path.startsWith('/api/package/')) headers.set('X-EventBrief-Workspace', hosted.workspace);
+  const response = await fetch(path, {...options, headers});
   const result = await response.json();
+  if (result.code === 'WORKSPACE_CHANGED') window.location.reload();
   if (!response.ok) { const error = new Error(result.error || 'The package could not be prepared.'); error.details = result; throw error; }
   return result;
 }
@@ -372,7 +383,7 @@ async function saveProgress() {
   $('#save-status').textContent='Saving your progress…';
   try {
     const result=await post('/api/package/review',{scenario_id:currentId,run_id:s.data.extraction?.run_id??null,corrections:s.corrections,reviews:s.reviews,sequence:s.sequence});
-    s.sequence=result.saved.sequence;$('#save-status').textContent=hosted ? 'Saved for this browser. Keep using this browser to return to your drafts.' : 'Progress saved on this computer.';
+    s.sequence=result.saved.sequence;$('#save-status').textContent=storageMessage();
   } catch(error) {$('#save-status').textContent='Progress was not saved. Keep this page open and download the review package.';throw error;}
 }
 async function openSaved(runId=null) {
@@ -391,11 +402,11 @@ async function openSaved(runId=null) {
 
 function saveMessageDraft() {
   $('#paste-count').textContent=`${$('#event-messages').value.length.toLocaleString()} / 8,000 characters`;
-  try {localStorage.setItem('eventbrief.package.message-draft',$('#event-messages').value);}
+  try {localStorage.setItem(browserKey('message-draft'),$('#event-messages').value);}
   catch {$('#save-status').textContent='The text in this box could not be saved in this browser. Keep a copy before refreshing.';}
 }
 
-function replyDraftKey(id = currentId) { return `eventbrief.package.reply:${id}`; }
+function replyDraftKey(id = currentId) { return browserKey(`reply:${id}`); }
 function restoreReplyDraft() {
   try {
     const raw = localStorage.getItem(replyDraftKey());
@@ -438,7 +449,16 @@ $('#reply-form').addEventListener('submit', async event => {
   if (saved && (referenceAvailable() || canAnalyze())) await prepare(undefined, 'Reply added. Check the updated drafts and review them again.', true);
   else if (saved) announce('Your reply is saved as a new version. AI preparation is unavailable; earlier drafts remain in the version history.');
 });
-$('#show-events').addEventListener('click', () => showOverview(true));
+$('#show-events').addEventListener('click', async () => {
+  if (busy) return;
+  setBusy(true);
+  try {
+    await refreshListing();
+    sessions.clear(); openSession();
+    showOverview(true);
+  } catch (error) { announce(error.message, true); }
+  finally { setBusy(false); }
+});
 $('#new-event').addEventListener('click', () => chooseScenario('new'));
 $('#header-new-event').addEventListener('click', () => chooseScenario('new'));
 $('#event-search').addEventListener('input', renderEvents);
@@ -451,6 +471,11 @@ async function tryDemo() {
   if (busy) return;
   setBusy(true); announce('Opening the guided example…'); announce('', true);
   try {
+    if (hosted?.unlocked) {
+      await post('/api/hosted/lock', {});
+      window.location.assign('/?sample=1');
+      return;
+    }
     const result = await post('/api/package/demo', {});
     currentId = result.input.id; currentMode = result.reference_available ? 'reference' : 'live'; openSession();
     await refreshListing(); $('#package-mode').value = currentMode;
@@ -514,12 +539,24 @@ $('#package-history').addEventListener('click', async event => {
   } catch(error){announce(error.message,true);renderPackage();}
   finally{setBusy(false);}
 });
-async function checkLatest() {
+async function checkLatest({allowEarlier = false} = {}) {
   if(busy||!session()?.data)return false;
   setBusy(true);
   try {
     await refreshListing();renderPackage();
-    if(isEarlier()){announce('New messages have arrived. Choose the latest messages before reviewing or downloading.');return false;}
+    if(isEarlier() && !allowEarlier){announce('New messages have arrived. Choose the latest messages before reviewing or downloading.');return false;}
+    if (workspace && session()?.data) {
+      const s = session(), runId = s.data.extraction?.run_id ?? null;
+      const loaded = await post('/api/package/review/load', {scenario_id: currentId, run_id: runId});
+      if ((loaded.saved?.sequence ?? 0) !== s.sequence ||
+          JSON.stringify(loaded.saved?.corrections ?? {}) !== JSON.stringify(s.corrections) ||
+          JSON.stringify(loaded.saved?.reviews ?? {}) !== JSON.stringify(s.reviews)) {
+        await openSaved(runId);
+        renderPackage();
+        announce('The saved review changed. The latest draft is now open. Check it before reviewing or downloading.');
+        return false;
+      }
+    }
     return true;
   } catch(error){announce('The latest messages could not be checked. Try again before reviewing or downloading.',true);return false;}
   finally{setBusy(false);}
@@ -593,10 +630,11 @@ $('#review-document').addEventListener('click', async () => {
   if(!await checkLatest())return;
   const doc = session().data.documents.find(item => item.id === selectedDocument);
   if (busy || doc.state !== 'ready_for_review') return;
+  const previousReviews = structuredClone(session().reviews);
   if (isReviewed(doc)) delete session().reviews[doc.id];
   else session().reviews[doc.id] = { decision: 'reviewed', revision: doc.revision, reviewed_at: new Date().toISOString() };
   setBusy(true);
-  try {await saveProgress();}catch(error){announce(error.message,true);}
+  try {await saveProgress();}catch(error){session().reviews = previousReviews;announce(error.message,true);}
   finally{renderPackage();setBusy(false);}
 });
 
@@ -616,6 +654,7 @@ $('#download-document').addEventListener('click', async () => {
 });
 $('#download-package').addEventListener('click', async () => {
   if (busy || !session().data) return;
+  if (!await checkLatest({allowEarlier: true})) return;
   setBusy(true);
   try {
     await refreshListing();
@@ -639,7 +678,7 @@ async function init() {
     const data = await request('/api/package/scenarios');
     applyListing(data);
     let selection=null;
-    try { selection=JSON.parse(localStorage.getItem('eventbrief.package.selection')); $('#event-messages').value=localStorage.getItem('eventbrief.package.message-draft')??''; }
+    try { selection=JSON.parse(localStorage.getItem(browserKey('selection'))); $('#event-messages').value=localStorage.getItem(browserKey('message-draft'))??''; }
     catch {$('#save-status').textContent='Your last place could not be restored. Saved reviews are still available.';}
     $('#paste-count').textContent=`${$('#event-messages').value.length.toLocaleString()} / 8,000 characters`;
     currentId = selection && (selection.id==='new'||scenarios.some(input=>input.id===selection.id)) ? selection.id : workspace || hosted ? 'new' : updates?.active_scenario_id ?? scenarios[0].id;
@@ -662,6 +701,11 @@ async function init() {
     if(currentId!=='new' && updates?.active_scenario_id && !session().data) announce('Messages are saved. Click Prepare five drafts. Earlier AI results are available below.');
     restoreReplyDraft(); renderPackage();
     setBusy(false);
+    if (hosted?.unlocked && currentId === 'new') showOverview(true);
+    if (hosted && !hosted.unlocked && new URLSearchParams(window.location.search).get('sample') === '1') {
+      window.history.replaceState(null, '', window.location.pathname);
+      await tryDemo();
+    }
   } catch {
     announce('Could not load the event workspace. Please reload this page.', true);
   }

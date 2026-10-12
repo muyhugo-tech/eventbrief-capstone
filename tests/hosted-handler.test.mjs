@@ -41,6 +41,7 @@ function memoryBlob() {
 
 function setup({ duringTransport } = {}) {
   const sdk = memoryBlob(); let calls = 0;
+  const config = {...env};
   const packageTransport = async ({ request, key }) => {
     calls++;
     if (duringTransport) await duringTransport();
@@ -54,13 +55,15 @@ function setup({ duringTransport } = {}) {
   };
   function visitor() {
     const jar = new Map();
+    let scope = 'public';
     return {
       async request(path, body, options = {}) {
         const method = options.method ?? (body === undefined ? 'GET' : 'POST');
         const headers = new Headers({ ...(method === 'POST' ? { Origin: origin, 'Content-Type': 'application/json' } : {}), ...options.headers });
+        if (path.includes('package/') && !headers.has('X-EventBrief-Workspace')) headers.set('X-EventBrief-Workspace', scope);
         headers.set('Cookie', [...jar].map(([name, value]) => `${name}=${value}`).join('; '));
         // A fresh handler on every request exercises cold-start persistence.
-        const response = await createHostedFetch({ env, sdk, packageTransport })(new Request(origin + path, {
+        const response = await createHostedFetch({ env: config, sdk, packageTransport })(new Request(origin + path, {
           method, headers, ...(body === undefined ? {} : { body: JSON.stringify(body) })
         }));
         for (const cookie of response.headers.getSetCookie()) {
@@ -68,11 +71,13 @@ function setup({ duringTransport } = {}) {
           const name = pair.slice(0, index), value = pair.slice(index + 1);
           if (cookie.includes('Max-Age=0')) jar.delete(name); else jar.set(name, value);
         }
-        return { status: response.status, data: await response.json(), headers: response.headers };
+        const data = await response.json();
+        if (response.ok) scope = data.hosted?.workspace ?? data.workspace ?? scope;
+        return { status: response.status, data, headers: response.headers };
       }
     };
   }
-  return { sdk, visitor, calls: () => calls };
+  return { sdk, visitor, config, calls: () => calls };
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
@@ -111,7 +116,7 @@ test('hosted public sample saves review progress across cold starts and reaches 
   assert.equal(system.calls(), 0);
 });
 
-test('hosted access code gates the provider, visitor cookies isolate sources and receipts, and locking preserves saved work', async () => {
+test('hosted access code gates shared private sources and receipts; locking restores the separate public workspace', async () => {
   const system = setup(), owner = system.visitor(), stranger = system.visitor();
   const sample = await owner.request('/api/package/demo', {}), scenarioId = sample.data.input.id;
   const locked = await owner.request('/api/package/analyze', { scenario_id: scenarioId });
@@ -120,6 +125,8 @@ test('hosted access code gates the provider, visitor cookies isolate sources and
   assert.equal(wrong.status, 401); assert.equal(system.calls(), 0);
   const unlocked = await owner.request('/api/hosted/unlock', { code: env.EVENTBRIEF_ACCESS_CODE });
   assert.equal(unlocked.status, 200); assert.equal(unlocked.data.unlocked, true);
+  assert.equal((await owner.request('/api/package/scenarios')).data.events.length, 0);
+  assert.equal((await owner.request('/api/package/messages', {text: demoText})).status, 200);
   const analyzed = await owner.request('/api/package/analyze', { scenario_id: scenarioId });
   assert.equal(analyzed.status, 200, JSON.stringify(analyzed.data)); assert.equal(system.calls(), 1);
   assert.equal(analyzed.data.extraction.mode, 'live');
@@ -142,11 +149,12 @@ test('hosted access code gates the provider, visitor cookies isolate sources and
   const session = await owner.request('/api/hosted/session'); assert.equal(session.data.unlocked, false);
   const preserved = await owner.request('/api/package/scenarios');
   assert.equal(preserved.status, 200); assert.equal(preserved.data.events.length, 1);
-  assert.equal(preserved.data.history[0].run_id, runId); assert.equal(preserved.data.events[0].summary.reviewed_count, 2);
-  assert.equal((await owner.request(`/api/package/attempts/${runId}`)).status, 200);
+  assert.equal(preserved.data.history.length, 0); assert.equal(preserved.data.events[0].summary.reviewed_count, 0);
+  assert.equal((await owner.request(`/api/package/attempts/${runId}`)).status, 404);
+  assert.equal((await owner.request('/api/hosted/unlock', {code: env.EVENTBRIEF_ACCESS_CODE})).status, 200);
   const reopened = await owner.request('/api/package/review/load', identity);
   assert.equal(reopened.status, 200); assert.deepEqual(reopened.data.saved.reviews, reviews);
-  assert.equal((await owner.request('/api/package/analyze', { scenario_id: scenarioId })).status, 401);
+  assert.equal((await owner.request('/api/package/scenarios')).data.history[0].run_id, runId);
   assert.equal(system.calls(), 1);
 });
 
@@ -176,6 +184,7 @@ test('a reply from another request during AI preparation makes the completed ori
   owner = system.visitor();
   assert.equal((await owner.request('/api/package/demo', {})).status, 200);
   assert.equal((await owner.request('/api/hosted/unlock', { code: env.EVENTBRIEF_ACCESS_CODE })).status, 200);
+  assert.equal((await owner.request('/api/package/messages', {text: demoText})).status, 200);
   const original = await owner.request('/api/package/analyze', { scenario_id: demoInput.id });
   assert.equal(original.status, 200, JSON.stringify(original.data));
   assert.equal(system.calls(), 1);
@@ -192,4 +201,71 @@ test('a reply from another request during AI preparation makes the completed ori
   const current = await owner.request('/api/package/prepare', { scenario_id: appended.data.input.id, corrections: {} });
   assert.equal(current.status, 200); assert.equal(readyIds(current.data).length, 5);
   assert.equal(current.data.version.superseded, false);
+});
+
+test('two browsers with the code share messages, results and reviews while public samples stay isolated', async () => {
+  const system = setup(), chrome = system.visitor(), inApp = system.visitor(), publicVisitor = system.visitor();
+  await chrome.request('/api/package/demo', {});
+  await inApp.request('/api/package/messages', {text: 'Host: Public browser sample only.'});
+  for (const client of [chrome, inApp]) {
+    const result = await client.request('/api/hosted/unlock', {code: env.EVENTBRIEF_ACCESS_CODE});
+    assert.equal(result.data.workspace, 'private');
+    assert.equal((await client.request('/api/package/scenarios')).data.events.length, 0);
+  }
+  assert.equal((await chrome.request('/api/package/demo', {})).status, 409);
+  await chrome.request('/api/package/messages', {text: demoText});
+  const changed = await chrome.request('/api/package/reply', {scenario_id: demoInput.id, text: demoReply, role: 'host'});
+  const id = changed.data.input.id;
+  const ai = await chrome.request('/api/package/analyze', {scenario_id: id});
+  assert.equal(ai.status, 200); assert.equal(readyIds(ai.data).length, 5);
+  const identity = {scenario_id: id, run_id: ai.data.extraction.run_id};
+  const marks = marksFor(ai.data);
+  const firstMark = {calendar: marks.calendar};
+  await chrome.request('/api/package/review', {...identity, corrections: {}, reviews: firstMark, sequence: 0});
+  const other = await inApp.request('/api/package/scenarios');
+  assert.equal(other.data.events.length, 1);
+  assert.equal(other.data.events[0].current_scenario_id, id);
+  assert.equal(other.data.events[0].summary.reviewed_count, 1);
+  assert.equal((await inApp.request(`/api/package/attempts/${identity.run_id}`)).status, 200);
+  const loaded = await inApp.request('/api/package/review/load', identity);
+  assert.deepEqual(loaded.data.saved.reviews, firstMark);
+  const second = await inApp.request('/api/package/review', {...identity, corrections: {}, reviews: marks, sequence: 1});
+  assert.equal(second.status, 200);
+  const stale = await chrome.request('/api/package/review', {...identity, corrections: {}, reviews: {}, sequence: 1});
+  assert.equal(stale.status, 400); assert.match(stale.data.error, /changed in another tab/);
+  assert.equal(Object.keys((await chrome.request('/api/package/review/load', identity)).data.saved.reviews).length, 5);
+  await publicVisitor.request('/api/package/demo', {});
+  assert.equal((await publicVisitor.request('/api/package/scenarios')).data.events[0].revision, 1);
+  assert.equal((await publicVisitor.request('/api/package/review/load', identity)).status, 400);
+  assert.equal((await publicVisitor.request(`/api/package/attempts/${identity.run_id}`)).status, 404);
+  await chrome.request('/api/hosted/lock', {});
+  assert.equal((await chrome.request('/api/package/scenarios')).data.events[0].revision, 1);
+  await inApp.request('/api/hosted/lock', {});
+  assert.equal((await inApp.request('/api/package/scenarios')).data.events[0].title, 'Pasted event: Host: Public browser sample only.');
+  await chrome.request('/api/hosted/unlock', {code: env.EVENTBRIEF_ACCESS_CODE});
+  assert.equal((await chrome.request('/api/package/scenarios')).data.events[0].summary.reviewed_count, 5);
+  assert.equal(system.calls(), 1);
+});
+
+test('stale workspace pages cannot write across a lock, unlock, or access-code rotation', async () => {
+  const system = setup(), client = system.visitor();
+  await client.request('/api/hosted/unlock', {code: env.EVENTBRIEF_ACCESS_CODE});
+  await client.request('/api/package/messages', {text: demoText});
+  for (const scope of ['public', '']) {
+    const wrong = await client.request('/api/package/messages', {text: 'Host: Must never be saved.'}, {headers: {'X-EventBrief-Workspace': scope}});
+    assert.equal(wrong.status, 409); assert.equal(wrong.data.code, 'WORKSPACE_CHANGED');
+  }
+  system.config.EVENTBRIEF_ACCESS_CODE = 'replacement-fictional-access-code-for-tests';
+  const stale = await client.request('/api/package/messages', {text: 'Host: Must never reach the public sample.'});
+  assert.equal(stale.status, 409);
+  await client.request('/api/hosted/session');
+  assert.equal((await client.request('/api/package/scenarios')).data.events.length, 0);
+  await client.request('/api/hosted/unlock', {code: system.config.EVENTBRIEF_ACCESS_CODE});
+  const recovered = await client.request('/api/package/scenarios');
+  assert.equal(recovered.data.events.length, 1);
+  assert.equal(recovered.data.events[0].event_id, demoInput.id);
+  await client.request('/api/hosted/lock', {});
+  const oldPrivate = await client.request('/api/package/review/load', {scenario_id: demoInput.id, run_id: null}, {headers: {'X-EventBrief-Workspace': 'private'}});
+  assert.equal(oldPrivate.status, 409);
+  assert.equal(system.calls(), 0);
 });
