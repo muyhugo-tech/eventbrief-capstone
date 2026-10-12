@@ -111,7 +111,7 @@ The owner's screenshot governs the dashboard composition. It supplies five white
 | Month calendar with a narrow-screen agenda | Yanni's event calendar behavior. | Entries open the saved event's calendar draft. Undated events remain visible. No reservation or external calendar connection is created. |
 | Dedicated asset lists | Yanni's event-to-document and quote workflows. | Each row opens the selected event's guest quote, kitchen sheet, staff plan, or guest plan, with its saved readiness and review state. |
 | Itemized quote and clear total | Yanni's quote preview and printable document pattern. | EventBrief's fictional prices and deterministic cents calculation remain authoritative. No production commercial terms are copied. |
-| Useful print outputs | Existing kitchen and event-order builders. | Kitchen and staff HTML reuse those builders through an audience filter. Quote and guest HTML use EventBrief's renderer. The browser provides Print / Save PDF. |
+| Useful print outputs | Existing kitchen and event-order builders, plus the owner's quote PDF. | Kitchen and staff HTML reuse those builders through an audience filter. Quotes use a shared preview/PDF template; the browser also provides Print / Save PDF. |
 
 The UI uses ordinary words and visible actions: **New event**, **Prepare five drafts**, **Mark this draft reviewed**, and **Download reviewed draft**. It does not present a board stage as a booking status. Exact controls and current boundaries are recorded in [the asset workflow](docs/ASSET-WORKFLOW.md).
 
@@ -186,6 +186,8 @@ The selected navigation row has a pale green fill and a written label. The sideb
 Source mode, local-demo status, and draft review labels are small contextual tags. Draft and message surfaces are bordered reading areas, not decorative metric cards. Preparation details, source records, policy, history, and internal export remain disclosures.
 
 ### Asset previews and copies
+
+The guest quote is reference-locked to the owner's one-page Yannis wedding estimate: a serif brand/title, thin dividing rule, two-column pale event summary, dark total band, and itemized rows. The EventBrief green palette owns the color role; no production contact details or commercial rules are carried over. Montserrat body text and Playfair Display headings follow that document, supplied by pinned Fontsource packages. Preview and PDF share `public/quote-document.mjs`; the PDF embeds the same fonts. Source-check buttons sit outside the paper. The normal synthetic quote fits one Letter page; longer text flows to more pages rather than clipping. This document styling does not restyle the dashboard. The direct **Download PDF** action exports only the saved, current, ready quote and retains its review label.
 
 Previews group approved facts for their audience. Quotes lead into an itemized estimate and draft total. Kitchen sheets emphasize courses and dietary requirements. Staff plans expose schedule, setup, and internal instructions. Guest plans show the host's schedule, food, drinks, and arrival information without internal notes, prices, or individual dietary details.
 

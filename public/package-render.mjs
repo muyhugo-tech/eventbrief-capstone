@@ -1,9 +1,9 @@
 import { approvedDocumentRows, reusedInternalDocument } from './package-export.mjs';
+import { renderGuestQuote, standaloneGuestQuote } from './quote-document.mjs';
 
 export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[character]);
-const money = cents => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
 const sourceButton = field => `<button class="fact-source" data-field="${escapeHtml(field)}">Source</button>`;
 const overviewFields = ['host_name', 'event_date', 'start_time', 'end_time', 'timezone', 'venue', 'guest_13_plus_count', 'child_count', 'guest_count'];
 
@@ -32,6 +32,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
       <p>Resolve the following before preparing this document:</p><ul>${(document.blockers ?? []).map(blocker => `<li>${esc(blocker.reason)}${interactive ? sourceButton(blocker.field) : ''}</li>`).join('')}</ul>
       <p>No completed draft or quote total has been produced.</p></div></article>`;
   }
+  if(document.id==='quote')return renderGuestQuote(document,prepared,{reviewed,interactive});
   const facts = (fields, className = 'draft-facts') => {
     const selected = fields.map(field => rows.find(row => row.field === field)).filter(Boolean);
     return selected.length ? `<dl class="${className}">${selected.map(row => `<div class="draft-fact"><dt>${esc(row.field === 'guest_count' ? 'Total attendance' : row.label)}</dt><dd>${esc(displayValue(row))}${interactive ? sourceButton(row.field) : ''}</dd></div>`).join('')}</dl>` : '';
@@ -45,16 +46,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
   const beverage = () => facts(['beverage']) + (document.beverage_note ? `<p class="draft-note">${esc(document.beverage_note)}</p>` : '');
   let content = section('Event details', facts(document.id === 'staff' ? overviewFields.filter(field => !['start_time','end_time'].includes(field)) : overviewFields));
 
-  if (document.id === 'quote') {
-    content += section('Food &amp; drinks', facts(['menu']) + beverage());
-    if (document.quote) {
-      content += `<section class="asset-section"><div class="asset-total"><span>Draft total · USD</span><strong>${money(document.quote.total_cents)}</strong></div>
-        <table class="quote-table"><caption>Itemized estimate · fictional prices</caption><thead><tr><th scope="col">Item</th><th scope="col" class="numeric">Qty</th><th scope="col" class="numeric">Each</th><th scope="col" class="numeric">Amount</th></tr></thead>
-        <tbody>${document.quote.lines.map(line => `<tr><td>${esc(line.description)}${interactive ? `<span class="calculation">${esc(line.calculation)}</span>` : ''}</td><td class="numeric">${esc(line.quantity)}</td><td class="numeric">${money(line.unit_cents)}</td><td class="numeric">${money(line.amount_cents)}</td></tr>`).join('')}</tbody>
-        <tfoot><tr><th scope="row" colspan="3">Draft total · USD</th><td class="numeric">${money(document.quote.total_cents)}</td></tr></tfoot></table>
-        <p class="draft-note">${esc(document.quote.note)}</p></section>`;
-    }
-  } else if (document.id === 'kitchen') {
+  if (document.id === 'kitchen') {
     content += section('Allergies &amp; dietary needs', facts(['dietary']));
     content += section('Menu for the kitchen', menu());
     content += '<p class="draft-note">Course times and production quantities are not supplied in this event record. Confirm them with the event team before service.</p>';
@@ -73,6 +65,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
 }
 
 export function standaloneDocument(document, prepared, reviewed) {
+  if(document.id==='quote'&&document.state==='ready_for_review')return standaloneGuestQuote(document,prepared,reviewed);
   const reused = reusedInternalDocument(document, prepared, reviewed);
   if (reused) return reused;
   // Each export receives only its audience-approved rows, never the full thread.

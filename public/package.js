@@ -358,6 +358,8 @@ function renderSelected() {
   $('#download-document').disabled = busy || isEarlier() || selected.state === 'blocked';
   $('#print-document').disabled = busy || isEarlier() || selected.state === 'blocked';
   $('#download-document').textContent = isEarlier() ? 'Earlier draft · download off' : selected.id==='calendar' ? 'Download calendar file (.ics)' : isReviewed(selected) ? 'Download reviewed draft' : 'Download unreviewed draft';
+  if(!isEarlier()&&selected.id==='quote')$('#download-document').textContent='Download PDF';
+  $('#print-document').textContent=selected.id==='quote'?'Print quote':'Print / Save PDF';
   const ready = data.documents.filter(doc => doc.state === 'ready_for_review').length;
   const reviewed = data.documents.filter(isReviewed).length;
   $('#package-summary').textContent = isEarlier() ? `Earlier version · ${data.record.fields.guest_count.value ?? 'Unknown'} people · saved for comparison` : `${ready} of 5 drafts ready for review · ${5 - ready} need details · ${data.record.fields.guest_count.value ?? 'Unknown'} people`;
@@ -647,7 +649,7 @@ document.addEventListener('click', async event => {
   if (button) {
     if(button.dataset.openDocument) selectedDocument=button.dataset.openDocument;
     await chooseScenario(button.dataset.openEvent);
-    if(button.dataset.openDocument && session()?.data) $('#document-preview').scrollIntoView({block:'start',behavior:'instant'});
+    if(button.dataset.openDocument && session()?.data) $('.document-pane').scrollIntoView({block:'start',behavior:'instant'});
   }
 });
 document.addEventListener('change', event => {
@@ -917,6 +919,16 @@ $('#download-document').addEventListener('click', async () => {
     if(doc.id==='calendar') {
       download(calendarFile(doc,data,{reviewed:isReviewed(doc),eventId:versionFor()?.event_id??currentId}),assetFilename(doc,data,'ics'),'text/calendar;charset=utf-8');
       announce('Calendar file downloaded. Open it in your calendar app if you want to add this draft. Nothing was booked or sent.');
+    } else if(doc.id==='quote') {
+      setBusy(true);announce('Creating your quote PDF…');$('#download-document').textContent='Creating PDF…';
+      try {
+        const headers={'Content-Type':'application/json',...(hosted?{'X-EventBrief-Workspace':hosted.workspace}:{})};
+        const response=await fetch('/api/package/quote/pdf',{method:'POST',headers,body:JSON.stringify({scenario_id:currentId,run_id:data.extraction?.run_id??null,sequence:session().sequence,revision:doc.revision})});
+        if(!response.ok){const result=await response.json();if(result.code==='WORKSPACE_CHANGED')window.location.reload();throw new Error(result.error||'The PDF could not be created. Please try again.');}
+        if(!response.headers.get('content-type')?.startsWith('application/pdf'))throw new Error('The PDF could not be created. Please try again.');
+        download(await response.blob(),assetFilename(doc,data,'pdf'),'application/pdf');
+        announce('Quote PDF downloaded. It includes the review status shown in the preview.');
+      } finally {setBusy(false);}
     } else {
       download(standaloneDocument(doc, data, isReviewed(doc)), assetFilename(doc,data), 'text/html');
       announce('Draft downloaded. Open the file to present it or print it. Its review status is included.');

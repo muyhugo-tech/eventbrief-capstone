@@ -22,6 +22,10 @@
     "build": "node scripts/build-hosted.mjs"
   },
   "dependencies": {
-    "@vercel/blob": "2.8.1"
+    "@fontsource/montserrat": "5.2.8",
+    "@fontsource/playfair-display": "5.2.8",
+    "@sparticuz/chromium": "149.0.0",
+    "@vercel/blob": "2.8.1",
+    "playwright-core": "1.61.1"
   }
 }

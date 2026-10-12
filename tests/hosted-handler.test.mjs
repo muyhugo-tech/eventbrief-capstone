@@ -39,7 +39,7 @@ function memoryBlob() {
   };
 }
 
-function setup({ duringTransport } = {}) {
+function setup({ duringTransport, quotePdfRenderer } = {}) {
   const sdk = memoryBlob(); let calls = 0;
   const config = {...env};
   const packageTransport = async ({ request, key }) => {
@@ -63,7 +63,7 @@ function setup({ duringTransport } = {}) {
         if (path.includes('package/') && !headers.has('X-EventBrief-Workspace')) headers.set('X-EventBrief-Workspace', scope);
         headers.set('Cookie', [...jar].map(([name, value]) => `${name}=${value}`).join('; '));
         // A fresh handler on every request exercises cold-start persistence.
-        const response = await createHostedFetch({ env: config, sdk, packageTransport })(new Request(origin + path, {
+        const response = await createHostedFetch({ env: config, sdk, packageTransport, quotePdfRenderer })(new Request(origin + path, {
           method, headers, ...(body === undefined ? {} : { body: JSON.stringify(body) })
         }));
         for (const cookie of response.headers.getSetCookie()) {
@@ -71,7 +71,7 @@ function setup({ duringTransport } = {}) {
           const name = pair.slice(0, index), value = pair.slice(index + 1);
           if (cookie.includes('Max-Age=0')) jar.delete(name); else jar.set(name, value);
         }
-        const data = await response.json();
+        const data = response.headers.get('Content-Type')==='application/pdf'?Buffer.from(await response.arrayBuffer()):await response.json();
         if (response.ok) scope = data.hosted?.workspace ?? data.workspace ?? scope;
         return { status: response.status, data, headers: response.headers };
       }
@@ -81,6 +81,22 @@ function setup({ duringTransport } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
+test('hosted quote download returns PDF bytes within the selected workspace without an AI call',async()=>{
+  let renders=0;
+  const system=setup({quotePdfRenderer:async()=>{renders++;return Buffer.from('%PDF-1.7\nsynthetic test');}});
+  const visitor=system.visitor(),owner=system.visitor();
+  const source=await visitor.request('/api/package/demo',{});
+  const prepared=await visitor.request('/api/package/prepare',{scenario_id:source.data.input.id,corrections:{}});
+  const body={scenario_id:source.data.input.id,run_id:null,sequence:0,revision:prepared.data.documents.find(doc=>doc.id==='quote').revision};
+  const pdf=await visitor.request('/api/package/quote/pdf',body);
+  assert.equal(pdf.status,200);assert.equal(pdf.data.toString(),'%PDF-1.7\nsynthetic test');
+  assert.match(pdf.headers.get('Content-Disposition'),/attachment; filename="eventbrief-.*\.pdf"/);
+  await owner.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
+  assert.equal((await owner.request('/api/package/quote/pdf',body)).status,400);
+  assert.equal((await owner.request('/api/package/quote/pdf',body,{headers:{'X-EventBrief-Workspace':'public'}})).status,409);
+  assert.equal((await visitor.request('/api/package/quote/pdf',body,{headers:{Origin:'https://untrusted.example'}})).status,403);
+  assert.equal(renders,1);assert.equal(system.calls(),0);
+});
 const marksFor = data => Object.fromEntries(data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => [doc.id, {
   decision: 'reviewed', revision: doc.revision, reviewed_at: new Date().toISOString()
 }]));

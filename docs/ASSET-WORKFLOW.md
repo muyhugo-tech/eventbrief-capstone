@@ -28,7 +28,7 @@ Use **Refresh inbox** to load changes saved from another browser. Search covers 
 | Sidebar item | What to check | What you can keep |
 | --- | --- | --- |
 | **Calendar** | Date, start and end times, restaurant timezone, and venue. | A calendar `.ics` file. |
-| **Guest quotes** | Guests, Children (0–12), menu, drinks, itemized prices, and draft total. | A standalone HTML draft, or a printed/PDF copy. |
+| **Guest quotes** | Guests, Children (0–12), menu, drinks, itemized prices, and estimated total. | A direct PDF download or printed copy. |
 | **Kitchen sheets** | Attendance, menu courses, and allergy or dietary information. | A standalone HTML sheet, or a printed/PDF copy. |
 | **Staff event plans** | Schedule, setup, equipment, service details, and internal team instructions. | A standalone HTML plan, or a printed/PDF copy. |
 | **Guest event plans** | Schedule, venue, menu, drinks, and arrival instructions for the host. | A standalone HTML plan, or a printed/PDF copy. |
@@ -39,7 +39,8 @@ The kitchen sheet does not invent course times or production quantities. Those a
 
 ## Download or print
 
-- **Download reviewed draft** saves an HTML file for a document. Open the file in a browser to present it or print it. An unreviewed download is labeled **Draft · not reviewed**.
+- **Download PDF** on a guest quote saves the presented estimate directly as a PDF. The preview and PDF use one EventBrief template, including the current prices and review status. No AI call or email delivery occurs. A normal estimate fits one Letter page; longer content can continue onto more pages.
+- **Download reviewed draft** saves an HTML file for a kitchen sheet, staff plan, or guest plan. Open the file in a browser to present it or print it. An unreviewed download is labeled **Draft · not reviewed**.
 - **Print / Save PDF** opens the browser's print window for the selected draft. Choose a printer or **Save as PDF**.
 - **Download calendar file (.ics)** saves a tentative calendar entry. Open that file in your calendar app to import it yourself. EventBrief does not connect to or synchronize an external calendar. Importing is not a reservation or invitation.
 

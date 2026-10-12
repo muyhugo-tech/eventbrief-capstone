@@ -7,7 +7,7 @@
   "functions": {
     "api/index.mjs": {
       "maxDuration": 180,
-      "includeFiles": "{fixtures,prompts,lib,public}/**"
+      "includeFiles": "{fixtures/**,prompts/**,lib/**,public/**,node_modules/@sparticuz/chromium/bin/**,node_modules/@fontsource/montserrat/files/*.woff2,node_modules/@fontsource/playfair-display/files/*.woff2}"
     }
   },
   "rewrites": [

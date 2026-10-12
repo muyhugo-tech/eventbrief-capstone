@@ -18,6 +18,9 @@ import { createExtensionPackageAllowance } from './lib/package-extension-allowan
 import { demoText, demoReply, demoRecord } from './lib/package-demo.mjs';
 import { packageSummary } from './lib/package-summary.mjs';
 import { eventEditCorrections } from './lib/package-edits.mjs';
+import { quoteStyles } from './public/quote-document.mjs';
+import { quoteFontPath, quotePdfHtml, renderQuotePdf } from './lib/quote-pdf.mjs';
+import { assetFilename } from './public/package-export.mjs';
 
 const root = new URL('./', import.meta.url);
 const fixtures = new Map();
@@ -35,6 +38,7 @@ assets.set('/package.js', ['public/package.js', 'text/javascript; charset=utf-8'
 assets.set('/package.css', ['public/package.css', 'text/css; charset=utf-8']);
 assets.set('/package-render.mjs', ['public/package-render.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/package-export.mjs', ['public/package-export.mjs', 'text/javascript; charset=utf-8']);
+assets.set('/quote-document.mjs', ['public/quote-document.mjs', 'text/javascript; charset=utf-8']);
 for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox']) {
   assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
   assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);
@@ -46,7 +50,7 @@ assets.set('/package-contract.mjs', ['lib/package-contract.mjs', 'text/javascrip
 export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol', maxCalls = 3, provider = analyze,
   packageTransport = responsesTransport, packageStore = createAttemptStore(fileURLToPath(new URL('out/model-attempts/package-v1/', root))),
   packageRunMode = 'live', packageAllowance = null, packageMaxOutputTokens = 10000, packageUpdates = null, packageWorkspace = null,
-  hostedOrigin = null, hosted = null } = {}) {
+  hostedOrigin = null, hosted = null, quotePdfRenderer = renderQuotePdf } = {}) {
   if (!['live', 'simulated'].includes(packageRunMode)) throw new Error('Invalid package provider mode.');
   if (packageAllowance && packageStore !== packageAllowance.store) throw new Error('The spending allowance must use its own attempt store.');
   let calls = 0;
@@ -118,14 +122,19 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
     const port = res.socket?.localPort;
     const hosts = hostedOrigin ? [new URL(hostedOrigin).host] : [`127.0.0.1:${port}`, `localhost:${port}`];
     const origins = hostedOrigin ? [hostedOrigin] : hosts.map(host => `http://${host}`);
-    const send = (status, data, type = 'application/json; charset=utf-8') => {
-      res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" });
+    const send = (status, data, type = 'application/json; charset=utf-8', extraHeaders = {}) => {
+      res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'", ...extraHeaders });
       res.end(type.startsWith('application/json') ? JSON.stringify(data) : data);
     };
     if (!hosts.includes(req.headers.host)) return send(403, { error: 'This demo accepts localhost requests only.' });
     const pathname = new URL(req.url, `http://${req.headers.host}`).pathname;
     const liveReady = configured;
     try {
+      if(req.method==='GET'&&pathname==='/quote-document.css')return send(200,quoteStyles,'text/css; charset=utf-8');
+      if(req.method==='GET'&&pathname.startsWith('/quote-fonts/')) {
+        const path=quoteFontPath(pathname.slice('/quote-fonts/'.length));
+        return path?send(200,await readFile(path),'font/woff2'):send(404,{error:'Not found.'});
+      }
       if (req.method === 'GET' && assets.has(pathname)) {
         const [file, type] = assets.get(pathname);
         return send(200, await readFile(new URL(file, root)), type);
@@ -133,7 +142,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       if (req.method === 'GET' && pathname === '/api/package/scenarios') {
         return send(200, await packageListing());
       }
-      if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load','/api/package/edit'].includes(pathname)) {
+      if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load','/api/package/edit','/api/package/quote/pdf'].includes(pathname)) {
         if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site']==='cross-site') return send(403,{error:'Open the app locally first.'});
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'JSON is required.'});
         if (!packageWorkspace) return send(503,{error:'Saved conversations are not available.'});
@@ -165,11 +174,12 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
           }
           const loading=pathname.endsWith('/load');
           const editing=pathname==='/api/package/edit';
-          const keys=loading?'run_id|scenario_id':editing?'changes|reason|run_id|scenario_id|sequence':'corrections|reviews|run_id|scenario_id|sequence';
+          const exporting=pathname==='/api/package/quote/pdf';
+          const keys=loading?'run_id|scenario_id':exporting?'revision|run_id|scenario_id|sequence':editing?'changes|reason|run_id|scenario_id|sequence':'corrections|reviews|run_id|scenario_id|sequence';
           if(Object.keys(data).sort().join('|')!==keys || typeof data.scenario_id!=='string' || (data.run_id!==null && typeof data.run_id!=='string'))throw new Error('Invalid saved review request.');
           const bundle=await getBundle(data.scenario_id);if(!bundle)throw new Error('Saved conversation not found.');
           const state=await updateState();if(!available(data.scenario_id,state))throw new Error('Choose available messages.');
-          const saved=loading||editing?await packageWorkspace.loadReview(data.scenario_id,data.run_id):null;
+          const saved=loading||editing||exporting?await packageWorkspace.loadReview(data.scenario_id,data.run_id):null;
           if(loading&&!saved)return send(200,{saved:null});
           let original=bundle.original,extraction=null;
           if(data.run_id) {
@@ -178,6 +188,18 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             original=receipt.parsed_output;extraction={run_id:receipt.run_id,mode:receipt.mode,meta:receipt.meta,receipt_saved:true};
           }
           if(!original)throw new Error('Prepare these messages with AI first.');
+          if(exporting) {
+            if(isSuperseded(data.scenario_id,state))throw new SourceConflictError('New messages have arrived. Open the latest quote before downloading.');
+            const prepared=prepareEventPackage({...bundle,original,extraction,corrections:saved?.corrections??{}}), doc=prepared.documents.find(doc=>doc.id==='quote');
+            if(doc.state!=='ready_for_review')throw new SourceConflictError('This quote needs details before it can be downloaded.');
+            if(!Number.isSafeInteger(data.sequence)||data.sequence!==(saved?.sequence??0)||data.revision!==doc.revision)throw new SourceConflictError('The quote changed. Open it again before downloading.');
+            let pdf;
+            try {pdf=await quotePdfRenderer(await quotePdfHtml(doc,prepared,saved?.reviews?.quote?.revision===doc.revision));}
+            catch {return send(503,{error:'The PDF could not be created. Your quote is saved. Please try again.'});}
+            const latest=await updateState(),latestReview=await packageWorkspace.loadReview(data.scenario_id,data.run_id);
+            if(isSuperseded(data.scenario_id,latest)||(latestReview?.sequence??0)!==data.sequence)throw new SourceConflictError('The event changed while the PDF was being created. Open the latest quote and download it again.');
+            return send(200,pdf,'application/pdf',{'Content-Disposition':`attachment; filename="${assetFilename(doc,prepared,'pdf')}"`});
+          }
           if(editing) {
             if(isSuperseded(data.scenario_id,state))throw new SourceConflictError('New messages have arrived. Open the latest event before editing.');
             if(!Number.isSafeInteger(data.sequence)||data.sequence!==(saved?.sequence??0))throw new SourceConflictError('This event changed in another browser. Cancel this edit, open the event again, and try your change on the latest details.');
