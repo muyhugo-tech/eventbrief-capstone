@@ -2,7 +2,7 @@
 
 Turn a restaurant event conversation into five drafts that a person can check: a calendar entry, guest quote, kitchen sheet, staff event plan, and guest event plan.
 
-This is a **capstone prototype with fictional messages and prices**, with local and hosted entry points that share the same application core. It does not connect to an inbox, book events, send messages, or change a live restaurant system.
+This is a **capstone prototype with fictional messages and prices**, with local and hosted entry points that share the same application core. Its Inbox holds pasted conversations and replies. It does not connect to an email account, book events, send messages, or change a live restaurant system.
 
 ## Try it
 
@@ -22,6 +22,7 @@ Open [the event workspace](http://127.0.0.1:3135/package). Choose **New event**,
 3. Select **Update drafts**. The five drafts are now ready for review.
 4. Check each draft and mark it reviewed. Refresh to see the saved progress.
 5. Open **Calendar**, **Guest quotes**, **Kitchen sheets**, **Staff event plans**, or **Guest event plans** in the sidebar. Download a draft or choose **Print / Save PDF**.
+6. Open **Inbox** to compare the original messages, extracted event details, coordinator changes, and all five assets. Click **See source** on a detail to highlight its quotation. Adding a conversation or reply to the Inbox makes no AI call; preparation is a separate action.
 
 This guided example uses explicitly authored records for one exact conversation and reply. New arbitrary messages or different replies require real AI; the example is never a fallback for a failed request.
 

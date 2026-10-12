@@ -197,6 +197,10 @@ The header names the current scope: public sample or private workspace. The acce
 
 ### Evidence interaction
 
+The Inbox extends the existing EventBrief design system. Its reference lock is the current white CRM shell and Yanni's conversation review queue/panel: a searchable source list, original messages, separately identified corrections, and links to affected event work. A compact **Messages → Event details → Five drafts** strip shows actual saved state. Five asset buttons stay above the long reading area. The source and extracted fields sit side by side on wide screens and stack on smaller screens. The palette, font, borders, and button roles remain unchanged. Refero's bundled form/focus guidance supplies visible labels and keyboard focus; live Refero MCP research was unavailable.
+
+Message previews use the saved source text. No delivery dates, sender identities, confidence percentages, unread badges, or agent activity are invented. Authored examples are labeled. Pending source versions cannot reuse an earlier version's facts or ready-asset status. Public samples and private conversations use the existing separate storage scopes.
+
 Choosing a source reference brings the original message into focus and highlights its exact excerpt. The control remains keyboard accessible. Original facts and reviewer corrections stay visibly distinct.
 
 **The Actual Progress Rule.** Display real saved results and review counts; do not invent agent activity or confidence metrics.

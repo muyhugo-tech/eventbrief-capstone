@@ -3,6 +3,7 @@ import { escapeHtml as esc, renderDocument, standaloneDocument } from '/package-
 import { assetFilename } from '/package-export.mjs';
 import { renderBoard, renderAssetLibrary } from '/workspace-board.mjs';
 import { renderCalendar, calendarMonth, shiftMonth, calendarFile } from '/workspace-calendar.mjs';
+import { inboxThreads, renderInboxThreads, renderInboxDetail } from '/workspace-inbox.mjs';
 
 const $ = selector => document.querySelector(selector);
 const sessions = new Map();
@@ -26,13 +27,20 @@ let eventLayout = 'board';
 let calendarViewMonth = null;
 let accessInitialized = false;
 let eventEdit = null;
+let inboxId = null;
+let inboxData = null;
+let inboxReviews = {};
+let inboxError = '';
+let inboxLoading = false;
+let inboxHighlight = null;
+let inboxComposeTarget = null;
 const editGroups = [
   ['attendance', 'Guests and children', ['guest_13_plus_count', 'child_count']],
   ['event_date', 'Event date', ['event_date']],
   ['times', 'Event times', ['start_time', 'end_time']],
   ...['host_name', 'venue', 'menu', 'beverage', 'dietary', 'setup', 'av', 'special', 'guest_notes', 'staff_notes', 'timezone', 'booking_status'].map(field => [field, FIELD_DEFINITIONS[field].label, [field]])
 ];
-const viewNames = {events:'Events',calendar:'Calendar',quote:'Guest quotes',kitchen:'Kitchen sheets',staff:'Staff event plans',guest:'Guest event plans'};
+const viewNames = {inbox:'Inbox',events:'Events',calendar:'Calendar',quote:'Guest quotes',kitchen:'Kitchen sheets',staff:'Staff event plans',guest:'Guest event plans'};
 // Retain existing public/local browser drafts; private selections and unsent
 // text have separate keys and are never restored into the public sample.
 const browserKey = suffix => `eventbrief.package.${hosted?.workspace === 'private' ? 'private.' : ''}${suffix}`;
@@ -40,7 +48,7 @@ const storageMessage = () => hosted?.workspace === 'private' ? 'Saved in your pr
 const isPasted = () => currentId === 'new' || currentId?.startsWith('pasted-');
 const post = (path, body) => request(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 function rememberSelection() {
-  try { localStorage.setItem(browserKey('selection'), JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, view:overview?workspaceView:'event', layout:eventLayout, run_id:session()?.data?.extraction?.run_id??null})); }
+  try { localStorage.setItem(browserKey('selection'), JSON.stringify({id:currentId, mode:currentMode, document:selectedDocument, view:overview?workspaceView:'event', layout:eventLayout, inbox_id:inboxId, run_id:session()?.data?.extraction?.run_id??null})); }
   catch { $('#save-status').textContent = hosted ? 'Your place could not be saved in this browser. Your completed reviews are still saved.' : 'Your place could not be saved in this browser. Completed reviews still save on this computer.'; }
 }
 const session = () => sessions.get(`${currentMode}:${currentId}`);
@@ -68,6 +76,7 @@ function applyListing(data) {
   $('#package-scenario').value = currentId;
   renderAccess();
   renderEvents();
+  renderInboxList();
 }
 async function refreshListing() { applyListing(await request('/api/package/scenarios')); }
 function renderAccess() {
@@ -203,6 +212,8 @@ function showOverview(value, view = 'events') {
   $('#calendar-overview').hidden = !value || workspaceView !== 'calendar';
   $('#assets-overview').hidden = !value || ['events','calendar'].includes(workspaceView);
   $('#event-workbench').hidden = value;
+  $('#inbox-overview').hidden = !value || workspaceView !== 'inbox';
+  if(workspaceView==='inbox') $('#assets-overview').hidden = true;
   $('#page-title').textContent = value ? viewNames[workspaceView] : currentId === 'new' ? 'New event' : 'Event workspace';
   $('#assets-heading').textContent = viewNames[workspaceView];
   $('#assets-help').textContent = {quote:'Open a quote. Check the price and details, then download or print it.',kitchen:'Open a kitchen sheet. Check the menu, numbers and dietary details.',staff:'Open a staff plan. Check the schedule, setup and team instructions.',guest:'Open a guest plan. Check what the host and their guests need to know.'}[workspaceView] ?? '';
@@ -215,6 +226,7 @@ function showOverview(value, view = 'events') {
 }
 async function chooseScenario(id, preferredRun = null) {
   if (busy) return;
+  closeInboxCompose();
   closeEventEdit();
   currentId = id;
   const saved = history.find(entry => entry.scenario_id === id && entry.status === 'succeeded' && (!preferredRun || entry.run_id === preferredRun));
@@ -256,6 +268,7 @@ function setBusy(value) {
   $('#package-mode').disabled = value;
   $('#package-mode').closest('label').hidden = isPasted() || sourceVersions[currentId]?.reference_available;
   $('#event-messages').disabled = value;
+  for (const control of document.querySelectorAll('#inbox-overview button, #inbox-overview input, #inbox-overview select, #inbox-overview textarea, #event-inbox-source')) control.disabled = value;
   $('#paste-example').disabled = value;
   $('#download-attempt').disabled = value;
   $('#add-update').disabled = value || !updates?.available || currentId !== 'patio-complete' || !session()?.data;
@@ -266,12 +279,15 @@ function setBusy(value) {
   renderReplyCost();
   for (const button of document.querySelectorAll('#package-history button')) button.disabled = value;
   $('#package-result').setAttribute('aria-busy', String(value));
+  $('#inbox-detail').setAttribute('aria-busy', String(value));
   for (const button of document.querySelectorAll('#package-result button, #package-fields button')) button.disabled = value;
   for (const control of document.querySelectorAll('#event-edit-form input, #event-edit-form select, #event-edit-form textarea')) control.disabled = value;
   $('#save-event-edit').textContent = value && eventEdit ? 'Saving changes…' : 'Save changes';
   if (!value && session()?.data) renderSelected();
   if (isEarlier()) for (const button of document.querySelectorAll('#package-fields [data-edit], #package-fields [data-undo]')) button.disabled = true;
   renderAccess();
+  renderInboxList();
+  if(overview && workspaceView==='inbox') renderInboxContent();
 }
 
 function renderMessages(highlight = null) {
@@ -356,6 +372,7 @@ function renderPackage() {
   const data = session().data;
   const version = versionFor();
   $('#paste-panel').hidden = currentId !== 'new';
+  $('#event-inbox-source').hidden = currentId === 'new' || !eventRows().some(event => event.current_scenario_id === currentId || event.scenario_ids?.includes(currentId));
   $('#package-result').hidden = !data;
   $('#package-empty').hidden = Boolean(data);
   $('#policy-panel').hidden = !data;
@@ -511,6 +528,91 @@ $('#reply-form').addEventListener('submit', async event => {
   if (saved && (referenceAvailable() || canAnalyze())) await prepare(undefined, 'Reply added. Check the updated drafts and review them again.', true);
   else if (saved) announce('Your reply is saved as a new version. AI preparation is unavailable; earlier drafts remain in the version history.');
 });
+function renderInboxList() {
+  const threads=inboxThreads(eventRows(),scenarios);
+  $('#rail-inbox-count').textContent=threads.length;
+  $('#inbox-threads').innerHTML=renderInboxThreads(threads,{selectedId:inboxId,search:$('#inbox-search').value,filter:$('#inbox-filter').value,busy});
+}
+function renderInboxContent() {
+  const thread=inboxThreads(eventRows(),scenarios).find(thread=>thread.id===inboxId);
+  $('#inbox-detail').innerHTML=renderInboxDetail(thread,{data:inboxData,reviews:inboxReviews,definitions:FIELD_DEFINITIONS,busy,loading:inboxLoading,error:inboxError,highlight:inboxHighlight,canPrepare:canAnalyze(),canReply:Boolean(sourceVersions[inboxId]?.can_add_reply)});
+}
+async function loadInbox(id) {
+  const threads=inboxThreads(eventRows(),scenarios);
+  const latest=eventRows().find(event=>event.scenario_ids?.includes(id))?.current_scenario_id;
+  const thread=threads.find(thread=>thread.id===(latest??id))??threads[0];
+  inboxId=thread?.id??null;inboxData=null;inboxReviews={};inboxError='';inboxHighlight=null;inboxLoading=Boolean(thread);
+  renderInboxList();renderInboxContent();
+  try {
+    if(!thread)return;
+    const entry=history.find(entry=>entry.scenario_id===thread.id&&entry.status==='succeeded');
+    if(entry||referenceAvailable(thread.id)) {
+      const runId=entry?.run_id??null;
+      const result=workspace?await post('/api/package/review/load',{scenario_id:thread.id,run_id:runId}):{saved:null};
+      inboxData=result.saved?result.data:await post('/api/package/prepare',{scenario_id:thread.id,corrections:{},...(runId?{run_id:runId}:{})});
+      inboxReviews=result.saved?.reviews??{};
+      if(inboxData.version?.superseded) {inboxData=null;inboxError='New messages arrived. Refresh the inbox to open the latest source.';}
+    }
+  } catch(error) {inboxError=`Could not open the saved details. ${error.message}`;}
+  finally {inboxLoading=false;renderInboxContent();rememberSelection();}
+}
+function closeInboxCompose() { $('#inbox-compose').hidden=true;inboxComposeTarget=null; }
+function openInboxCompose(target=null) {
+  inboxComposeTarget=target;
+  const thread=inboxThreads(eventRows(),scenarios).find(thread=>thread.id===target);
+  $('#inbox-compose-heading').textContent=target?`Add a reply · ${thread?.title??'this event'}`:'Add a conversation';
+  $('#inbox-compose-help').textContent=target?'Paste only the new reply. Earlier messages stay saved. This does not call AI.':'Paste fictional event messages, oldest first. Saving them does not call AI.';
+  $('#inbox-reply-role-label').hidden=!target;
+  $('#inbox-reply-role').value='host';
+  $('#inbox-text').value='';$('#inbox-text').maxLength=target?2000:8000;
+  $('#inbox-save').textContent=target?'Save reply':'Save to inbox';
+  $('#inbox-compose-error').hidden=true;$('#inbox-compose').hidden=false;$('#inbox-text').focus();
+}
+$('#inbox-add').addEventListener('click',()=>openInboxCompose());
+$('#inbox-cancel').addEventListener('click',()=>{closeInboxCompose();$('#inbox-add').focus();});
+$('#inbox-refresh').addEventListener('click',()=>openWorkspace('inbox'));
+$('#inbox-search').addEventListener('input',renderInboxList);
+$('#inbox-filter').addEventListener('change',renderInboxList);
+$('#inbox-compose').addEventListener('submit',async event=>{
+  event.preventDefault();if(busy)return;
+  const text=$('#inbox-text').value.trim(),target=inboxComposeTarget;
+  if(!text)return;
+  setBusy(true);$('#inbox-compose-error').hidden=true;$('#inbox-notice').hidden=true;
+  let saved=false;
+  try {
+    const result=await post(target?'/api/package/reply':'/api/package/messages',target?{scenario_id:target,text,role:$('#inbox-reply-role').value}:{text});
+    saved=true;closeInboxCompose();$('#inbox-text').value='';
+    await refreshListing();await loadInbox(result.input.id);
+    $('#inbox-notice').textContent=target?'Reply saved. The latest source is below. No AI call was made.':'Conversation saved to the inbox. No AI call was made.';
+    $('#inbox-notice').hidden=false;
+  } catch(error) {
+    if(saved){$('#inbox-notice').textContent='Messages saved. Refresh the inbox to reopen them.';$('#inbox-notice').hidden=false;}
+    else{$('#inbox-compose-error').textContent=error.message;$('#inbox-compose-error').hidden=false;}
+  } finally {setBusy(false);}
+});
+$('#inbox-overview').addEventListener('click',async event=>{
+  if(busy)return;
+  const thread=event.target.closest('[data-inbox-thread]');
+  if(thread){setBusy(true);try{await loadInbox(thread.dataset.inboxThread);}finally{setBusy(false);}return;}
+  const source=event.target.closest('[data-inbox-source]');
+  if(source&&inboxData){
+    const field=source.dataset.inboxSource,detail=inboxData.record.fields[field];
+    const evidence=detail.provenance==='coordinator_correction'?inboxData.original_record.fields[field].evidence:detail.evidence;
+    const citation=evidence[Number(source.dataset.citationIndex)];
+    if(citation){inboxHighlight=citation;renderInboxContent();const message=document.getElementById(`inbox-message-${citation.message_id}`);message?.focus({preventScroll:true});message?.scrollIntoView({block:'center',behavior:'instant'});}
+    return;
+  }
+  const reply=event.target.closest('[data-inbox-add-reply]');
+  if(reply){openInboxCompose(reply.dataset.inboxAddReply);return;}
+  const prepareButton=event.target.closest('[data-inbox-prepare]');
+  if(prepareButton){
+    const id=prepareButton.dataset.inboxPrepare;
+    setBusy(true);try{await refreshListing();}catch{inboxError='Could not check the latest messages. Refresh before preparing.';setBusy(false);return;}setBusy(false);
+    await chooseScenario(id);
+    if(!session()?.data&&canAnalyze()&&!isEarlier())await prepare(undefined,null,true);
+  }
+});
+
 async function openWorkspace(view) {
   if (busy) return;
   closeEventEdit();
@@ -520,10 +622,12 @@ async function openWorkspace(view) {
     await refreshListing();
     sessions.clear(); openSession();
     showOverview(true, view);
+    if(view==='inbox') await loadInbox(inboxId);
   } catch (error) { $('#workspace-error').textContent = error.message; $('#workspace-error').hidden = false; }
   finally { setBusy(false); }
 }
 $('#show-events').addEventListener('click', () => openWorkspace('events'));
+$('#event-inbox-source').addEventListener('click', () => { inboxId=versionFor()?.current_scenario_id??currentId; openWorkspace('inbox'); });
 $('#new-event').addEventListener('click', () => chooseScenario('new'));
 $('#header-new-event').addEventListener('click', () => chooseScenario('new'));
 $('#event-search').addEventListener('input', renderEvents);
@@ -553,6 +657,7 @@ document.addEventListener('change', event => {
 async function tryDemo() {
   if (busy) return;
   closeEventEdit();
+  closeInboxCompose();
   setBusy(true); announce('Opening the guided example…'); announce('', true);
   try {
     if (hosted?.unlocked) {
@@ -858,6 +963,7 @@ async function init() {
     currentId = selection && (selection.id==='new'||scenarios.some(input=>input.id===selection.id)) ? selection.id : workspace || hosted ? 'new' : updates?.active_scenario_id ?? scenarios[0].id;
     currentMode = sourceVersions[currentId]?.reference_available ? 'reference' : isPasted() ? 'live' : selection?.mode==='reference' ? 'reference' : live.ready ? 'live' : 'reference';
     selectedDocument=['calendar','quote','kitchen','staff','guest'].includes(selection?.document)?selection.document:'calendar';
+    inboxId=selection?.inbox_id??null;
     eventLayout=selection?.layout==='list'?'list':'board';
     const saved=history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded'&&entry.run_id===selection?.run_id) ?? history.find(entry=>entry.scenario_id===currentId&&entry.status==='succeeded') ?? (live.last_successful?.scenario_id===currentId?live.last_successful:null);
     $('#package-mode').value = currentMode;
@@ -876,7 +982,7 @@ async function init() {
     if(currentId!=='new' && updates?.active_scenario_id && !session().data) announce('Messages are saved. Click Prepare five drafts. Earlier AI results are available below.');
     restoreReplyDraft(); renderPackage();
     setBusy(false);
-    if (selection?.view && Object.hasOwn(viewNames,selection.view)) showOverview(true,selection.view);
+    if (selection?.view && Object.hasOwn(viewNames,selection.view)) { showOverview(true,selection.view); if(selection.view==='inbox') { setBusy(true);try{await loadInbox(inboxId);}finally{setBusy(false);} } }
     else if ((hosted?.unlocked && currentId === 'new') || (!selection && eventRows().length)) showOverview(true);
     if (hosted && !hosted.unlocked && new URLSearchParams(window.location.search).get('sample') === '1') {
       window.history.replaceState(null, '', window.location.pathname);

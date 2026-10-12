@@ -35,7 +35,7 @@ assets.set('/package.js', ['public/package.js', 'text/javascript; charset=utf-8'
 assets.set('/package.css', ['public/package.css', 'text/css; charset=utf-8']);
 assets.set('/package-render.mjs', ['public/package-render.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/package-export.mjs', ['public/package-export.mjs', 'text/javascript; charset=utf-8']);
-for (const name of ['workspace-board', 'workspace-calendar']) {
+for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox']) {
   assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
   assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);
 }

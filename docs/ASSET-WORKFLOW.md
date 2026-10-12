@@ -12,6 +12,17 @@ Open [EventBrief](https://eventbrief-capstone.vercel.app/). One saved event supp
 
 The public sample uses written example results and makes no AI call. Real AI is available in the private workspace when it is configured and allowance remains. Opening saved results does not require another AI call.
 
+## See where the details came from
+
+1. Click **Inbox** in the sidebar.
+2. Choose a conversation. The original messages appear beside the current event details.
+3. Open a detail and click **See source** to highlight its exact quotation. A coordinator change shows its reason and original value separately.
+4. Open any of the five assets at the top. Each field also links to the drafts that use or check it.
+
+**Add conversation** saves pasted fictional messages without calling AI. **Add a reply** appends a message to the selected event. When a new source still needs preparation, the inbox shows **Needs preparation** and does not present older details or assets as current. **Prepare five drafts** uses the existing AI allowance in the private workspace. Authored sample results are labeled as written examples.
+
+Use **Refresh inbox** to load changes saved from another browser. Search covers names and source message text; the filter separates messages awaiting preparation, missing details, and prepared drafts. The inbox is an intake and evidence view for pasted conversations and replies. It is not connected to Gmail, Outlook, or a live email account, and it does not invent received dates or unread counts.
+
 ## Find the right asset
 
 | Sidebar item | What to check | What you can keep |

@@ -27,6 +27,8 @@ No customer corpus, production environment file, live database client, operation
 
 ## Design references
 
+The EventBrief Inbox adapts the interaction pattern of Yanni's `ConversationReviewQueue.tsx`, `ConversationReviewPanel.tsx`, and documented intake review: original messages, extracted facts, source quotations, separate coordinator corrections, and affected event outputs. Its vanilla JavaScript view is implemented for EventBrief's existing storage and extraction contracts. No Yannis inbox connection, customer messages, matching RPC, database, or live intake credential is included.
+
 The owner supplied a CRM board screenshot and these references for the dashboard direction:
 
 - [AI CRM Dashboard by Larsen66 on 21st.dev](https://21st.dev/@larsen66/templates/ai-crm-dashboard)

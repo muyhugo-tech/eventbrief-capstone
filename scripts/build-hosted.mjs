@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const files = new Map([
   ['index.html', 'public/package.html'],
-  ...['package.js', 'package.css', 'styles.css', 'package-render.mjs', 'package-export.mjs', 'workspace-board.mjs', 'workspace-board.css', 'workspace-calendar.mjs', 'workspace-calendar.css'].map(name => [name, `public/${name}`]),
+  ...['package.js', 'package.css', 'styles.css', 'package-render.mjs', 'package-export.mjs', 'workspace-board.mjs', 'workspace-board.css', 'workspace-calendar.mjs', 'workspace-calendar.css', 'workspace-inbox.mjs', 'workspace-inbox.css'].map(name => [name, `public/${name}`]),
   ['package-contract.mjs', 'lib/package-contract.mjs'],
   ...['kitchen', 'event'].map(name => [`lib/reused-yannis/templates/${name}.mjs`, `lib/reused-yannis/templates/${name}.mjs`])
 ]);
