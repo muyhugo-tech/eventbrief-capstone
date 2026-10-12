@@ -113,7 +113,7 @@ const statusText = status => ({ unknown: 'Missing', conflicting: 'Conflicting', 
 // Ported from Yanni's lib/events/index-view.ts: count the actual filtered records.
 const countLabel = (shown, total) => `Showing ${shown} of ${total}`;
 function eventRows() {
-  if (events.length) return events;
+  if (workspace) return events;
   return scenarios.filter(input => !sourceVersions[input.id]?.superseded).map(input => ({event_id: input.id, current_scenario_id: input.id, title: input.title, revision: 1, scenario_ids: [input.id]}));
 }
 function eventDisplay(item) {
