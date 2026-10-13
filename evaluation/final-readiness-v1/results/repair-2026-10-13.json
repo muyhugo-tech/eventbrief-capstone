@@ -1,0 +1,260 @@
+{
+  "type": "Saved-answer application repair; not a new AI test",
+  "original_result_sha256": "a6a69b00ce64926c81e25c903ff83032fe3cb519af2caacc275b3259228c0513",
+  "cases": [
+    {
+      "id": "diego-count-default",
+      "original_output_sha256": "485d96b914dc0f5969455f3fb4f6dd6fa79f8fd586cb237cababf941d0e68c9e",
+      "original_ready_documents": 5,
+      "readiness_policy": "host-raised-dietary-v2",
+      "normalization_policy": "supported-details-v5",
+      "workflow_policy": "usable-drafts-v2",
+      "beverage_option": "Nonalcoholic service",
+      "beverage_notes": "with juice and soda for everyone and no alcohol",
+      "guest_dietary_dependency": false,
+      "original_unchanged": true,
+      "manual_corrections": 0,
+      "new_ai_calls": 0,
+      "checks": {
+        "checks": {
+          "latest_counts": true,
+          "source_counts": false,
+          "known_details": true,
+          "agreed_arrangements": true,
+          "evidence_quotes_present": true,
+          "restaurant_timezone": true,
+          "end_rule": true,
+          "dietary": true,
+          "no_unrelated_open_items": true,
+          "no_corrections": true,
+          "document_states": true,
+          "no_obsolete_count": true
+        },
+        "draft_checks": {
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "all_pass": false,
+        "ready_documents": 5,
+        "quote_total_cents": 166400,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "staff",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "guest",
+            "state": "ready_for_review",
+            "blockers": []
+          }
+        ],
+        "workflow_pass": true,
+        "raw_count_check_pass": false
+      }
+    },
+    {
+      "id": "priya-explicit-end",
+      "original_output_sha256": "81b8ebf46debc7dfdf82c34f3511159265c3f163400fac3344185a00b9936ba5",
+      "original_ready_documents": 1,
+      "readiness_policy": "host-raised-dietary-v2",
+      "normalization_policy": "supported-details-v5",
+      "workflow_policy": "usable-drafts-v2",
+      "beverage_option": "Beer and wine service",
+      "beverage_notes": "only for guests confirmed to be 21 or older; juice and soda for the children; no spirits or cocktails.",
+      "guest_dietary_dependency": true,
+      "original_unchanged": true,
+      "manual_corrections": 0,
+      "new_ai_calls": 0,
+      "checks": {
+        "checks": {
+          "latest_counts": true,
+          "source_counts": true,
+          "known_details": true,
+          "agreed_arrangements": true,
+          "evidence_quotes_present": true,
+          "restaurant_timezone": true,
+          "end_rule": true,
+          "dietary": true,
+          "no_unrelated_open_items": true,
+          "no_corrections": true,
+          "document_states": true,
+          "no_obsolete_count": true
+        },
+        "draft_checks": {
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "all_pass": true,
+        "ready_documents": 5,
+        "quote_total_cents": 130000,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "staff",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "guest",
+            "state": "ready_for_review",
+            "blockers": []
+          }
+        ],
+        "workflow_pass": true,
+        "raw_count_check_pass": true
+      }
+    },
+    {
+      "id": "jordan-unresolved-allergy",
+      "original_output_sha256": "14b98d4ccd5fb1d04cc6fb9d11b66bb5e5786bc1e9e059732575b3235e9d5f4f",
+      "original_ready_documents": 1,
+      "readiness_policy": "host-raised-dietary-v2",
+      "normalization_policy": "supported-details-v5",
+      "workflow_policy": "usable-drafts-v2",
+      "beverage_option": "Nonalcoholic service",
+      "beverage_notes": "with juice and soda for everyone, and no alcohol.",
+      "guest_dietary_dependency": true,
+      "original_unchanged": true,
+      "manual_corrections": 0,
+      "new_ai_calls": 0,
+      "checks": {
+        "checks": {
+          "latest_counts": true,
+          "source_counts": true,
+          "known_details": true,
+          "agreed_arrangements": true,
+          "evidence_quotes_present": true,
+          "restaurant_timezone": true,
+          "end_rule": true,
+          "dietary": true,
+          "no_unrelated_open_items": true,
+          "no_corrections": true,
+          "document_states": true,
+          "no_obsolete_count": true
+        },
+        "draft_checks": {
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "all_pass": true,
+        "ready_documents": 2,
+        "quote_total_cents": 172000,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "blocked",
+            "blockers": [
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements: What are the guest's food allergy details?",
+                "kind": "open_question"
+              },
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements needs coordinator review: this request is outside the supported demo options.",
+                "rule": "supported_dietary"
+              }
+            ]
+          },
+          {
+            "id": "staff",
+            "state": "blocked",
+            "blockers": [
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements: What are the guest's food allergy details?",
+                "kind": "open_question"
+              },
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements needs coordinator review: this request is outside the supported demo options.",
+                "rule": "supported_dietary"
+              }
+            ]
+          },
+          {
+            "id": "guest",
+            "state": "blocked",
+            "blockers": [
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements: What are the guest's food allergy details?",
+                "kind": "open_question"
+              },
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements needs coordinator review: this request is outside the supported demo options.",
+                "rule": "supported_dietary"
+              }
+            ]
+          }
+        ],
+        "workflow_pass": true,
+        "raw_count_check_pass": true
+      }
+    }
+  ],
+  "summary": {
+    "workflow_outcomes_passed": 3,
+    "cases": 3,
+    "document_checks_passed": 15,
+    "document_checks": 15,
+    "strict_saved_answer_checks_passed": 2,
+    "new_ai_calls": 0,
+    "added_ai_cost_usd": 0
+  },
+  "limitations": [
+    "Diego raw Guests field is still omitted in the saved AI answer; the existing derived count remains correct.",
+    "Jordan intentionally has only two ready assets until the host allergy detail is resolved.",
+    "These are known saved cases used to develop the repair. Unseen-event accuracy remains unproven."
+  ]
+}

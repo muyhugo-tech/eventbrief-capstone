@@ -57,7 +57,8 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   for(const testCase of finalProtocol.cases){
     const item=saved.cases.find(c=>c.id===testCase.id);
     assert.ok(Date.parse(saved.predeclared_at)<Date.parse(item.tested_at));
-    const data=prepareEventPackage({input:pastedInput(testCase.conversation),original:item.original_output,profile:saved.profile,workflowPolicy:item.workflow_policy,normalizationPolicy:item.normalization_policy});
+    // Pin all recorded policies so later application repairs cannot rescore the original run.
+    const data=prepareEventPackage({input:pastedInput(testCase.conversation),original:item.original_output,profile:saved.profile,workflowPolicy:item.workflow_policy,normalizationPolicy:item.normalization_policy,readinessPolicy:item.readiness_policy});
     const result=checkFinalReadiness(data,testCase);assert.deepEqual(result,item.automated_checks);
     results.push({id:item.id,...result});
   }

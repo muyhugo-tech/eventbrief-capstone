@@ -8,7 +8,9 @@ const root = new URL('../', import.meta.url);
 const read = async name => JSON.parse(await readFile(new URL(name, root), 'utf8'));
 const saved = await read('evaluation/new-event-v4/results/2026-10-13.json');
 const protocol = await read('evaluation/new-event-v4/protocol.json');
-const data = prepareEventPackage({input:pastedInput(protocol.conversation), original:saved.original_output, profile:saved.profile});
+// Reproduce the recorded v4 repair, rather than relabel it with a later policy.
+const data = prepareEventPackage({input:pastedInput(protocol.conversation), original:saved.original_output, profile:saved.profile,
+  normalizationPolicy:'supported-details-v4',readinessPolicy:'host-raised-dietary-v1'});
 assert.deepEqual(data.original_record, saved.original_output);
 assert.deepEqual(data.corrections, {});
 const checks = checkSofiaEvent(data);
