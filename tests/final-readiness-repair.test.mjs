@@ -127,6 +127,9 @@ test('speaker handling separates host, other people, restaurant, quotes and ambi
     'Jordan: I will ask.\nThe food allergy details will follow.',
     'Jordan:\nPlease book the Garden Patio on May 14, 2027 from 18:00 to 21:00. I will send the allergy details.',
     'Jordan:\nDietary requirements: I will send the details tomorrow.',
+    'HOST:\nI’ve checked with everyone: no allergies or dietary restrictions.',
+    "Jordan:\nI've checked with everyone: one guest has an allergy.",
+    'HOST:\nWe have agreed on: dinner.\nAllergy details will follow.',
     'Host — Jordan Wells: Allergy details will follow.',
     "Jordan: I'm Jordan Wells.\nJordan Roberts: Good evening.\nJordan: I need to confirm an allergy."
   ])assert.equal(raised(text),true,text);
