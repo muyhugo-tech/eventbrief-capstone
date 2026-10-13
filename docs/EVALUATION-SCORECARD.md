@@ -1,8 +1,8 @@
 # EventBrief evaluation scorecard
 
-Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, its saved-answer replay, and one newly authored event tested against the updated app.
+Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, and two newly authored events tested at successive stages of the app.
 
-**Noah's saved answer now produces all five drafts and the expected $1,776 quote after the drink-matching fix. “Juice and soda for everyone, with no alcohol” stays in the quote, staff plan and guest plan. No new AI call was made.** The original first-attempt failure remains recorded; this is a saved-answer replay, not a new AI trial.
+**The latest new event failed without correction: Lena's calendar passed, but the other four drafts were blocked.** The AI retained soda and juice for everybody with no alcohol, but the app rejected the combined wording. Noah's saved answer still passes after the previous fix; that success did not generalize to this new conversation. [Latest result](../evaluation/new-event-v2/README.md)
 
 ## What passed and what needs work
 
@@ -18,11 +18,27 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. Incl
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
 | Download event assets | **Passed** | Hosted checks returned four document PDFs. Calendar download worked as a tentative `.ics` file. Blocked dietary drafts could not export PDFs. [Saved evidence](#saved-evidence) |
-| Interpret natural beverage wording | **Passed after app fix for tested wording** | The app separates a known drink option from supported drink instructions. Elena's two saved answers still pass; Noah's saved answer now also yields all five drafts, preserving the exact juice-and-soda note. Unpriced extras and contradictory alcohol instructions remain blocked. This does not establish general beverage accuracy. [Noah replay](../evaluation/new-event-v1/APP-REPLAY.md) |
+| Interpret natural beverage wording | **Still needs work** | Elena's and Noah's saved answers pass after fixes, but Lena's new first attempt blocked four drafts on ordinary wording: “soda and juice for everybody and no alcohol.” The matcher still depends too much on phrase structure. [Latest failure](../evaluation/new-event-v2/README.md) · [Noah replay](../evaluation/new-event-v1/APP-REPLAY.md) |
 | Edit drink notes and keep assets consistent | **Passed** | Notes save separately, survive reload and appear in the quote, staff and guest outputs. Notes-only edits reset those three reviews and retain the calendar and kitchen reviews. [Checks](../tests/package-normalization.test.mjs) |
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
 
-## Original new-event check
+## Latest new-event check: Lena
+
+One new fictional conversation, expectations saved before the call, no app or prompt changes, no saved lessons, no retry and no correction.
+
+| Draft | Result | What was checked |
+| --- | --- | --- |
+| Calendar | **Passed** | July 17, 2027, 5:30–8:30 PM Pacific, Garden Patio, correct tentative calendar file |
+| Guest quote | **Blocked** | Beverage mismatch; expected $1,420 was not generated; PDF export rejected |
+| Kitchen sheet | **Blocked** | Menu/beverage compatibility; quantities could not be inspected; PDF export rejected |
+| Staff event plan | **Blocked** | Beverage mismatch; document content unverified; PDF export rejected |
+| Guest event plan | **Blocked** | Beverage mismatch; document content unverified; PDF export rejected |
+
+The AI correctly retained the accepted change to **20 guests and 5 children**, 25 total, and all 18 field meanings were supported by source excerpts. Exact prepared values matched **17/18** expectations; the app did not normalize `Nonalcoholic service, with soda and juice for everybody and no alcohol`. Source understanding and successful asset creation are separate checks.
+
+All four blocked PDF endpoints returned HTTP 409. The saved record reopened unchanged, with no corrections or review marks; other events remained unchanged. These safeguards passed, but the event remains an overall failure. **Estimated cost: $0.0266675 (about three cents); 16 hosted preparations remain.** Existing allocations remain $4.56384 within the $5 budget. [Conversation, frozen method, original output and reproduction](../evaluation/new-event-v2/README.md)
+
+## Earlier new-event check: Noah
 
 One new synthetic conversation, one AI attempt, expectations saved before the request. No app or prompt changes were made for this test. No saved lessons were present in the request.
 
@@ -38,7 +54,7 @@ The AI supplied `Nonalcoholic service; juice and soda for everyone, with no alco
 
 Source excerpts were checked against all 18 fields. All four PDFs were visually inspected. Blocked exports correctly rejected download before correction. A reload retained the correction, and existing events were unchanged. **Limitation of that first recovery:** the PDFs used general nonalcoholic-service wording; the specific juice-and-soda request remained only in the source and correction reason. The follow-up below addresses this omission. Owner review marks remain pending.
 
-**Estimated AI cost: $0.02701 (about three cents).** One existing hosted slot used; **17 remain**. No additional AI calls for recovery or checks. Existing allocations stay within the $5 authorization. [Conversation, method, original output and recovery](../evaluation/new-event-v1/README.md)
+**Estimated AI cost: $0.02701 (about three cents).** One existing hosted slot used; **17 remained at that point** (16 after Lena). No additional AI calls for recovery or checks. Existing allocations stay within the $5 authorization. [Conversation, method, original output and recovery](../evaluation/new-event-v1/README.md)
 
 ### Follow-up: saved-answer replay after the drink fix
 
@@ -49,7 +65,7 @@ Source excerpts were checked against all 18 fields. All four PDFs were visually 
 | Exact juice-and-soda notes in quote, staff and guest previews/PDFs | **Passed** |
 | Preserve historical failure, source evidence and prior corrections | **Passed** |
 | Reload the restored private event; keep other events unchanged | **Passed** |
-| Additional AI calls / cost | **0 / $0; 17 hosted preparations still available** |
+| Additional AI calls / cost | **0 / $0; 17 hosted preparations available at that point** |
 
 The existing private event had an explicit blank-notes correction from the first recovery. A separately recorded edit restored its source instructions; the app does not silently override coordinator edits. The quote, staff and guest PDFs were checked for exact text and readable layout. Calendar and kitchen revisions stayed unchanged after that note-only edit. [Method, boundaries and evidence](../evaluation/new-event-v1/APP-REPLAY.md)
 
@@ -96,15 +112,15 @@ The **60/60** readiness score uses the original policy; the later dietary rule w
 
 ## App checks
 
-The latest app-fix run reports **211 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers. They are not 211 AI trials; older totals are not added to them. Hosted checks verified Noah's saved note restoration, reload, four PDF exports and calendar file.
+The latest app-fix run reported **211 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers. They are not 211 AI trials; older totals are not added to them. Hosted checks verified Noah's saved note restoration, reload, four PDF exports and calendar file. Lena's test changed no application code; its separate saved-result checker reproduces the new failure without an AI call.
 
 ## What still needs work
 
-1. **Broader drink requests:** supported juice-and-soda wording now passes. Custom cocktails, price changes, exceptions and descriptions without an identified package still require coordinator resolution. Do not infer general drink understanding from the saved examples.
-2. **More new conversations:** this one new event exposed a failure. Check more independently written examples after fixing it, including source support and follow-up questions. One case is not a general accuracy estimate.
+1. **Drink matching:** even ordinary soda-and-juice wording still fails when combined with “and no alcohol.” Separate the priced package from drink instructions more reliably, while retaining checks for contradictions and unpriced additions. Replay saved failures before spending on another new event.
+2. **More independent conversations:** Lena exposed a remaining failure after Noah's replay passed. Check independently written examples after fixing it, including source support and follow-up questions. These few authored cases are not a general accuracy estimate.
 3. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. A later new-event test exposed a drink-matching failure. We fixed the app and replayed the unchanged answer: all five drafts were ready at the expected $1,776, with the drink instructions preserved and no additional AI call. The original failure stays in our evaluation record.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later new conversations exposed drink-matching failures. A fix made Noah's saved answer produce all five drafts with preserved drink instructions, but Lena's next new conversation still blocked four drafts on ordinary wording. The system kept the original evidence and prevented those blocked PDFs from being downloaded. Drink matching remains unfinished.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 
