@@ -30,6 +30,7 @@ The [October 12 validation note](docs/VALIDATION-2026-10-12.md) records the comp
 - Preserve original AI receipts and failures. Corrections are separate reviewer decisions.
 - Do not reset spending records or count unknown outcomes as free.
 - Hosted AI has 20 permanently reserved slots at $0.205 each: $4.10 maximum conservative reservations. The earlier $0.05384 estimate belongs to the same existing $5 authorization. Do not treat deployment as a new budget.
+- The beverage lesson comparison adds a separate permanent $0.41 local reservation for two used slots (estimated usage $0.057705). Combined allocations are $4.56384, leaving $0.43616 unallocated; hosted slots stay unchanged. Preserve `out/beverage-lesson-pair/` and its failed results. See [comparison](evaluation/lesson-comparison-v1/README.md).
 - Keep the hosted Blob store and global namespace `eventbrief/v1/visitors/global-paid-allowance-v1/paid/` fixed across deployments. Model, prompt, rates, schema, or plan changes require an explicit migration that preserves spent reservations. Do not delete or rename the ledger to refill it.
 - Do not silently substitute authored examples for failed AI requests.
 - Keep frozen evaluation inputs/expectations separate from model requests.

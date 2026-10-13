@@ -18,6 +18,8 @@ This is prompt context, not automatic fine-tuning. OpenAI describes task-specifi
 
 The October 12, 2026 checks use synthetic data and fake providers. They verify confirmed resolution, preservation of original evidence, deliberate custom-arrangement approval, pricing and capacity boundaries, immutable feedback history, browser-to-browser saves, stale-edit conflicts, lesson inclusion in the next captured request, disabling a lesson, public/private isolation and preservation of the existing allowance plan. The local browser rehearsal resolves the missing-dietary example with AI disabled.
 
+A later [two-call real-AI comparison](../evaluation/lesson-comparison-v1/README.md) used the same new beverage conversation with and without a saved lesson. Both responses appended notes to the drink option and left the quote blocked. The main check failed in both conditions; this is evidence against claiming that this lesson solved the observed issue.
+
 ## Interface reference
 
 The existing EventBrief editor and source inspector are the primary layout and visual references. The supplied CRM reference remains the dashboard direction. The new form follows the Refero copywriting reference: a specific explanation beside the input, one save action, an optional lesson field, and a collapsible audit history. Existing colors, focus treatment and spacing are retained.

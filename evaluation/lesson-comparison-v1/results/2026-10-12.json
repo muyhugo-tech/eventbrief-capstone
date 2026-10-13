@@ -1,0 +1,787 @@
+{
+  "id": "beverage-lesson-pair-2026-10-12",
+  "created_at": "2026-10-13T01:44:55.709Z",
+  "protocol_sha256": "b629ce4057c2ae46d77ec666d0b7d96e19677348b929e388a98772de1093051c",
+  "predeclared_at": "2026-10-13T01:42:39.219Z",
+  "purpose": "Two-run development spot check of one coordinator lesson on one newly written synthetic conversation.",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "max_output_tokens": 7500,
+  "attempts": [
+    {
+      "condition": "without_lesson",
+      "recorded_at": "2026-10-13T01:43:37.123Z",
+      "accepted": true,
+      "primary_pass": false,
+      "checks": {
+        "canonical_beverage": false,
+        "agreed_beverage": true,
+        "beverage_source_evidence": true,
+        "quote_ready": false,
+        "quote_total": false,
+        "host_date_attendance": false,
+        "five_ready": false,
+        "no_open_items": true,
+        "internal_note_separation": true
+      },
+      "beverage": {
+        "value": "Beer and wine service, with juice and soda for the children. No spirits or cocktails. Beer and wine will only be served to guests confirmed to be 21 or older.",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Beer and wine will only be served to guests confirmed to be 21 or older."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ]
+      },
+      "quote_total_cents": null,
+      "documents": [
+        {
+          "id": "calendar",
+          "state": "ready_for_review",
+          "blockers": []
+        },
+        {
+          "id": "quote",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "guest_count",
+              "reason": "Total guests: not supplied."
+            },
+            {
+              "field": "beverage",
+              "reason": "The selected beverage is not in the fictional restaurant profile.",
+              "rule": "beverages"
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        },
+        {
+          "id": "kitchen",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "guest_count",
+              "reason": "Total guests: not supplied."
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        },
+        {
+          "id": "staff",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "guest_count",
+              "reason": "Total guests: not supplied."
+            },
+            {
+              "field": "setup",
+              "reason": "This setup is not supported for the selected venue in the demo profile.",
+              "rule": "venues.Garden Patio.setups"
+            },
+            {
+              "field": "beverage",
+              "reason": "The selected beverage is not in the fictional restaurant profile.",
+              "rule": "beverages"
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        },
+        {
+          "id": "guest",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "guest_count",
+              "reason": "Total guests: not supplied."
+            },
+            {
+              "field": "beverage",
+              "reason": "The selected beverage is not in the fictional restaurant profile.",
+              "rule": "beverages"
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        }
+      ],
+      "original_output": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Elena Brooks",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "HOST — Elena Brooks:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2027-12-11",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "start_time": {
+            "value": "18:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "end_time": {
+            "value": "21:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "timezone": {
+            "value": "America/Los_Angeles",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "guest_count": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_13_plus_count": {
+            "value": 16,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "We have 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "child_count": {
+            "value": 3,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "We have 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Menu 2 and one long table are confirmed."
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Beer and wine service, with juice and soda for the children. No spirits or cocktails. Beer and wine will only be served to guests confirmed to be 21 or older.",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Beer and wine will only be served to guests confirmed to be 21 or older."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "dietary": {
+            "value": "No allergies or dietary restrictions",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No allergies or dietary restrictions."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "setup": {
+            "value": "one long table",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Menu 2 and one long table are confirmed."
+              }
+            ]
+          },
+          "av": {
+            "value": "No AV required",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No AV required."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "special": {
+            "value": "No special requirements",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No special requirements."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "guest_notes": {
+            "value": "Please enter through the garden gate and meet Elena at the patio at 6:00 PM.",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Please enter through the garden gate and meet Elena at the patio at 6:00 PM."
+              }
+            ]
+          },
+          "staff_notes": {
+            "value": "Jordan will lead setup and check the place settings before guests arrive.",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Jordan will lead setup and check the place settings before guests arrive."
+              }
+            ]
+          }
+        },
+        "pending_changes": [],
+        "open_questions": []
+      },
+      "manual_corrections": 0,
+      "usage": {
+        "input_tokens": 2840,
+        "input_tokens_details": {
+          "cache_write_tokens": 2837,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2116,
+        "output_tokens_details": {
+          "reasoning_tokens": 262
+        },
+        "total_tokens": 4956
+      },
+      "conservative_estimated_usd": 0.02826,
+      "latency_ms": 42290,
+      "reported_model": "gpt-6.1-sol",
+      "request_sha256": "a32ca881098fbfc606c24f113bf963bc923dab10936bf626a67e981c1778bc87",
+      "receipt_sha256": "00de550cf2aaedec3b3aa3317e39fcc51ec3d721aa7d634255010dd94f771335",
+      "automatic_retries": 0,
+      "remaining_local_slots": 1
+    },
+    {
+      "condition": "with_lesson",
+      "recorded_at": "2026-10-13T01:44:33.646Z",
+      "accepted": true,
+      "primary_pass": false,
+      "checks": {
+        "canonical_beverage": false,
+        "agreed_beverage": true,
+        "beverage_source_evidence": true,
+        "quote_ready": false,
+        "quote_total": false,
+        "host_date_attendance": true,
+        "five_ready": false,
+        "no_open_items": true,
+        "internal_note_separation": true
+      },
+      "beverage": {
+        "value": "Beer and wine service; juice and soda for the children; no spirits or cocktails. Beer and wine only for guests confirmed to be 21 or older.",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children. Beer and wine will only be served to guests confirmed to be 21 or older."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ]
+      },
+      "quote_total_cents": null,
+      "documents": [
+        {
+          "id": "calendar",
+          "state": "ready_for_review",
+          "blockers": []
+        },
+        {
+          "id": "quote",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "beverage",
+              "reason": "The selected beverage is not in the fictional restaurant profile.",
+              "rule": "beverages"
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        },
+        {
+          "id": "kitchen",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        },
+        {
+          "id": "staff",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "beverage",
+              "reason": "The selected beverage is not in the fictional restaurant profile.",
+              "rule": "beverages"
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        },
+        {
+          "id": "guest",
+          "state": "blocked",
+          "blockers": [
+            {
+              "field": "beverage",
+              "reason": "The selected beverage is not in the fictional restaurant profile.",
+              "rule": "beverages"
+            },
+            {
+              "field": "menu",
+              "reason": "This menu and beverage combination is not supported by the demo profile.",
+              "rule": "menus.Menu 2.beverages"
+            }
+          ]
+        }
+      ],
+      "original_output": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Elena Brooks",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "HOST — Elena Brooks:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2027-12-11",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "start_time": {
+            "value": "18:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "end_time": {
+            "value": "21:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "timezone": {
+            "value": "America/Los_Angeles",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "guest_count": {
+            "value": 19,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "guest_13_plus_count": {
+            "value": 16,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "child_count": {
+            "value": 3,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Menu 2 and one long table are confirmed."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Beer and wine service; juice and soda for the children; no spirits or cocktails. Beer and wine only for guests confirmed to be 21 or older.",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children. Beer and wine will only be served to guests confirmed to be 21 or older."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "dietary": {
+            "value": "No allergies or dietary restrictions",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No allergies or dietary restrictions."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "setup": {
+            "value": "One long table",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Menu 2 and one long table are confirmed."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you, everything you listed is correct."
+              }
+            ]
+          },
+          "av": {
+            "value": "No AV required",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No AV required."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "special": {
+            "value": "No special requirements",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No special requirements."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Your booking is confirmed and those final details are noted."
+              }
+            ]
+          },
+          "guest_notes": {
+            "value": "Please enter through the garden gate and meet Elena at the patio at 6:00 PM.",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Please enter through the garden gate and meet Elena at the patio at 6:00 PM."
+              }
+            ]
+          },
+          "staff_notes": {
+            "value": "Jordan will lead setup and check the place settings before guests arrive.",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Jordan will lead setup and check the place settings before guests arrive."
+              }
+            ]
+          }
+        },
+        "pending_changes": [],
+        "open_questions": []
+      },
+      "manual_corrections": 0,
+      "usage": {
+        "input_tokens": 2982,
+        "input_tokens_details": {
+          "cache_write_tokens": 565,
+          "cached_tokens": 2414
+        },
+        "output_tokens": 2199,
+        "output_tokens_details": {
+          "reasoning_tokens": 274
+        },
+        "total_tokens": 5181
+      },
+      "conservative_estimated_usd": 0.029445,
+      "latency_ms": 39966,
+      "reported_model": "gpt-6.1-sol",
+      "request_sha256": "f47f5ec55d1ada215a4ccf613facb404bf9a765bf9a33b729b70184fdb253c2d",
+      "receipt_sha256": "9488ce8598607e82905d356a7e3db6d4198de77ac6c4129c97ce1caa463dd815",
+      "automatic_retries": 0,
+      "remaining_local_slots": 0
+    }
+  ],
+  "conservative_estimated_total_usd": 0.057705,
+  "budget": {
+    "existing_authorization_usd": 5,
+    "previous_local_usage_estimate_usd": 0.05384,
+    "existing_hosted_reserved_usd": 4.1,
+    "this_pair_max_reserved_usd": 0.41,
+    "combined_allocation_usd": 4.56384,
+    "unallocated_after_reserving_pair_usd": 0.43616,
+    "note": "Two local slots at $0.205; the existing hosted allowance is unchanged. Reservations are conservative estimates, not provider invoices. Unknown or failed attempts retain their reservation."
+  },
+  "limitations": [
+    "One conversation, one attempt per condition",
+    "Fixed run order and model variability",
+    "Lesson and test address the same known failure category",
+    "A tie does not prove the lesson is useless; a win does not establish reliable improvement",
+    "Separate from the frozen twelve-case evaluation"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "beverage-lesson-pair-2026-10-12",
+  "purpose": "Two-run development spot check of one coordinator lesson on one newly written synthetic conversation.",
+  "synthetic": true,
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "max_output_tokens": 7500,
+  "order": ["without_lesson", "with_lesson"],
+  "attempts_per_condition": 1,
+  "automatic_retries": 0,
+  "coordinator_corrections_to_scored_outputs": false,
+  "conversation": "HOST — Elena Brooks:\nHi! I would like to book our winter celebration for December 11, 2027, from 6:00 PM to 9:00 PM. We have 16 guests and 3 children. Could we use the Garden Patio, have Menu 2 and sit at one long table? For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails.\n\nRESTAURANT — Jordan:\nYes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children. Menu 2 and one long table are confirmed. The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children. Beer and wine will only be served to guests confirmed to be 21 or older. Please let us know about dietary needs, AV and any other requests.\n\nHOST — Elena Brooks:\nThank you, everything you listed is correct. No allergies or dietary restrictions. No AV required. No special requirements.\n\nRESTAURANT — Jordan:\nYour booking is confirmed and those final details are noted. Guest instructions: Please enter through the garden gate and meet Elena at the patio at 6:00 PM.\n\nINTERNAL STAFF NOTE:\nJordan will lead setup and check the place settings before guests arrive.",
+  "lesson": {
+    "fields": ["beverage"],
+    "lesson": "When the host and restaurant agree on beer and wine with soft drinks for children, use the existing Beer and wine service option. Children's nonalcoholic drinks do not make the whole event Nonalcoholic service. Do not infer that every guest is 21 or older."
+  },
+  "lesson_origin": "Coordinator guidance based on the earlier Maya beverage correction; saved in an isolated local workspace before either request. It is not an automatically learned or previously evaluated rule.",
+  "expected": {
+    "beverage_value": "Beer and wine service",
+    "beverage_status": "agreed",
+    "host_name": "Elena Brooks",
+    "guest_13_plus_count": 16,
+    "child_count": 3,
+    "guest_count": 19,
+    "event_date": "2027-12-11",
+    "quote_total_cents": 130000,
+    "quote_calculation": "16 x ($58 menu + $18 drinks) + 3 x ($22 menu + $6 drinks) = $1,300",
+    "ready_documents": ["calendar", "quote", "kitchen", "staff", "guest"],
+    "internal_note": "Jordan will lead setup and check the place settings before guests arrive."
+  },
+  "primary_pass": "Accepted uncorrected record has the exact expected beverage value and agreed status, with exact source evidence; the quote is ready and totals 130000 cents.",
+  "secondary_checks": ["Host, date and attendance match the conversation", "All five drafts ready", "No pending changes or unanswered questions", "Internal note stays in staff_notes and out of guest_notes"],
+  "controls": "Same source, profile, base prompt, output schema, model, reasoning and output allowance. Only coordinator_lessons differs. Expected answers are not included in the model request.",
+  "budget": {
+    "existing_authorization_usd": 5,
+    "previous_local_usage_estimate_usd": 0.05384,
+    "existing_hosted_reserved_usd": 4.10,
+    "this_pair_max_reserved_usd": 0.41,
+    "combined_allocation_usd": 4.56384,
+    "unallocated_after_reserving_pair_usd": 0.43616,
+    "note": "Two local slots at $0.205; the existing hosted allowance is unchanged. Reservations are conservative estimates, not provider invoices. Unknown or failed attempts retain their reservation."
+  },
+  "limitations": ["One conversation, one attempt per condition", "Fixed run order and model variability", "Lesson and test address the same known failure category", "A tie does not prove the lesson is useless; a win does not establish reliable improvement", "Separate from the frozen twelve-case evaluation"]
+}

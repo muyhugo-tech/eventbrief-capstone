@@ -58,6 +58,8 @@ The current model is `gpt-6.1-sol`, with bounded request size, 7,500 maximum out
 
 The $4.10 plan comes from the owner's existing **$5 authorization**. Two earlier local validation calls were estimated at **$0.05384**, leaving about **$4.94616** before hosted use. This setup does not authorize an additional $5. Keep further local paid calls within the same remaining budget; local and hosted ledgers do not automatically reconcile with one another.
 
+The October 12 beverage lesson comparison permanently reserved **$0.41** in a separate local two-slot ledger. Its two completed calls cost an estimated **$0.057705**. Keep the full reservation in the budget accounting: **$4.10 + $0.05384 + $0.41 = $4.56384 allocated**, leaving **$0.43616 unallocated**. Hosted slots are unchanged. Do not recreate this test ledger or assign a new batch to obtain unaccounted calls. See the [protocol and receipts summary](../evaluation/lesson-comparison-v1/README.md).
+
 The first hosted verification consumed one slot and an estimated **$0.0266275** in model usage. At that checkpoint, 19 hosted slots remained. These are historical checkpoint figures, not a live balance.
 
 Keep the same private Blob store and the global namespace `eventbrief/v1/visitors/global-paid-allowance-v1/paid/`. Do not rename it, delete reservations, or connect an empty store to replenish the plan. The sealed plan includes request-envelope hashes, model, schema, rates, and limits. Changes to prompts, model, schema, or pricing require a deliberate plan migration preserving consumed reservations and the approved remaining budget. A mismatched plan keeps AI off until checked.

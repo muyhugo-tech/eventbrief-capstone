@@ -1,8 +1,8 @@
 # EventBrief evaluation scorecard
 
-Evidence through October 12, 2026 (Pacific time). All events are fictional. This scorecard summarizes saved results; no new AI calls were made to create it.
+Evidence through October 12, 2026 (Pacific time). All events are fictional. The initial scorecard used saved results; this update adds two actual AI calls for a beverage lesson comparison.
 
-**The core workflow passed the recorded checks. AI interpretation still needs human review, and improvement from saved lessons is not yet measured.**
+**Earlier workflow checks passed, but the new beverage conversation left drafts blocked both with and without a saved lesson. Human review and further fixes are still needed.**
 
 ## What passed and what needs work
 
@@ -17,8 +17,22 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. This
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
 | Download event assets | **Passed** | Hosted checks returned four document PDFs. Calendar download worked as a tentative `.ics` file. Blocked dietary drafts could not export PDFs. [Saved evidence](#saved-evidence) |
-| Interpret natural beverage wording | **Needs work** | Maya’s quote needed a coordinator to map the AI’s wording to **Beer and wine service**. This does not count as an original AI pass. |
-| Remember a coordinator lesson | **Mechanism passed; benefit untested** | Fake-provider checks confirmed lesson inclusion, disabling and workspace separation. Whether lessons improve real AI answers remains untested. [Evidence](COORDINATOR-FEEDBACK.md) |
+| Interpret natural beverage wording | **Needs work** | Maya needed a coordinator correction. In the new Elena test, both runs added drink notes to the option name, leaving the quote blocked. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
+| Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
+
+## New beverage comparison
+
+Same fictional conversation and model settings; one attempt per condition; no retries or manual corrections.
+
+| Result | Without lesson | With lesson |
+| --- | --- | --- |
+| Supported beverage option | Failed | Failed |
+| Quote ready at expected $1,300 | Blocked | Blocked |
+| Drafts ready | 1/5 | 1/5 |
+| 16 guests and 3 children extracted | Passed | Passed |
+| Total attendance of 19 supplied | Missing | Passed |
+
+Both outputs added notes after **Beer and wine service**, which the app requires as an exact option name. The no-lesson run also had a table-name capitalization mismatch. These observations identify fixes; they do not prove that the lesson caused the secondary differences. **Estimated cost: $0.057705, about six cents.** [Full method, original outputs and results](../evaluation/lesson-comparison-v1/README.md)
 
 ## Recorded AI scores
 
@@ -40,13 +54,13 @@ The **60/60** readiness score uses the original policy; the later dietary rule w
 
 The saved run for revision `e13264b` reports **200 passed, 0 failed, 0 skipped**. These software checks use synthetic data and fake providers. They are not 200 AI trials; older totals are not added to them.
 
-## What still needs testing
+## What still needs work
 
-1. **Lesson effectiveness:** compare a new beverage-wording example with and without a saved lesson.
+1. **Extraction and app agreement:** separate the drink option from its notes, calculate attendance totals consistently and handle equivalent table-name capitalization. Then retest; preserve these failed results.
 2. **Unseen conversations:** check new examples, whether source excerpts support the facts, and whether follow-up questions make sense.
 3. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Our rehearsals also showed how a coordinator can resolve missing information and update the assets. Human review remains part of the workflow.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. A new beverage example failed with and without a saved lesson, exposing an option-matching problem. A coordinator can correct it, and human review remains part of the workflow.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 
