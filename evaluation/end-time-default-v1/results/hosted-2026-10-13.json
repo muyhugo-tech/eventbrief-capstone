@@ -1,0 +1,39 @@
+{
+  "verified_date": "2026-10-13",
+  "commit": "1e41d1ac052be4544711a5dc66024a095f137e2e",
+  "deployment_id": "dpl_9gUgpLXavLe2Kj9pjT7njJqBrcZF",
+  "target": "production",
+  "status": "READY",
+  "original_answer_ready": 5,
+  "default_start": "17:30",
+  "default_end": "21:30",
+  "duration_hours": 4,
+  "explicit_saved_end_preserved": true,
+  "original_receipt_unchanged": true,
+  "existing_corrections_and_reviews_preserved": true,
+  "settings_unchanged": true,
+  "public_private_separate": true,
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_preparations": 15,
+  "ready": 5,
+  "guests": 46,
+  "children": null,
+  "quote_cents": 294400,
+  "quote_provisional": true,
+  "exports": [
+    "calendar.ics",
+    "quote.pdf",
+    "kitchen.pdf",
+    "staff.pdf",
+    "guest.pdf"
+  ],
+  "automated_checks": 229,
+  "original_answer_pdf_checks": {
+    "documents": 4,
+    "pages_each": 1,
+    "labelled_default_visible": true,
+    "visual_check": "No clipped content or overlap"
+  },
+  "browser_check": "Published event-time editor shows the four-hour default instructions. Existing explicit end time retained; editor cancelled without saving."
+}

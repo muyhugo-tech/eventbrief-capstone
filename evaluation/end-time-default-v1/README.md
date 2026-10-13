@@ -18,3 +18,7 @@ node --test tests/draft-workflow.test.mjs
 ```
 
 [Recorded result](results/2026-10-13.json). The earlier [4/5 workflow replay](../draft-workflow-v1/README.md) is retained under `usable-drafts-v1`. The app now uses `usable-drafts-v2`. Alex's original 0/5 failure remains recorded; this is a regression replay of that answer, not evidence of unseen-event accuracy.
+
+## Deployed verification
+
+[Production check](results/hosted-2026-10-13.json) passed at `1e41d1a`. The saved-answer prepare endpoint, with empty corrections, returned all five drafts and the labelled 9:30 PM default. The existing private event kept its explicit 9:30 PM correction and all saved reviews; settings and the original receipt were unchanged. Four hosted PDFs and the tentative calendar exported successfully. The browser shows the new simple editing instructions. The original-answer PDF templates were also rendered and visually checked: four one-page documents with the default visible. **229 software checks passed; zero new AI calls, $0 added, 15 preparations remain.**
