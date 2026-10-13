@@ -1,0 +1,131 @@
+{
+  "verified_at": "2026-10-13T07:23:52.166Z",
+  "ready": 5,
+  "checks": {
+    "checks": {
+      "latest_counts": true,
+      "source_counts": true,
+      "accepted_arrangements": true,
+      "known_details": true,
+      "raw_unknowns": true,
+      "optional_stays_unknown": true,
+      "labelled_end_default": true,
+      "restaurant_timezone": true,
+      "no_open_items": true,
+      "no_corrections": true,
+      "no_obsolete_count": true
+    },
+    "draft_checks": {
+      "calendar": true,
+      "quote": true,
+      "kitchen": true,
+      "staff": true,
+      "guest": true
+    },
+    "all_pass": true,
+    "ready_documents": 5,
+    "quote_total_cents": 210400,
+    "documents": [
+      {
+        "id": "calendar",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "quote",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "kitchen",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "staff",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "guest",
+        "state": "ready_for_review",
+        "blockers": []
+      }
+    ]
+  },
+  "guests": 32,
+  "children": 2,
+  "total": 34,
+  "start_time": "17:45",
+  "end_time": "21:45",
+  "quote_cents": 210400,
+  "original_receipt_unchanged": true,
+  "existing_events_and_reviews_unchanged": true,
+  "settings_unchanged": true,
+  "saved_reload": true,
+  "new_event_corrections": 0,
+  "new_event_review_marks": 0,
+  "new_ai_calls_for_repair": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_preparations": 14,
+  "exports": [
+    {
+      "id": "quote",
+      "http_status": 200,
+      "bytes": 28295,
+      "sha256": "4e89bce84af0df621cdc945eb4bef4262a487c4b0a98920663911a008739a3d9"
+    },
+    {
+      "id": "kitchen",
+      "http_status": 200,
+      "bytes": 23254,
+      "sha256": "76de533c19270271c6289ac65a361c231093fe54cdbfb694bf7a4faf4d2a30e1"
+    },
+    {
+      "id": "staff",
+      "http_status": 200,
+      "bytes": 24522,
+      "sha256": "511a75afa9a9ae27ac393cc3bf9dbeb965b4d3b2039ec2048227007f99088377"
+    },
+    {
+      "id": "guest",
+      "http_status": 200,
+      "bytes": 21781,
+      "sha256": "38d43caab713495512ac4d496929fd6f813b46cf59daf05620fb137d2d98445b"
+    }
+  ],
+  "calendar_export": true,
+  "app_commit": "3d0c1b639e2cb41684c4f8270bec096e35f5c380",
+  "deployment_id": "dpl_76QxbtB1ijYYvN6kqbT7JMViExZe",
+  "target": "production",
+  "status": "READY",
+  "automated_software_checks": 232,
+  "pdf_content_checks": [
+    {
+      "id": "quote",
+      "pages": 2,
+      "content_check": true
+    },
+    {
+      "id": "kitchen",
+      "pages": 2,
+      "content_check": true
+    },
+    {
+      "id": "staff",
+      "pages": 1,
+      "content_check": true
+    },
+    {
+      "id": "guest",
+      "pages": 1,
+      "content_check": true
+    }
+  ],
+  "visual_review": {
+    "all_event_content_readable": true,
+    "clipped_content": false,
+    "remaining_polish": "Quote and kitchen sheet put their footer on a second page. Staff and guest sheets fit one page. Page count is a formatting issue, not a missing-data or blocked-export failure."
+  },
+  "browser_review": "All five live previews opened, showed the 9:45 PM default and export controls. Sofia left open for user review; no review boxes changed."
+}

@@ -31,7 +31,22 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Edit drink notes and keep assets consistent | **Passed** | Notes save separately, survive reload and appear in the quote, staff and guest outputs. Notes-only edits reset those three reviews and retain the calendar and kitchen reviews. [Checks](../tests/package-normalization.test.mjs) |
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
 
-## Latest repair: Alex's saved event
+## Latest test: Sofia's retirement dinner
+
+| Check | First attempt | After app repair, same saved answer |
+| --- | --- | --- |
+| Updated attendance | **Passed:** 28 → 32 guests, 2 children, 34 total | Unchanged and correct |
+| Missing end time | **Passed:** 5:45 PM start → 9:45 PM default | Labelled in all previews and downloads |
+| Optional details | **Passed:** remain unknown without blocking solely for absence | No manual entry required |
+| Five usable assets | **Failed: 1/5**, drink-option punctuation blocked four drafts | **Passed: 5/5**, no coordinator correction |
+| Quote and kitchen quantities | Blocked | **$2,104**; prep quantities for **34 people** |
+| Downloads and saved reopening | Calendar only; PDFs returned 409 | Four PDFs and tentative calendar work; reopening uses no AI |
+| Layout | Four PDF layouts unavailable | Content readable; **quote/kitchen footers spill to page 2** and still need formatting polish |
+| Preserve existing work | Other events unchanged | Original receipt, existing corrections/reviews and settings unchanged |
+
+**One AI call total, estimated $0.0217875; 14 preparations remain.** The repair used the saved answer, with no additional model request. This was a fresh test failure followed by a successful regression replay, not a first-attempt success. [Full evidence](../evaluation/new-event-v4/README.md)
+
+## Earlier repair: Alex's saved event
 
 | Check | Result |
 | --- | --- |

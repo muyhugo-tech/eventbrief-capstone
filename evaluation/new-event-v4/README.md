@@ -29,3 +29,9 @@ node --test tests/sofia-beverages.test.mjs
 ```
 
 Confidence is high for these observed outputs. Broader unseen-conversation accuracy remains unproven. The fresh run was a failure followed by a software repair, not a first-attempt success.
+
+## Hosted check after the repair
+
+[Production verification](results/hosted-replay-2026-10-13.json) passed on `3d0c1b6`: all five previews opened; four PDF endpoints returned 200; the calendar file had the correct times; reopening the saved result was free. Other events, review revisions, corrections, settings and the original AI receipt were unchanged. No new event corrections or review marks were added. All 232 software checks passed.
+
+PDF content and all six pages were inspected. The quote and kitchen sheet currently spill their footer onto a second page; staff and guest sheets fit one page. All event content is present and readable. **Footer pagination still needs formatting polish.**
