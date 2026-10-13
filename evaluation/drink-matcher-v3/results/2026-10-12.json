@@ -1,0 +1,573 @@
+{
+  "offline": {
+    "replayed_at": "2026-10-13T04:34:12.687Z",
+    "code_sha256": {
+      "lib/package-normalization.mjs": "36a41854643afbce3ea9dea35dad50f762287c4440799b56f6e4156480fca15d",
+      "lib/event-package.mjs": "f0fd97ea0d7f2f9b052b2a8169d4ad670c13c367d95a03fb9cf38e8d1e9d7a18",
+      "scripts/replay-drink-matcher.mjs": "5ab6a6c5a4d6cd7f03882a39bc4efd2ff8a993d48abcd7a099ae133309a703cf"
+    },
+    "results": [
+      {
+        "case": "lena",
+        "original_policy": "supported-details-v2",
+        "normalization_policy": "supported-details-v3",
+        "original_result_sha256": "adba56938b1c084671916b8673320a3e8303dd42f94d1fb43650075837ba90bf",
+        "protocol_sha256": "ef917d15e9ee51f3b6c733e47b0c9adf69aaae050ec77bcf8f17c76572e795a9",
+        "original_ready_documents": 1,
+        "checks": {
+          "final_counts": true,
+          "final_time": true,
+          "no_open_items": true,
+          "supported_beverage": true,
+          "no_corrections": true,
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "beverage_details": {
+          "quote": true,
+          "staff": true,
+          "guest": true
+        },
+        "field_matches": {
+          "host_name": true,
+          "booking_status": true,
+          "event_date": true,
+          "start_time": true,
+          "end_time": true,
+          "timezone": true,
+          "guest_count": true,
+          "guest_13_plus_count": true,
+          "child_count": true,
+          "venue": true,
+          "menu": true,
+          "beverage": true,
+          "dietary": true,
+          "setup": true,
+          "av": true,
+          "special": true,
+          "guest_notes": true,
+          "staff_notes": true
+        },
+        "ready_documents": 5,
+        "all_five_pass": true,
+        "quote_total_cents": 142000,
+        "beverage_value": "Nonalcoholic service",
+        "beverage_notes": "with soda and juice for everybody and no alcohol",
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "staff",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "guest",
+            "state": "ready_for_review",
+            "blockers": []
+          }
+        ],
+        "beverage_option": "Nonalcoholic service",
+        "exact_notes_in_preview_and_download": {
+          "quote": true,
+          "staff": true,
+          "guest": true
+        },
+        "original_preserved": true,
+        "manual_corrections": 0,
+        "new_ai_calls": 0,
+        "added_ai_cost_usd": 0
+      },
+      {
+        "case": "noah",
+        "original_policy": "supported-details-v1",
+        "normalization_policy": "supported-details-v3",
+        "original_result_sha256": "d3fe71cd5cce1e08125501bacc3c0b62e2d753a8625898cb85d1ec8fd8ca490f",
+        "protocol_sha256": "1f32a7bea9c2341596cf1d8147050b7db83016c138ac8ebc5a4972e79f64ea74",
+        "original_ready_documents": 1,
+        "checks": {
+          "final_counts": true,
+          "final_time": true,
+          "no_open_items": true,
+          "supported_beverage": true,
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true,
+          "original_retained": true
+        },
+        "ready_documents": 5,
+        "quote_total_cents": 177600,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "staff",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "guest",
+            "state": "ready_for_review",
+            "blockers": []
+          }
+        ],
+        "beverage_option": "Nonalcoholic service",
+        "beverage_notes": "juice and soda for everyone, with no alcohol",
+        "exact_notes_in_preview_and_download": {
+          "quote": true,
+          "staff": true,
+          "guest": true
+        },
+        "original_preserved": true,
+        "manual_corrections": 0,
+        "new_ai_calls": 0,
+        "added_ai_cost_usd": 0
+      }
+    ],
+    "new_ai_calls": 0,
+    "added_ai_cost_usd": 0,
+    "limitation": "Saved-answer regression checks used to develop this fix, not new AI trials or an independent accuracy benchmark."
+  },
+  "hosted": {
+    "app_commit": "731a35a96fafa025a6c8cc4278ba8889459b5e29",
+    "checked_at": "2026-10-13T04:38:46.748Z",
+    "normalization_policy": "supported-details-v3",
+    "new_ai_calls": 0,
+    "added_ai_cost_usd": 0,
+    "remaining_hosted_calls": 16,
+    "unaffected_events_unchanged": true,
+    "lena_summary_updated": true,
+    "public_private_separate": true,
+    "results": [
+      {
+        "case": "lena",
+        "original_replay": {
+          "checks": {
+            "final_counts": true,
+            "final_time": true,
+            "no_open_items": true,
+            "supported_beverage": true,
+            "no_corrections": true,
+            "calendar": true,
+            "quote": true,
+            "kitchen": true,
+            "staff": true,
+            "guest": true
+          },
+          "beverage_details": {
+            "quote": true,
+            "staff": true,
+            "guest": true
+          },
+          "field_matches": {
+            "host_name": true,
+            "booking_status": true,
+            "event_date": true,
+            "start_time": true,
+            "end_time": true,
+            "timezone": true,
+            "guest_count": true,
+            "guest_13_plus_count": true,
+            "child_count": true,
+            "venue": true,
+            "menu": true,
+            "beverage": true,
+            "dietary": true,
+            "setup": true,
+            "av": true,
+            "special": true,
+            "guest_notes": true,
+            "staff_notes": true
+          },
+          "ready_documents": 5,
+          "all_five_pass": true,
+          "quote_total_cents": 142000,
+          "beverage_value": "Nonalcoholic service",
+          "beverage_notes": "with soda and juice for everybody and no alcohol",
+          "documents": [
+            {
+              "id": "calendar",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "quote",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "kitchen",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "staff",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "guest",
+              "state": "ready_for_review",
+              "blockers": []
+            }
+          ],
+          "beverage_option": "Nonalcoholic service",
+          "exact_notes_in_preview_and_download": {
+            "quote": true,
+            "staff": true,
+            "guest": true
+          }
+        },
+        "current_workspace": {
+          "checks": {
+            "final_counts": true,
+            "final_time": true,
+            "no_open_items": true,
+            "supported_beverage": true,
+            "no_corrections": true,
+            "calendar": true,
+            "quote": true,
+            "kitchen": true,
+            "staff": true,
+            "guest": true
+          },
+          "beverage_details": {
+            "quote": true,
+            "staff": true,
+            "guest": true
+          },
+          "field_matches": {
+            "host_name": true,
+            "booking_status": true,
+            "event_date": true,
+            "start_time": true,
+            "end_time": true,
+            "timezone": true,
+            "guest_count": true,
+            "guest_13_plus_count": true,
+            "child_count": true,
+            "venue": true,
+            "menu": true,
+            "beverage": true,
+            "dietary": true,
+            "setup": true,
+            "av": true,
+            "special": true,
+            "guest_notes": true,
+            "staff_notes": true
+          },
+          "ready_documents": 5,
+          "all_five_pass": true,
+          "quote_total_cents": 142000,
+          "beverage_value": "Nonalcoholic service",
+          "beverage_notes": "with soda and juice for everybody and no alcohol",
+          "documents": [
+            {
+              "id": "calendar",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "quote",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "kitchen",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "staff",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "guest",
+              "state": "ready_for_review",
+              "blockers": []
+            }
+          ],
+          "beverage_option": "Nonalcoholic service",
+          "exact_notes_in_preview_and_download": {
+            "quote": true,
+            "staff": true,
+            "guest": true
+          }
+        },
+        "original_preserved": true,
+        "new_corrections": 0,
+        "existing_correction_count": 0,
+        "saved_reviews_preserved": true,
+        "saved_reload": true,
+        "review_marks": 0,
+        "exports": [
+          {
+            "id": "quote",
+            "status": 200,
+            "bytes": 26741,
+            "sha256": "6c2741e803339446b3dac00ff143d4f939e8dba8f7a801ae6656af9bd3a3f4ba"
+          },
+          {
+            "id": "kitchen",
+            "status": 200,
+            "bytes": 21669,
+            "sha256": "053c0a36a5a5648c9b11c8a706ac8c6106a8ed88d34135c4651d15bf2c2673e2"
+          },
+          {
+            "id": "staff",
+            "status": 200,
+            "bytes": 25076,
+            "sha256": "2fb39298eddaf031a4b38c47cfeef1ac90bac42f9740aeeea1d2a9fb618d6d9a"
+          },
+          {
+            "id": "guest",
+            "status": 200,
+            "bytes": 21336,
+            "sha256": "fdf605aea319ef141dc7ffce10461ced89bc148c1d75b0cd10146f68dba120af"
+          }
+        ],
+        "calendar_sha256": "cd7b2ed72b07dec0cecfd5a1c8a9df88f10d2ea99e851a7a3f7dd7e2e3133664"
+      },
+      {
+        "case": "noah",
+        "original_replay": {
+          "checks": {
+            "final_counts": true,
+            "final_time": true,
+            "no_open_items": true,
+            "supported_beverage": true,
+            "calendar": true,
+            "quote": true,
+            "kitchen": true,
+            "staff": true,
+            "guest": true,
+            "original_retained": true
+          },
+          "ready_documents": 5,
+          "quote_total_cents": 177600,
+          "documents": [
+            {
+              "id": "calendar",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "quote",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "kitchen",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "staff",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "guest",
+              "state": "ready_for_review",
+              "blockers": []
+            }
+          ],
+          "beverage_option": "Nonalcoholic service",
+          "beverage_notes": "juice and soda for everyone, with no alcohol",
+          "exact_notes_in_preview_and_download": {
+            "quote": true,
+            "staff": true,
+            "guest": true
+          }
+        },
+        "current_workspace": {
+          "checks": {
+            "final_counts": true,
+            "final_time": true,
+            "no_open_items": true,
+            "supported_beverage": true,
+            "calendar": true,
+            "quote": true,
+            "kitchen": true,
+            "staff": true,
+            "guest": true,
+            "original_retained": true
+          },
+          "ready_documents": 5,
+          "quote_total_cents": 177600,
+          "documents": [
+            {
+              "id": "calendar",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "quote",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "kitchen",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "staff",
+              "state": "ready_for_review",
+              "blockers": []
+            },
+            {
+              "id": "guest",
+              "state": "ready_for_review",
+              "blockers": []
+            }
+          ],
+          "beverage_option": "Nonalcoholic service",
+          "beverage_notes": "juice and soda for everyone, with no alcohol",
+          "exact_notes_in_preview_and_download": {
+            "quote": true,
+            "staff": true,
+            "guest": true
+          }
+        },
+        "original_preserved": true,
+        "new_corrections": 0,
+        "existing_correction_count": 1,
+        "saved_reviews_preserved": true,
+        "saved_reload": true,
+        "review_marks": 0,
+        "exports": [
+          {
+            "id": "quote",
+            "status": 200,
+            "bytes": 27027,
+            "sha256": "1362598fb12dc058b3462778f4fc1bc34e30ef4a81fcd1540e7f1748bd7adc74"
+          },
+          {
+            "id": "kitchen",
+            "status": 200,
+            "bytes": 21564,
+            "sha256": "e17d6da85679222074b1d81b64332e91cb85d2a1470c8335b66d072b3191e239"
+          },
+          {
+            "id": "staff",
+            "status": 200,
+            "bytes": 25037,
+            "sha256": "b44e83e1ed891147e4441175bcb2b17bc2adbbd0b75842f2b53a6305cc0e9a33"
+          },
+          {
+            "id": "guest",
+            "status": 200,
+            "bytes": 21354,
+            "sha256": "e3ce043062cbca921af9bafd9b55f62addd0bfabc1f52fc36c33741367fe398f"
+          }
+        ],
+        "calendar_sha256": "e9b4fb87e77375295f4a0f056cf2ed3428ec64152331d66e67f5b8490bae1d26"
+      }
+    ]
+  },
+  "pdf_content": {
+    "checked_pdfs": 8,
+    "results": [
+      {
+        "case": "lena",
+        "document": "quote",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "lena",
+        "document": "kitchen",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "lena",
+        "document": "staff",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "lena",
+        "document": "guest",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "noah",
+        "document": "quote",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "noah",
+        "document": "kitchen",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "noah",
+        "document": "staff",
+        "pages": 1,
+        "content_checks_passed": true
+      },
+      {
+        "case": "noah",
+        "document": "guest",
+        "pages": 1,
+        "content_checks_passed": true
+      }
+    ]
+  },
+  "visual_review": {
+    "reviewer": "development assistant",
+    "documents": 8,
+    "pages": 8,
+    "result": "All rendered pages inspected; no clipping, overlaps or unreadable layout observed."
+  },
+  "software_checks": {
+    "passed": 215,
+    "failed": 0,
+    "skipped": 0
+  },
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_hosted_calls": 16,
+  "limitations": [
+    "Saved-answer regression checks used to develop the fix, not new AI trials.",
+    "Noah hosted PDF exports retain his pre-existing coordinator corrections; his original answer also passed a separate empty-correction replay.",
+    "Owner review marks remain pending for both events."
+  ]
+}

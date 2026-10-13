@@ -2,7 +2,7 @@
 
 Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, and two newly authored events tested at successive stages of the app.
 
-**The latest new event failed without correction: Lena's calendar passed, but the other four drafts were blocked.** The AI retained soda and juice for everybody with no alcohol, but the app rejected the combined wording. Noah's saved answer still passes after the previous fix; that success did not generalize to this new conversation. [Latest result](../evaluation/new-event-v2/README.md)
+**After the combined-drink fix, Lena's and Noah's saved answers both pass all five draft checks: $1,420 and $1,776 respectively.** The original answers were replayed with no corrections and no new AI calls. Eight hosted PDFs and both calendar files were checked. Their original first-attempt failures remain recorded; this is an app-fix replay, not a new AI accuracy trial. [Latest replay](../evaluation/drink-matcher-v3/README.md)
 
 ## What passed and what needs work
 
@@ -18,11 +18,25 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. Incl
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
 | Download event assets | **Passed** | Hosted checks returned four document PDFs. Calendar download worked as a tentative `.ics` file. Blocked dietary drafts could not export PDFs. [Saved evidence](#saved-evidence) |
-| Interpret natural beverage wording | **Still needs work** | Elena's and Noah's saved answers pass after fixes, but Lena's new first attempt blocked four drafts on ordinary wording: “soda and juice for everybody and no alcohol.” The matcher still depends too much on phrase structure. [Latest failure](../evaluation/new-event-v2/README.md) · [Noah replay](../evaluation/new-event-v1/APP-REPLAY.md) |
+| Interpret natural beverage wording | **Passed after app fix for saved examples** | Combined supported instructions now match while preserving the exact drink notes. Lena and Noah both replay to 5/5 ready; unsupported extras and contradictions remain blocked. Broader language accuracy remains unproven. [Original Lena failure](../evaluation/new-event-v2/README.md) · [Current replay](../evaluation/drink-matcher-v3/README.md) |
 | Edit drink notes and keep assets consistent | **Passed** | Notes save separately, survive reload and appear in the quote, staff and guest outputs. Notes-only edits reset those three reviews and retain the calendar and kitchen reviews. [Checks](../tests/package-normalization.test.mjs) |
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
 
-## Latest new-event check: Lena
+## Latest fix: Lena and Noah saved-answer replay
+
+| Draft | Lena | Noah |
+| --- | --- | --- |
+| Calendar | **Passed:** July 17, 5:30–8:30 PM Pacific | **Passed:** December 4, 6–9 PM Pacific |
+| Guest quote | **Passed:** 20 guests, 5 children, **$1,420** | **Passed:** 26 guests, 4 children, **$1,776** |
+| Kitchen sheet | **Passed:** 25 people and correct prep quantities | **Passed:** 30 people and correct prep quantities |
+| Staff event plan | **Passed:** event details, drink instructions and internal notes | **Passed:** updated details, drink instructions and internal notes |
+| Guest event plan | **Passed:** event details, arrival instructions and drinks; no staff-only note | **Passed:** updated details, arrival instructions and drinks; no staff-only note |
+
+All eight hosted PDFs passed content and visual checks; both tentative calendar files had the correct time conversion. Exact soda/juice/no-alcohol notes remain in the quote, staff and guest outputs. Both original answers replay with empty corrections. Noah's pre-existing private-workspace corrections were also preserved and separately checked. Existing events and review marks were retained; neither event was marked reviewed by this test.
+
+**Additional AI calls: 0. Added AI cost: $0. Preparations remaining: 16.** These are regression replays of known examples, not new AI trials. [Method, safeguards and reproducible evidence](../evaluation/drink-matcher-v3/README.md)
+
+## Original first attempt: Lena
 
 One new fictional conversation, expectations saved before the call, no app or prompt changes, no saved lessons, no retry and no correction.
 
@@ -112,15 +126,15 @@ The **60/60** readiness score uses the original policy; the later dietary rule w
 
 ## App checks
 
-The latest app-fix run reported **211 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers. They are not 211 AI trials; older totals are not added to them. Hosted checks verified Noah's saved note restoration, reload, four PDF exports and calendar file. Lena's test changed no application code; its separate saved-result checker reproduces the new failure without an AI call.
+The latest app-fix run reported **215 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers. They are not 215 AI trials; older totals are not added to them. Hosted checks verified both saved answers, unchanged corrections/reviews and allowance, eight PDF exports and two calendar files. Separate historical checkers still reproduce the original failures under their recorded policies.
 
 ## What still needs work
 
-1. **Drink matching:** even ordinary soda-and-juice wording still fails when combined with “and no alcohol.” Separate the priced package from drink instructions more reliably, while retaining checks for contradictions and unpriced additions. Replay saved failures before spending on another new event.
-2. **More independent conversations:** Lena exposed a remaining failure after Noah's replay passed. Check independently written examples after fixing it, including source support and follow-up questions. These few authored cases are not a general accuracy estimate.
+1. **Broader drink requests:** the saved soda-and-juice cases now pass, including combined instructions. Custom drinks, price exceptions and unsupported wording still require coordinator resolution. This bounded matcher does not establish general drink understanding.
+2. **Independent conversations:** the fixes pass the examples used to develop them. A separate set of independently written examples is still needed to measure broader performance, including source support and follow-up questions.
 3. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later new conversations exposed drink-matching failures. A fix made Noah's saved answer produce all five drafts with preserved drink instructions, but Lena's next new conversation still blocked four drafts on ordinary wording. The system kept the original evidence and prevented those blocked PDFs from being downloaded. Drink matching remains unfinished.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later new conversations exposed drink-matching failures. We preserved those failures, improved the app, and replayed Lena's and Noah's original answers without another AI call. Both then produced all five drafts with correct prices and preserved drink instructions. These replays demonstrate the fixes on known examples; broader accuracy still needs independent testing.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 
