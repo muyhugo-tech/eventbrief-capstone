@@ -21,7 +21,8 @@ import { eventEditCorrections } from './lib/package-edits.mjs';
 import { quoteStyles } from './public/quote-document.mjs';
 import { kitchenStyles } from './public/kitchen-document.mjs';
 import { staffStyles } from './public/staff-document.mjs';
-import { quoteFontPath, quotePdfHtml, kitchenPdfHtml, staffPdfHtml, renderQuotePdf } from './lib/quote-pdf.mjs';
+import { guestStyles } from './public/guest-document.mjs';
+import { quoteFontPath, quotePdfHtml, kitchenPdfHtml, staffPdfHtml, guestPdfHtml, renderQuotePdf } from './lib/quote-pdf.mjs';
 import { assetFilename } from './public/package-export.mjs';
 
 const root = new URL('./', import.meta.url);
@@ -43,6 +44,7 @@ assets.set('/package-export.mjs', ['public/package-export.mjs', 'text/javascript
 assets.set('/quote-document.mjs', ['public/quote-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/kitchen-document.mjs', ['public/kitchen-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/staff-document.mjs', ['public/staff-document.mjs', 'text/javascript; charset=utf-8']);
+assets.set('/guest-document.mjs', ['public/guest-document.mjs', 'text/javascript; charset=utf-8']);
 for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox']) {
   assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
   assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);
@@ -137,6 +139,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       if(req.method==='GET'&&pathname==='/quote-document.css')return send(200,quoteStyles,'text/css; charset=utf-8');
       if(req.method==='GET'&&pathname==='/kitchen-document.css')return send(200,kitchenStyles,'text/css; charset=utf-8');
       if(req.method==='GET'&&pathname==='/staff-document.css')return send(200,staffStyles,'text/css; charset=utf-8');
+      if(req.method==='GET'&&pathname==='/guest-document.css')return send(200,guestStyles,'text/css; charset=utf-8');
       if(req.method==='GET'&&pathname.startsWith('/quote-fonts/')) {
         const path=quoteFontPath(pathname.slice('/quote-fonts/'.length));
         return path?send(200,await readFile(path),'font/woff2'):send(404,{error:'Not found.'});
@@ -148,7 +151,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       if (req.method === 'GET' && pathname === '/api/package/scenarios') {
         return send(200, await packageListing());
       }
-      if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load','/api/package/edit','/api/package/quote/pdf','/api/package/kitchen/pdf','/api/package/staff/pdf'].includes(pathname)) {
+      if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load','/api/package/edit','/api/package/quote/pdf','/api/package/kitchen/pdf','/api/package/staff/pdf','/api/package/guest/pdf'].includes(pathname)) {
         if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site']==='cross-site') return send(403,{error:'Open the app locally first.'});
         if (!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'JSON is required.'});
         if (!packageWorkspace) return send(503,{error:'Saved conversations are not available.'});
@@ -180,8 +183,8 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
           }
           const loading=pathname.endsWith('/load');
           const editing=pathname==='/api/package/edit';
-          const exportId=/^\/api\/package\/(quote|kitchen|staff)\/pdf$/.exec(pathname)?.[1]??null;
-          const exporting=Boolean(exportId),exportLabel={quote:'quote',kitchen:'kitchen sheet',staff:'staff sheet'}[exportId];
+          const exportId=/^\/api\/package\/(quote|kitchen|staff|guest)\/pdf$/.exec(pathname)?.[1]??null;
+          const exporting=Boolean(exportId),exportLabel={quote:'quote',kitchen:'kitchen sheet',staff:'staff sheet',guest:'guest sheet'}[exportId];
           const keys=loading?'run_id|scenario_id':exporting?'revision|run_id|scenario_id|sequence':editing?'changes|reason|run_id|scenario_id|sequence':'corrections|reviews|run_id|scenario_id|sequence';
           if(Object.keys(data).sort().join('|')!==keys || typeof data.scenario_id!=='string' || (data.run_id!==null && typeof data.run_id!=='string'))throw new Error('Invalid saved review request.');
           const bundle=await getBundle(data.scenario_id);if(!bundle)throw new Error('Saved conversation not found.');
@@ -201,7 +204,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             if(doc.state!=='ready_for_review')throw new SourceConflictError(`This ${exportLabel} needs details before it can be downloaded.`);
             if(!Number.isSafeInteger(data.sequence)||data.sequence!==(saved?.sequence??0)||data.revision!==doc.revision)throw new SourceConflictError(`The ${exportLabel} changed. Open it again before downloading.`);
             let pdf;
-            try {pdf=await quotePdfRenderer(await ({quote:quotePdfHtml,kitchen:kitchenPdfHtml,staff:staffPdfHtml}[exportId])(doc,prepared,saved?.reviews?.[exportId]?.revision===doc.revision));}
+            try {pdf=await quotePdfRenderer(await ({quote:quotePdfHtml,kitchen:kitchenPdfHtml,staff:staffPdfHtml,guest:guestPdfHtml}[exportId])(doc,prepared,saved?.reviews?.[exportId]?.revision===doc.revision));}
             catch {return send(503,{error:`The PDF could not be created. Your ${exportLabel} is saved. Please try again.`});}
             const latest=await updateState(),latestReview=await packageWorkspace.loadReview(data.scenario_id,data.run_id);
             if(isSuperseded(data.scenario_id,latest)||(latestReview?.sequence??0)!==data.sequence)throw new SourceConflictError(`The event changed while the PDF was being created. Open the latest ${exportLabel} and download it again.`);

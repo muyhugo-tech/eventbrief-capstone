@@ -81,7 +81,7 @@ function setup({ duringTransport, quotePdfRenderer } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
-for(const kind of ['quote','kitchen','staff'])test(`hosted ${kind} download returns PDF bytes within the selected workspace without an AI call`,async()=>{
+for(const kind of ['quote','kitchen','staff','guest'])test(`hosted ${kind} download returns PDF bytes within the selected workspace without an AI call`,async()=>{
   let renders=0;
   const system=setup({quotePdfRenderer:async()=>{renders++;return Buffer.from('%PDF-1.7\nsynthetic test');}});
   const visitor=system.visitor(),owner=system.visitor();

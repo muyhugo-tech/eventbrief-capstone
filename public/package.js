@@ -358,8 +358,8 @@ function renderSelected() {
   $('#download-document').disabled = busy || isEarlier() || selected.state === 'blocked';
   $('#print-document').disabled = busy || isEarlier() || selected.state === 'blocked';
   $('#download-document').textContent = isEarlier() ? 'Earlier draft · download off' : selected.id==='calendar' ? 'Download calendar file (.ics)' : isReviewed(selected) ? 'Download reviewed draft' : 'Download unreviewed draft';
-  if(!isEarlier()&&['quote','kitchen','staff'].includes(selected.id))$('#download-document').textContent='Download PDF';
-  $('#print-document').textContent={quote:'Print quote',kitchen:'Print kitchen sheet',staff:'Print staff sheet'}[selected.id]??'Print / Save PDF';
+  if(!isEarlier()&&['quote','kitchen','staff','guest'].includes(selected.id))$('#download-document').textContent='Download PDF';
+  $('#print-document').textContent={quote:'Print quote',kitchen:'Print kitchen sheet',staff:'Print staff sheet',guest:'Print guest sheet'}[selected.id]??'Print / Save PDF';
   const ready = data.documents.filter(doc => doc.state === 'ready_for_review').length;
   const reviewed = data.documents.filter(isReviewed).length;
   $('#package-summary').textContent = isEarlier() ? `Earlier version · ${data.record.fields.guest_count.value ?? 'Unknown'} people · saved for comparison` : `${ready} of 5 drafts ready for review · ${5 - ready} need details · ${data.record.fields.guest_count.value ?? 'Unknown'} people`;
@@ -919,8 +919,8 @@ $('#download-document').addEventListener('click', async () => {
     if(doc.id==='calendar') {
       download(calendarFile(doc,data,{reviewed:isReviewed(doc),eventId:versionFor()?.event_id??currentId}),assetFilename(doc,data,'ics'),'text/calendar;charset=utf-8');
       announce('Calendar file downloaded. Open it in your calendar app if you want to add this draft. Nothing was booked or sent.');
-    } else if(['quote','kitchen','staff'].includes(doc.id)) {
-      const label={quote:'Quote',kitchen:'Kitchen sheet',staff:'Staff sheet'}[doc.id];
+    } else if(['quote','kitchen','staff','guest'].includes(doc.id)) {
+      const label={quote:'Quote',kitchen:'Kitchen sheet',staff:'Staff sheet',guest:'Guest sheet'}[doc.id];
       setBusy(true);announce(`Creating your ${label.toLowerCase()} PDF…`);$('#download-document').textContent='Creating PDF…';
       try {
         const headers={'Content-Type':'application/json',...(hosted?{'X-EventBrief-Workspace':hosted.workspace}:{})};

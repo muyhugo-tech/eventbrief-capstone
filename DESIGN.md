@@ -187,6 +187,16 @@ Source mode, local-demo status, and draft review labels are small contextual tag
 
 ### Asset previews and copies
 
+The guest event sheet builds on the staff sheet's white paper, centered restaurant name, thin gray table rules, and clear section hierarchy. The owner's request supplies its warmer voice: thank the host, summarize the saved arrangements, and invite last-minute change requests. Refero's copywriting guidance supplies short, concrete sentences and a clear next step; live Refero tools were unavailable.
+
+| Guest-sheet decision | Source and role | Boundary |
+| --- | --- | --- |
+| Familiar event summary table | Existing staff sheet, requested by the owner. | White Letter paper, black sans-serif text, gray lead row, no new dashboard styling or decorative imagery. |
+| Personal greeting and thank-you | Owner's guest-facing brief. | Address the saved host; thank them for choosing the saved restaurant. Do not invent an occasion or call an unconfirmed booking confirmed. |
+| Menu, drinks, and arrival notes | Existing guest audience allowlist. | Exclude staff instructions, individual dietary information, prices, and raw source messages. |
+| Last-minute changes and warm closing | Owner's brief plus Refero's concrete-next-step guidance. | Invite contact with the restaurant; promise only to review and confirm what can be accommodated. Do not invent contact details or guarantee changes. |
+| Shared preview and PDF | Existing quote, kitchen, and staff exports. | Preserve saved-data checks, review labels and conditional dietary blocking. Change only the guest document revision for this presentation update. |
+
 The staff execution sheet uses the owner's staff-sheet photo as its primary reference: centered restaurant name, left-aligned uppercase document title, a bordered two-column event summary, gray leading rows, a service timeline, and plain food/beverage and setup sections. The existing event-order builder supplies the audience boundary and internal-note grouping. The kitchen sheet supplies the already packaged sans-serif fonts, black/gray print palette, and shared preview/PDF delivery. Refero's typography guidance supports compact, neutral hierarchy for scanning during service; live Refero tools were unavailable.
 
 | Staff-sheet decision | Source and role | Boundary |

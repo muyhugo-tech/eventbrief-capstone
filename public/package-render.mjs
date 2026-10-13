@@ -2,6 +2,7 @@ import { approvedDocumentRows, reusedInternalDocument } from './package-export.m
 import { renderGuestQuote, standaloneGuestQuote } from './quote-document.mjs';
 import { renderKitchenSheet, standaloneKitchenSheet } from './kitchen-document.mjs';
 import { renderStaffSheet, standaloneStaffSheet } from './staff-document.mjs';
+import { renderGuestSheet, standaloneGuestSheet } from './guest-document.mjs';
 
 export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -37,23 +38,13 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
   if(document.id==='quote')return renderGuestQuote(document,prepared,{reviewed,interactive});
   if(document.id==='kitchen')return renderKitchenSheet(document,prepared,{reviewed,interactive});
   if(document.id==='staff')return renderStaffSheet(document,prepared,{reviewed,interactive});
+  if(document.id==='guest')return renderGuestSheet(document,prepared,{reviewed,interactive});
   const facts = (fields, className = 'draft-facts') => {
     const selected = fields.map(field => rows.find(row => row.field === field)).filter(Boolean);
     return selected.length ? `<dl class="${className}">${selected.map(row => `<div class="draft-fact"><dt>${esc(row.field === 'guest_count' ? 'Total attendance' : row.label)}</dt><dd>${esc(displayValue(row))}${interactive ? sourceButton(row.field) : ''}</dd></div>`).join('')}</dl>` : '';
   };
   const section = (title, content) => content ? `<section class="asset-section"><h3 class="draft-section-title">${title}</h3>${content}</section>` : '';
-  const menu = () => {
-    const selected = rows.find(row => row.field === 'menu');
-    return facts(['menu']) + (document.menu_courses?.length ? `<ol class="draft-list asset-courses">${document.menu_courses.map(course => `<li>${esc(course)}</li>`).join('')}</ol>` : '') +
-      (selected && interactive ? '<p class="draft-note">Menu items come from the fictional restaurant menu.</p>' : '');
-  };
-  const beverage = () => facts(['beverage']) + (document.beverage_note ? `<p class="draft-note">${esc(document.beverage_note)}</p>` : '');
   let content = section('Event details', facts(overviewFields));
-
-  if (document.id === 'guest') {
-    content += section('Your menu &amp; drinks', menu() + beverage());
-    content += section('Your arrival &amp; event notes', facts(['guest_notes']));
-  }
   content += `<footer class="asset-review-footer"><p class="draft-note">Prepared from the selected fictional conversation and the ${esc(prepared.profile.version)} restaurant profile. ${interactive ? '<button class="fact-source" data-policy="true">View restaurant rules</button>' : ''} Review does not create a booking, send a message, or make a business commitment.</p></footer>`;
   return `<article class="event-draft asset-${esc(document.id)}">${header}${content}</article>`;
 }
@@ -62,6 +53,7 @@ export function standaloneDocument(document, prepared, reviewed) {
   if(document.id==='quote'&&document.state==='ready_for_review')return standaloneGuestQuote(document,prepared,reviewed);
   if(document.id==='kitchen'&&document.state==='ready_for_review')return standaloneKitchenSheet(document,prepared,reviewed);
   if(document.id==='staff'&&document.state==='ready_for_review')return standaloneStaffSheet(document,prepared,reviewed);
+  if(document.id==='guest'&&document.state==='ready_for_review')return standaloneGuestSheet(document,prepared,reviewed);
   const reused = reusedInternalDocument(document, prepared, reviewed);
   if (reused) return reused;
   // Each export receives only its audience-approved rows, never the full thread.
