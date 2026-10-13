@@ -4,7 +4,7 @@ import { readFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { prepareEventPackage, fingerprint } from '../lib/event-package.mjs';
-import { normalizePackageRecord, SUPPORTED_DETAILS_V1 } from '../lib/package-normalization.mjs';
+import { normalizePackageRecord, APP_NORMALIZATION, SUPPORTED_DETAILS_V1, SUPPORTED_DETAILS_V2 } from '../lib/package-normalization.mjs';
 import { eventEditCorrections } from '../lib/package-edits.mjs';
 import { pastedInput, createPackageWorkspace } from '../lib/package-workspace.mjs';
 import { renderDocument, standaloneDocument } from '../public/package-render.mjs';
@@ -22,7 +22,7 @@ const doc = (data, id) => data.documents.find(item => item.id === id);
 test('Noah original answer produces five drafts with the exact drink notes and unchanged price', () => {
   const original = structuredClone(bundle.original);
   const current = prepareEventPackage(bundle);
-  assert.equal(current.normalization_policy, 'supported-details-v2');
+  assert.equal(current.normalization_policy, APP_NORMALIZATION);
   assert.ok(current.documents.every(d => d.state === 'ready_for_review'));
   assert.equal(doc(current, 'quote').quote.total_cents, 177600);
   assert.equal(current.record.fields.beverage.value, 'Nonalcoholic service');
@@ -31,6 +31,8 @@ test('Noah original answer produces five drafts with the exact drink notes and u
   assert.deepEqual(current.record.fields.beverage.evidence, original.fields.beverage.evidence);
   assert.deepEqual(bundle.original, original);
   assert.deepEqual(current.original_record, original);
+  const previous = prepareEventPackage({...bundle, normalizationPolicy: SUPPORTED_DETAILS_V2});
+  assert.deepEqual(current.documents, previous.documents, 'Already-supported drafts keep their revisions');
   for (const id of ['quote', 'staff', 'guest']) {
     assert.equal(doc(current, id).beverage_notes, notes);
     assert.ok(renderDocument(doc(current, id), current).includes(notes));
