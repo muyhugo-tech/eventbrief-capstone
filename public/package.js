@@ -346,7 +346,7 @@ function renderPolicy() {
     <p>Service: ${esc(profile.opening_time)}–${esc(profile.closing_time)}, ${esc(profile.timezone)}. Same-day events only. These rules do not establish availability.</p>
     <ul>${Object.entries(profile.venues).map(([name, venue]) => `<li>${esc(name)}: capacity ${venue.capacity}; setups: ${venue.setups.map(esc).join(', ')}.</li>`).join('')}</ul>
     <h3>Fictional prices per guest · USD</h3><ul>${[...Object.entries(profile.menus), ...Object.entries(profile.beverages)].map(([name, option]) => `<li>${esc(name)}: ${option.billing === 'pay_separately' ? 'Drinks paid separately; excluded from the food estimate' : Object.entries(option.prices_cents).map(([field, cents]) => `${esc(profile.categories[field].label)} $${(cents / 100).toFixed(2)}`).join('; ')}.</li>`).join('')}</ul>
-    <p>${esc(profile.quote_note)}</p><h3>Document fields and checks</h3><p>The fields below feed each document. Blank optional details stay unconfirmed. The restaurant timezone is used when the conversation gives none. Calendar export still needs an end time.</p><p>The guest event plan needs allergy and dietary details only when the host brings them up. If those details are still missing or unresolved, the guest plan stays blocked.</p><ul>${session().data.documents.map(doc => `<li><strong>${esc(doc.title)}:</strong> ${doc.dependencies.map(field => esc(FIELD_DEFINITIONS[field].label)).join(', ')}. ${profile.readiness[doc.id].agreed.length ? `Agreement required for ${profile.readiness[doc.id].agreed.map(field => esc(FIELD_DEFINITIONS[field].label)).join(', ')}.` : 'Specified pricing inputs are enough for a draft; a confirmed booking is not required.'}</li>`).join('')}</ul>`;
+    <p>${esc(profile.quote_note)}</p><h3>Document fields and checks</h3><p>The fields below feed each document. Blank optional details stay unconfirmed. The restaurant timezone is used when the conversation gives none. If no end time is specified, it defaults to 4 hours after the start. Specified times and unresolved timing questions take priority.</p><p>The guest event plan needs allergy and dietary details only when the host brings them up. If those details are still missing or unresolved, the guest plan stays blocked.</p><ul>${session().data.documents.map(doc => `<li><strong>${esc(doc.title)}:</strong> ${doc.dependencies.map(field => esc(FIELD_DEFINITIONS[field].label)).join(', ')}. ${profile.readiness[doc.id].agreed.length ? `Agreement required for ${profile.readiness[doc.id].agreed.map(field => esc(FIELD_DEFINITIONS[field].label)).join(', ')}.` : 'Specified pricing inputs are enough for a draft; a confirmed booking is not required.'}</li>`).join('')}</ul>`;
 }
 
 function isReviewed(doc) {
@@ -740,7 +740,9 @@ function renderEventEditInputs() {
   const profile = session().data.profile;
   const options = {venue:Object.keys(profile.venues), menu:Object.keys(profile.menus), beverage:Object.keys(profile.beverages), setup:[...new Set(Object.values(profile.venues).flatMap(venue => venue.setups))]};
   $('#event-edit-inputs').innerHTML = fields.map(field => {
-    const definition = FIELD_DEFINITIONS[field], value = eventEdit.fields[field].value ?? '';
+    const definition = FIELD_DEFINITIONS[field];
+    const automaticEnd = field === 'end_time' && eventEdit.fields[field].preparation?.kind === 'default_duration';
+    const value = automaticEnd ? '' : eventEdit.fields[field].value ?? '';
     const id = `event-edit-${field}`, type = definition.type === 'integer' ? 'number' : definition.type;
     let control;
     if (options[field]) {
@@ -749,8 +751,8 @@ function renderEventEditInputs() {
     } else if (['dietary', 'special', 'guest_notes', 'staff_notes', 'av'].includes(field)) {
       control = `<textarea id="${id}" name="${field}" rows="3" maxlength="1000">${esc(value)}</textarea>`;
     } else control = `<input id="${id}" name="${field}" type="${type}" value="${esc(value)}" ${type === 'number' ? 'min="0" max="10000" step="1" required' : type === 'text' ? 'maxlength="1000"' : ''}>`;
-    return `<label for="${id}">${esc(field==='beverage'?'Drink option':definition.label)}${control}</label>${field==='beverage'?`<label for="event-edit-beverage-notes">Drink notes<textarea id="event-edit-beverage-notes" name="beverage_notes" rows="3" maxlength="1000">${esc(eventEdit.fields.beverage.notes??'')}</textarea></label><p class="live-note">Put the details here. For example, with Nonalcoholic service: juice and soda for everyone, with no alcohol. Extra drinks need a saved price.</p>`:''}`;
-  }).join('') + (fields.includes('child_count') ? '<p id="event-edit-total" class="event-edit-total" aria-live="polite"></p>' : fields.includes('start_time') ? '<p class="event-edit-total">The schedule updates in each draft. Check any arrival or staff notes that mention the old time, too.</p>' : '');
+    return `<label for="${id}">${esc(field==='beverage'?'Drink option':definition.label)}${control}${automaticEnd ? `<span class="live-note">${esc(eventEdit.fields.end_time.preparation.description)}</span>` : ''}</label>${field==='beverage'?`<label for="event-edit-beverage-notes">Drink notes<textarea id="event-edit-beverage-notes" name="beverage_notes" rows="3" maxlength="1000">${esc(eventEdit.fields.beverage.notes??'')}</textarea></label><p class="live-note">Put the details here. For example, with Nonalcoholic service: juice and soda for everyone, with no alcohol. Extra drinks need a saved price.</p>`:''}`;
+  }).join('') + (fields.includes('child_count') ? '<p id="event-edit-total" class="event-edit-total" aria-live="polite"></p>' : fields.includes('start_time') ? '<p class="event-edit-total">Leave End time blank to use 4 hours after Start time. Enter an end time to override it. Check written times in arrival or staff notes, too.</p>' : '');
   $('#event-edit-error').hidden = true;
   const custom=fields.every(field=>['dietary','setup','av','special'].includes(field));
   $('#event-custom-label').hidden=!custom;

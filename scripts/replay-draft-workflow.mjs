@@ -13,7 +13,7 @@ const saved=await read('evaluation/new-event-v3/results/2026-10-12.json');
 const protocol=await read('evaluation/new-event-v3/protocol.json');
 const baseline=await read('fixtures/package/restaurant-v2.json');
 const profile=applyRestaurantSettings(baseline,rehearsalExample(settingsFromProfile(baseline)));
-const data=prepareEventPackage({input:pastedInput(protocol.conversation),original:saved.original_output,profile,baselineProfile:baseline});
+const data=prepareEventPackage({input:pastedInput(protocol.conversation),original:saved.original_output,profile,baselineProfile:baseline,workflowPolicy:'usable-drafts-v1'});
 assert.deepEqual(data.original_record,saved.original_output);
 assert.deepEqual(data.corrections,{});
 assert.equal(data.record.fields.guest_13_plus_count.value,46);

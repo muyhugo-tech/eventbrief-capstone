@@ -1,0 +1,62 @@
+{
+  "schema_version": "eventbrief.end-time-replay.v1",
+  "source": "evaluation/new-event-v3/results/2026-10-12.json",
+  "original_output_sha256": "02fe75fb0c36f643b608a199c9c118054efcbc0a13e6ac661bacbde263647889",
+  "workflow_policy": "usable-drafts-v2",
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "manual_corrections": 0,
+  "original_receipt_preserved": true,
+  "guests": 46,
+  "children": null,
+  "timezone": "America/Los_Angeles",
+  "start_time": "17:30",
+  "end_time": "21:30",
+  "default_duration_hours": 4,
+  "ready_documents": 5,
+  "documents": [
+    {
+      "id": "calendar",
+      "state": "ready_for_review",
+      "notices": [
+        "End time defaults to 9:30 PM: 4 hours after the 5:30 PM start. No end time was specified."
+      ]
+    },
+    {
+      "id": "quote",
+      "state": "ready_for_review",
+      "notices": [
+        "End time defaults to 9:30 PM: 4 hours after the 5:30 PM start. No end time was specified.",
+        "Estimate uses the standard guest rate for 46 guests. Children were not specified; confirm the child count before final pricing."
+      ]
+    },
+    {
+      "id": "kitchen",
+      "state": "ready_for_review",
+      "notices": [
+        "End time defaults to 9:30 PM: 4 hours after the 5:30 PM start. No end time was specified.",
+        "Children were not specified. Confirm any child count with the host.",
+        "Allergy and dietary details have not been supplied. Confirm them before food service."
+      ]
+    },
+    {
+      "id": "staff",
+      "state": "ready_for_review",
+      "notices": [
+        "End time defaults to 9:30 PM: 4 hours after the 5:30 PM start. No end time was specified.",
+        "Estimate uses the standard guest rate for 46 guests. Children were not specified; confirm the child count before final pricing.",
+        "Allergy and dietary details have not been supplied. Confirm them before food service.",
+        "Table setup has not been supplied. Confirm it before setup."
+      ]
+    },
+    {
+      "id": "guest",
+      "state": "ready_for_review",
+      "notices": [
+        "End time defaults to 9:30 PM: 4 hours after the 5:30 PM start. No end time was specified.",
+        "Children were not specified. Please confirm whether any children are attending."
+      ]
+    }
+  ],
+  "limitation": "Saved-answer regression with configured fictional restaurant settings and the user-authorized four-hour default; not an unseen AI test. Child count and Menu 3 prep quantities still need confirmation."
+}

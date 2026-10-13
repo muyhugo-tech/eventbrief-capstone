@@ -1,4 +1,4 @@
-import { approvedDocumentRows, reusedInternalDocument } from './package-export.mjs';
+import { approvedDocumentRows, reusedInternalDocument, draftReviewNotes } from './package-export.mjs';
 import { renderGuestQuote, standaloneGuestQuote } from './quote-document.mjs';
 import { renderKitchenSheet, standaloneKitchenSheet } from './kitchen-document.mjs';
 import { renderStaffSheet, standaloneStaffSheet } from './staff-document.mjs';
@@ -45,6 +45,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
   };
   const section = (title, content) => content ? `<section class="asset-section"><h3 class="draft-section-title">${title}</h3>${content}</section>` : '';
   let content = section('Event details', facts(overviewFields));
+  content += draftReviewNotes(document);
   content += `<footer class="asset-review-footer"><p class="draft-note">Prepared from the selected fictional conversation and the ${esc(prepared.profile.version)} restaurant profile. ${interactive ? '<button class="fact-source" data-policy="true">View restaurant rules</button>' : ''} Review does not create a booking, send a message, or make a business commitment.</p></footer>`;
   return `<article class="event-draft asset-${esc(document.id)}">${header}${content}</article>`;
 }

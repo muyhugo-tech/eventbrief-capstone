@@ -133,7 +133,8 @@ export function calendarFile(document, prepared, { reviewed = false, eventId, no
   // UTF-8 hex preserves the exact event identity without letting user input
   // become iCalendar syntax. Source revisions keep the same event's UID.
   const uid = [...encoder.encode(identity)].map(byte => byte.toString(16).padStart(2, '0')).join('');
-  const description = `${reviewed ? 'Reviewed draft' : 'Draft - not reviewed'}. Not a booking or invitation. All details are fictional.\nRestaurant timezone: ${values.timezone}.`;
+  const defaultDuration = prepared?.record?.fields?.end_time?.preparation;
+  const description = `${reviewed ? 'Reviewed draft' : 'Draft - not reviewed'}. Not a booking or invitation. All details are fictional.\nRestaurant timezone: ${values.timezone}.${defaultDuration?.kind==='default_duration'?'\n'+defaultDuration.description:''}`;
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//EventBrief//Event drafts//EN', 'CALSCALE:GREGORIAN', 'BEGIN:VEVENT', `UID:eventbrief-${uid}@eventbrief.invalid`, `DTSTAMP:${utcStamp(stamp)}`, `DTSTART:${utcStamp(start)}`, `DTEND:${utcStamp(end)}`, `SUMMARY:${calendarText(`Draft - ${values.host_name}`)}`, `LOCATION:${calendarText(values.venue)}`, `DESCRIPTION:${calendarText(description)}`, 'STATUS:TENTATIVE', 'TRANSP:TRANSPARENT', 'CLASS:PRIVATE', 'END:VEVENT', 'END:VCALENDAR'];
   return lines.map(foldLine).join('\r\n') + '\r\n';
 }

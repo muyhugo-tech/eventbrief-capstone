@@ -1,8 +1,8 @@
 # EventBrief evaluation scorecard
 
-Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, two assistant-authored events and one user-authored rehearsal-dinner test.
+Evidence through October 13, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, two assistant-authored events and one user-authored rehearsal-dinner test.
 
-**Alex's original workflow failed. The repaired saved-answer replay now fills 46 Guests and produces four usable document drafts; the original conversation still needs an end time for calendar export.** Children stay unspecified, and the $2,944 food quote clearly states its standard-rate assumption. The existing private event, with its earlier saved end-time/dietary/timezone corrections, now shows all five drafts ready on the live app. No new AI call or new event correction. [Workflow repair](../evaluation/draft-workflow-v1/README.md)
+**Alex's original workflow failed. The repaired saved-answer replay now fills 46 Guests and produces all five drafts, using the coordinator's new four-hour default: 5:30–9:30 PM.** The default is labelled, not attributed to the conversation. Children stay unspecified, and the $2,944 food quote states its standard-rate assumption. No new AI call or manual correction is needed for this replay. [Four-hour rule and replay](../evaluation/end-time-default-v1/README.md)
 
 The original user-authored test passed narrow extraction and blocking checks under the old rules, but delivered **0/5 documents: an end-to-end failure**. The checks reflected overly restrictive implementation rules, not successful event preparation. That historical result remains unchanged. [Original test](../evaluation/new-event-v3/README.md)
 
@@ -17,7 +17,7 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Make five drafts from a complete conversation | **Passed** | The earlier hosted Alex Morgan example produced a calendar entry, quote, kitchen sheet, staff plan and guest plan, all ready for human review. It is separate from the new Alex rehearsal-dinner test. [Evidence](HOSTED-VALIDATION-2026-10-12.md) |
 | Handle a new conversation with changed counts and times | **Passed after app fix on saved answer** | Noah's original run retained **26 guests, 4 children and 6–9 PM**, but blocked four drafts. Replaying the unchanged answer now yields **5/5 ready at $1,776**, with no coordinator corrections to the replay. [Original](../evaluation/new-event-v1/README.md) · [Replay](../evaluation/new-event-v1/APP-REPLAY.md) |
 | Use the latest confirmed guest count | **Passed** | The actual-AI rehearsal retained **22 guests and 2 children**, with the expected **$1,464** quote. [Evidence](VALIDATION-2026-10-12.md) |
-| Turn Alex's conversation into usable drafts | **Failed originally; improved after workflow fix** | The AI kept total attendance 46, but the app left Guests blank and blocked all five assets. The saved-answer repair fills Guests automatically, uses restaurant timezone and removes optional-field gates: **4/5 ready without corrections**, with end time still needed for the calendar. [Repair](../evaluation/draft-workflow-v1/README.md) |
+| Turn Alex's conversation into usable drafts | **Failed originally; passed after workflow fix and duration rule** | The AI kept total attendance 46, but the app left Guests blank and blocked all five assets. The repaired workflow fills Guests, uses restaurant timezone, removes optional-field gates and applies the coordinator's four-hour duration default: **5/5 ready without corrections**. [Replay](../evaluation/end-time-default-v1/README.md) |
 | Update assets after a coordinator changes attendance | **Passed** | Maya’s change to **24 guests and 2 children** updated four documents and reset their reviews. The unchanged calendar kept its review. [Attendance checks](../tests/package-edits.test.mjs) |
 | Configure menus, drink billing and venue limits | **Passed for tested settings** | Private settings save across browsers; the public sample remains separate. Menu 3 and cash-bar terms are supported. The earlier settings-only replay still produced 0/5; the later workflow repair addresses the count mapping and optional-field failures. [Settings evidence](../evaluation/restaurant-settings-v1/README.md) |
 | Block drafts when allergy details are outstanding | **Passed after a fix** | Kitchen, staff and guest plans blocked when the host raised unresolved dietary needs. A reply resolved the issue. Silence alone does not block the guest plan. [Rehearsal](VALIDATION-2026-10-12.md) · [Rule checks](../tests/guest-dietary.test.mjs) |
@@ -34,13 +34,14 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | --- | --- |
 | Guests populate automatically | **Passed: 46**, from the accepted attendance; superseded 40 is not used |
 | Blank optional details | **Passed:** guest/staff notes, setup, AV and special details no longer prevent drafts |
-| Untouched conversation replay | **4/5 ready:** only calendar export needs the missing end time |
+| Untouched conversation replay | **5/5 ready:** missing end defaults to 9:30 PM, four hours after the 5:30 PM start |
+| End-time changes | **Passed:** automatic ends follow the start; explicit ends take priority; clearing the end restores the default |
 | Existing saved event, with earlier corrections | **5/5 ready:** calendar, quote, kitchen, staff and guest |
 | Price | **$2,944 food estimate:** 46 at the standard guest rate; children unspecified; drinks excluded |
 | Downloads | **Passed:** four one-page PDFs visually checked; correct tentative calendar file |
 | Preserve data and budget | **Passed:** receipt, prior corrections/reviews and settings unchanged; **0 AI calls, $0, 15 preparations left** |
 
-Children and Menu 3 prep quantities still need confirmation before final pricing/service. The original failure is retained; these replays do not establish unseen-event accuracy. [Reproducible method and hosted evidence](../evaluation/draft-workflow-v1/README.md)
+Children and Menu 3 prep quantities still need confirmation before final pricing/service. The original failure is retained; these replays do not establish unseen-event accuracy. [Current default replay](../evaluation/end-time-default-v1/README.md) · [Earlier workflow and hosted evidence](../evaluation/draft-workflow-v1/README.md)
 
 ## Latest new conversation: Alex's rehearsal dinner
 
@@ -167,16 +168,16 @@ The **60/60** readiness score uses the original policy; the later dietary rule w
 
 ## App checks
 
-The workflow repair suite reported **226 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers, not 226 AI trials. The new checks cover automatic Guests, explicit price assumptions, optional fields, unresolved requests, source preservation and review invalidation. Historical checkers still reproduce the original failures under their recorded policies.
+The four-hour default suite reported **229 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers, not 229 AI trials. The new checks cover automatic Guests, explicit price assumptions, optional fields, unresolved requests, source preservation, automatic and explicit end times, late schedules and review invalidation. Historical checkers still reproduce the original failures under their recorded policies.
 
 ## What still needs work
 
-1. **Genuine follow-ups:** Alex's original conversation lacks an end time and child count. Drafts now show what is known; the calendar still needs the end time, and the price assumption needs confirmation. Menu 3 kitchen quantities also require confirmation.
+1. **Genuine follow-ups:** Alex's child count and the price assumption need confirmation. Menu 3 kitchen quantities also require confirmation. The missing end time now uses the coordinator's labelled four-hour default.
 2. **Broader drink requests:** the saved soda/juice examples and configured à la carte/cash-bar wording pass. Other arrangements still need supported settings or coordinator review. This is not broad language coverage.
 3. **Independent conversations:** one user-authored case is now recorded. A broader independent set is still needed to measure performance, including source support and follow-up questions.
 4. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later real-use tests exposed drink matching and workflow failures. Alex's total of 46 was extracted but did not populate the usable Guests field. We fixed that mapping and removed optional-field blocks, then replayed the saved answer without another AI call. Four drafts now work directly; the calendar still needs an end time. Broader independent testing and measured time savings remain unfinished.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later real-use tests exposed drink matching and workflow failures. Alex's total of 46 was extracted but did not populate the usable Guests field. We fixed that mapping, removed optional-field blocks and added the coordinator's four-hour default for missing end times. Replaying the saved answer now produces all five drafts without another AI call. Broader independent testing and measured time savings remain unfinished.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 

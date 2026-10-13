@@ -9,6 +9,7 @@ import {applyRestaurantSettings,settingsFromProfile} from '../lib/restaurant-set
 import {rehearsalExample} from '../public/restaurant-example.mjs';
 import {standaloneDocument} from '../public/package-render.mjs';
 import {calendarFile} from '../public/workspace-calendar.mjs';
+import {eventEditCorrections} from '../lib/package-edits.mjs';
 
 const read = async name => JSON.parse(await readFile(new URL(name,import.meta.url),'utf8'));
 const protocol=await read('../evaluation/new-event-v3/protocol.json');
@@ -18,8 +19,8 @@ const profile=applyRestaurantSettings(baseline,rehearsalExample(settingsFromProf
 const bundle={input:pastedInput(protocol.conversation),original,profile,baselineProfile:baseline};
 const doc=(data,id)=>data.documents.find(d=>d.id===id);
 
-test('saved Alex populates 46 guests and four useful drafts without fabricating children or an end time',()=>{
-  const before=JSON.stringify(original),data=prepareEventPackage(bundle);
+test('historical workflow v1 still reproduces four drafts with missing end time',()=>{
+  const before=JSON.stringify(original),data=prepareEventPackage({...bundle,workflowPolicy:'usable-drafts-v1'});
   assert.equal(JSON.stringify(original),before);assert.deepEqual(data.original_record,original);assert.deepEqual(data.corrections,{});
   assert.equal(data.record.fields.guest_13_plus_count.value,46);
   assert.equal(data.record.fields.guest_13_plus_count.preparation.kind,'guest_total_basis');
@@ -42,6 +43,57 @@ test('saved Alex populates 46 guests and four useful drafts without fabricating 
   }
   assert.match(standaloneDocument(doc(data,'guest'),data),/End time to confirm/);
   assert.match(standaloneDocument(doc(data,'kitchen'),data),/Confirm/);
+});
+
+test('missing end time defaults to four hours and saved Alex produces all five drafts without corrections',()=>{
+  const data=prepareEventPackage(bundle),end=data.record.fields.end_time;
+  assert.equal(end.value,'21:30');assert.equal(end.status,'agreed');
+  assert.equal(end.preparation.kind,'default_duration');assert.equal(end.preparation.hours,4);
+  assert.deepEqual(end.evidence,[]);assert.equal(data.original_record.fields.end_time.value,null);
+  assert.deepEqual(data.corrections,{});
+  for(const d of data.documents){assert.equal(d.state,'ready_for_review');assert.match(standaloneDocument(d,data),/4 hours after/);}
+  const ics=calendarFile(doc(data,'calendar'),data).replace(/\r\n /g,'');
+  assert.match(ics,/DTSTART:20261017T003000Z/);assert.match(ics,/DTEND:20261017T043000Z/);
+  assert.match(ics,/4 hours after/);
+});
+
+test('default follows start edits; entering an explicit end pins it; clearing it restores the default',()=>{
+  const initial=prepareEventPackage(bundle);
+  const change=(data,previous,values)=>eventEditCorrections(original,previous,values,'Coordinator checked the schedule.',{resolve:true,currentRecord:data.record});
+  const startEdit=change(initial,{}, {start_time:'18:00',end_time:null});
+  const shifted=prepareEventPackage({...bundle,corrections:startEdit});
+  assert.equal(shifted.record.fields.end_time.value,'22:00');
+  assert.equal(shifted.record.fields.end_time.preparation.kind,'default_duration');
+  assert.ok(shifted.documents.every(d=>d.state==='ready_for_review'));
+  for(const d of shifted.documents)assert.notEqual(d.revision,doc(initial,d.id).revision);
+  const pin=change(initial,{}, {end_time:'21:30'});
+  assert.equal(pin.end_time.value,'21:30');
+  const pinned=prepareEventPackage({...bundle,corrections:pin});
+  assert.equal(pinned.record.fields.end_time.preparation,undefined);
+  const later=change(pinned,pin,{start_time:'18:00'});
+  assert.equal(prepareEventPackage({...bundle,corrections:later}).record.fields.end_time.value,'21:30');
+  const clear=change(pinned,pin,{start_time:'18:00',end_time:null});
+  assert.equal(prepareEventPackage({...bundle,corrections:clear}).record.fields.end_time.value,'22:00');
+});
+
+test('specified times and unresolved schedule questions are not overwritten; late defaults do not wrap onto the same day',()=>{
+  const f=packageFixtures.get('patio-complete');
+  assert.equal(prepareEventPackage(f).record.fields.end_time.preparation,undefined);
+  for(const mutate of [
+    r=>{r.fields.start_time={value:null,status:'unknown',evidence:[]};},
+    r=>{r.fields.start_time.status='requested';},
+    r=>{r.fields.end_time={value:null,status:'conflicting',evidence:[]};},
+    r=>{r.open_questions.push({field:'end_time'});},
+    r=>{r.pending_changes.push({field:'start_time'});},
+    r=>{r.pending_changes.push({field:'end_time'});}
+  ]){const r=structuredClone(original);mutate(r);assert.equal(applyDraftWorkflow(r,profile,{}).fields.end_time.value,null);}
+  const late=prepareEventPackage({...bundle,corrections:{start_time:{value:'21:00',status:'agreed',reason:'Late start boundary test.'}}});
+  assert.equal(late.record.fields.end_time.value,'01:00');assert.equal(late.record.fields.end_time.preparation.day_offset,1);
+  assert.match(late.record.fields.end_time.preparation.description,/next day/);
+  assert.equal(doc(late,'calendar').state,'blocked');assert.throws(()=>calendarFile(doc(late,'calendar'),late));
+  const beyondClosing=prepareEventPackage({...bundle,corrections:{start_time:{value:'19:00',status:'agreed',reason:'Closing time boundary test.'}}});
+  assert.equal(beyondClosing.record.fields.end_time.value,'23:00');
+  assert.ok(doc(beyondClosing,'calendar').blockers.some(b=>b.rule==='closing_time'));
 });
 
 test('one actual end-time confirmation opens all five, preserves raw extraction and keeps optional notes blank',()=>{
