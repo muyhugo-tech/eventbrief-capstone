@@ -2,6 +2,8 @@
 
 Tested October 12, 2026 (Pacific time), against app commit `7a713eba3100642b2592f7d82331e552ef30260e`.
 
+**Later follow-up:** the [app-fix replay](APP-REPLAY.md) now produces all five drafts from the same unchanged answer, including the exact drink notes, with no AI calls. The first-attempt results below remain historical evidence.
+
 **The first attempt failed to produce all five drafts.** The AI extracted the changed counts and times correctly, but returned a beverage description the app could not match to its priced option. Only the calendar was ready. A separately recorded coordinator correction made all five assets available, without another AI call.
 
 ## Method

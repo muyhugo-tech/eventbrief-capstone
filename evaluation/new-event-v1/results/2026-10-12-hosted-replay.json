@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-13T04:02:20.131Z",
+  "site": "https://eventbrief-capstone.vercel.app",
+  "normalization_policy": "supported-details-v2",
+  "ready_documents": 5,
+  "quote_total_cents": 177600,
+  "drink_notes": "juice and soda for everyone, with no alcohol",
+  "note_documents": [
+    "quote",
+    "staff",
+    "guest"
+  ],
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_hosted_calls": 17,
+  "original_preserved": true,
+  "previous_feedback_preserved": true,
+  "saved_reload": true,
+  "other_events_unchanged": true,
+  "public_private_separate": true,
+  "reviews": 0,
+  "exports": [
+    {
+      "id": "quote",
+      "status": 200,
+      "bytes": 27027,
+      "sha256": "0f8ba96fabcd8b95a1657fefd4158f090c4fb2e5de2edb9007af8d5daddcbaa2"
+    },
+    {
+      "id": "kitchen",
+      "status": 200,
+      "bytes": 21564,
+      "sha256": "355d140cbd247ee198d4237090f5794ceb355ec590a8a8181037fed5d4919258"
+    },
+    {
+      "id": "staff",
+      "status": 200,
+      "bytes": 25037,
+      "sha256": "d3f49f11ae513ea07eef357b07f9b0961999b6a8d1c34658dd1f4367dc24e917"
+    },
+    {
+      "id": "guest",
+      "status": 200,
+      "bytes": 21354,
+      "sha256": "3e8f73cb2767be9faf92044bf29ada4804bb2205eb078ce8e9b51f1700732ad7"
+    }
+  ],
+  "application_commit": "f4a4b574855e5499ad8b16d373994bd9793dd2d4",
+  "pdf_review": "All four exports have one page. Quote, staff and guest PDFs contain the exact juice-and-soda notes and were rendered and visually checked; no clipping or overlap observed."
+}
