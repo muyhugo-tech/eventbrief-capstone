@@ -1,0 +1,61 @@
+{
+  "case_id": "noah-retirement-new-event-v1",
+  "replayed_at": "2026-10-13T03:58:16.998Z",
+  "original_app_commit": "7a713eba3100642b2592f7d82331e552ef30260e",
+  "original_result_sha256": "d3fe71cd5cce1e08125501bacc3c0b62e2d753a8625898cb85d1ec8fd8ca490f",
+  "protocol_sha256": "1f32a7bea9c2341596cf1d8147050b7db83016c138ac8ebc5a4972e79f64ea74",
+  "normalization_policy": "supported-details-v2",
+  "original_ready_documents": 1,
+  "checks": {
+    "final_counts": true,
+    "final_time": true,
+    "no_open_items": true,
+    "supported_beverage": true,
+    "calendar": true,
+    "quote": true,
+    "kitchen": true,
+    "staff": true,
+    "guest": true,
+    "original_retained": true
+  },
+  "ready_documents": 5,
+  "quote_total_cents": 177600,
+  "documents": [
+    {
+      "id": "calendar",
+      "state": "ready_for_review",
+      "blockers": []
+    },
+    {
+      "id": "quote",
+      "state": "ready_for_review",
+      "blockers": []
+    },
+    {
+      "id": "kitchen",
+      "state": "ready_for_review",
+      "blockers": []
+    },
+    {
+      "id": "staff",
+      "state": "ready_for_review",
+      "blockers": []
+    },
+    {
+      "id": "guest",
+      "state": "ready_for_review",
+      "blockers": []
+    }
+  ],
+  "beverage_option": "Nonalcoholic service",
+  "beverage_notes": "juice and soda for everyone, with no alcohol",
+  "exact_notes_in_preview_and_download": {
+    "quote": true,
+    "staff": true,
+    "guest": true
+  },
+  "manual_corrections": 0,
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "limitation": "Saved-answer regression replay used to develop the fix, not a new AI trial. Historical failure and coordinator recovery remain in the original result."
+}

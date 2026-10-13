@@ -2,6 +2,8 @@
 import {readFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {prepareEventPackage} from '../lib/event-package.mjs';
 import {pastedInput} from '../lib/package-workspace.mjs';
 import {calendarFile} from '../public/workspace-calendar.mjs';
@@ -37,8 +39,10 @@ export function checksFor(data) {
   };
   return {checks,ready_documents:data.documents.filter(d=>d.state==='ready_for_review').length,quote_total_cents:byId.quote.quote?.total_cents??null,documents:data.documents.map(({id,state,blockers})=>({id,state,blockers}))};
 }
-const initial=prepareEventPackage({input,profile,original:saved.original_output});
-const recovered=prepareEventPackage({input,profile,original:saved.original_output,corrections:saved.recovery.corrections});
+// Historical runs use their recorded preparation policy, even after app fixes.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+const initial=prepareEventPackage({input,profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
+const recovered=prepareEventPackage({input,profile,original:saved.original_output,corrections:saved.recovery.corrections,normalizationPolicy:saved.normalization_policy});
 const initialResult=checksFor(initial), recoveredResult=checksFor(recovered);
 // Verify the frozen expectations and reproduce the recorded failure honestly.
 // A later application fix should get a separate replay report, not rewrite this result.
@@ -57,3 +61,4 @@ assert.equal(recoveredResult.ready_documents,expected.ready_documents.length);
 assert.equal(recoveredResult.quote_total_cents,expected.quote_total_cents);
 assert.ok(Object.values(recoveredResult.checks).every(Boolean));
 console.log(JSON.stringify({initial:initialResult,after_coordinator_correction:recoveredResult,new_ai_calls:0},null,2));
+}
