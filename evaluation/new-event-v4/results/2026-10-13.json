@@ -1,0 +1,550 @@
+{
+  "id": "sofia-retirement-new-event-v4",
+  "author": "Development assistant, written before the model request; not an independent evaluator.",
+  "tested_at": "2026-10-13T07:14:35.415Z",
+  "predeclared_at": "2026-10-13T07:13:41.828Z",
+  "app_commit": "ee5fe8a33261269cb9c98ce00b7624f9728a3f3d",
+  "protocol_sha256": "c8487ad91ee06f7a2ae8dfcb2e61f2c06ca551b2077c09597e62f493ea5d42df",
+  "request_sha256": "390cf932eb126f9b5308b38a2f66bfeac115f8aaec5229bedb4d94577b7588af",
+  "receipt_sha256": "23005615c29d29883e50a140423162411c9ee7f5839fc96fa919ddeca0c9c300",
+  "normalization_policy": "supported-details-v3",
+  "workflow_policy": "usable-drafts-v2",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "max_output_tokens": 7500,
+  "lesson_count": 3,
+  "ai_calls": 1,
+  "automatic_retries": 0,
+  "manual_corrections": 0,
+  "original_output": {
+    "schema_version": "eventbrief.package-record.v3",
+    "fields": {
+      "host_name": {
+        "value": "Sofia Ramirez",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Hi, I'm Sofia Ramirez."
+          }
+        ]
+      },
+      "booking_status": {
+        "value": "Confirmed in the conversation",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "event_date": {
+        "value": "2027-01-22",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "start_time": {
+        "value": "17:45",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "end_time": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "timezone": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "guest_count": {
+        "value": 34,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "We're now at 32 guests plus the same 2 children. Please use that as our final count."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "guest_13_plus_count": {
+        "value": 32,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "We're now at 32 guests plus the same 2 children. Please use that as our final count."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "child_count": {
+        "value": 2,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "venue": {
+        "value": "Garden Patio",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "menu": {
+        "value": "Menu 2",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "beverage": {
+        "value": "Nonalcoholic service: juice and soda for everyone, no alcohol.",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Just juice and soda for everyone, please. No alcohol."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "That fits our Nonalcoholic service."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol."
+          }
+        ]
+      },
+      "dietary": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "setup": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "av": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "special": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "guest_notes": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "staff_notes": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      }
+    },
+    "pending_changes": [],
+    "open_questions": []
+  },
+  "profile": {
+    "schema_version": "eventbrief.restaurant.v2",
+    "id": "linden-fig-demo",
+    "version": "fictional-v3",
+    "synthetic": true,
+    "name": "Linden & Fig",
+    "description": "A fictional restaurant for the EventBrief capstone",
+    "timezone": "America/Los_Angeles",
+    "opening_time": "17:00",
+    "closing_time": "22:00",
+    "currency": "USD",
+    "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+    "categories": {
+      "guest_13_plus_count": {
+        "label": "Guests",
+        "age_min": 13,
+        "age_max": null
+      },
+      "child_count": {
+        "label": "Children (0–12)",
+        "age_min": 0,
+        "age_max": 12
+      }
+    },
+    "venues": {
+      "Garden Patio": {
+        "capacity": 60,
+        "setups": [
+          "One long table",
+          "Three tables of ten"
+        ]
+      }
+    },
+    "menus": {
+      "Menu 2": {
+        "description": "Family-style seasonal dinner",
+        "courses": [
+          "Garden salad",
+          "Roast squash and herb chicken, served family-style",
+          "Apple crumble"
+        ],
+        "prices_cents": {
+          "guest_13_plus_count": 5800,
+          "child_count": 2200
+        },
+        "beverages": [
+          "Beer and wine service",
+          "Nonalcoholic service"
+        ]
+      },
+      "Menu 3": {
+        "description": "Fictional rehearsal dinner menu",
+        "courses": [
+          "Mediterranean salad",
+          "Lemon herb chicken with roasted vegetables",
+          "Chocolate dessert"
+        ],
+        "prices_cents": {
+          "guest_13_plus_count": 6400,
+          "child_count": 2400
+        },
+        "beverages": [
+          "Beer and wine service",
+          "Nonalcoholic service",
+          "À la carte + cash bar"
+        ]
+      }
+    },
+    "beverages": {
+      "Beer and wine service": {
+        "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+        "prices_cents": {
+          "guest_13_plus_count": 1800,
+          "child_count": 600
+        }
+      },
+      "Nonalcoholic service": {
+        "description": "Nonalcoholic drinks for all guests",
+        "prices_cents": {
+          "guest_13_plus_count": 600,
+          "child_count": 600
+        }
+      },
+      "À la carte + cash bar": {
+        "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+        "prices_cents": {
+          "guest_13_plus_count": 0,
+          "child_count": 0
+        },
+        "billing": "pay_separately",
+        "aliases": [
+          "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+          "Beverages à la carte, cash bar"
+        ]
+      }
+    },
+    "supported_dietary": [
+      "No allergies or dietary restrictions"
+    ],
+    "supported_av": [
+      "No AV required"
+    ],
+    "supported_special": [
+      "No special requirements"
+    ],
+    "readiness": {
+      "calendar": {
+        "required": [
+          "host_name",
+          "event_date",
+          "start_time",
+          "end_time",
+          "timezone",
+          "venue"
+        ],
+        "agreed": [
+          "event_date",
+          "start_time",
+          "end_time",
+          "timezone",
+          "venue"
+        ]
+      },
+      "quote": {
+        "required": [
+          "host_name",
+          "guest_count",
+          "guest_13_plus_count",
+          "child_count",
+          "menu",
+          "beverage"
+        ],
+        "agreed": []
+      },
+      "kitchen": {
+        "required": [
+          "host_name",
+          "event_date",
+          "start_time",
+          "timezone",
+          "guest_count",
+          "menu",
+          "dietary"
+        ],
+        "agreed": [
+          "event_date",
+          "start_time",
+          "guest_count",
+          "menu"
+        ]
+      },
+      "staff": {
+        "required": [
+          "host_name",
+          "event_date",
+          "start_time",
+          "end_time",
+          "timezone",
+          "venue",
+          "guest_count",
+          "menu",
+          "beverage",
+          "dietary",
+          "setup",
+          "av",
+          "special",
+          "staff_notes"
+        ],
+        "agreed": [
+          "event_date",
+          "start_time",
+          "end_time",
+          "venue",
+          "guest_count",
+          "menu",
+          "beverage",
+          "setup"
+        ]
+      },
+      "guest": {
+        "required": [
+          "host_name",
+          "event_date",
+          "start_time",
+          "end_time",
+          "timezone",
+          "venue",
+          "guest_count",
+          "menu",
+          "beverage",
+          "guest_notes"
+        ],
+        "agreed": [
+          "event_date",
+          "start_time",
+          "end_time",
+          "venue",
+          "guest_count",
+          "menu",
+          "beverage"
+        ]
+      }
+    }
+  },
+  "automated_checks": {
+    "checks": {
+      "latest_counts": true,
+      "source_counts": true,
+      "accepted_arrangements": true,
+      "known_details": false,
+      "raw_unknowns": true,
+      "optional_stays_unknown": true,
+      "labelled_end_default": true,
+      "restaurant_timezone": true,
+      "no_open_items": true,
+      "no_corrections": true,
+      "no_obsolete_count": true
+    },
+    "draft_checks": {
+      "calendar": true,
+      "quote": false,
+      "kitchen": false,
+      "staff": false,
+      "guest": false
+    },
+    "all_pass": false,
+    "ready_documents": 1,
+    "quote_total_cents": null,
+    "documents": [
+      {
+        "id": "calendar",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "quote",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          },
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      },
+      {
+        "id": "kitchen",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      },
+      {
+        "id": "staff",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          },
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      },
+      {
+        "id": "guest",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          },
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      }
+    ]
+  },
+  "original_preserved": true,
+  "other_events_unchanged": true,
+  "review_marks": 0,
+  "pdf_exports": [
+    {
+      "id": "quote",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 65,
+      "sha256": "40f01901b30c98b3c9d4ebb30937ae51ab1bfc2072c5f2cae5190c8a206c6679"
+    },
+    {
+      "id": "kitchen",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 73,
+      "sha256": "e2117a2483e8090040ac9e73216f8f308a804e98b079dc22f17c698682ed4406"
+    },
+    {
+      "id": "staff",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 71,
+      "sha256": "ef50746a581fa8330ee9cf8a8d4e012ed81751cd2c17039c5d33f700b6a8a940"
+    },
+    {
+      "id": "guest",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 71,
+      "sha256": "74da2f2704a9e18b4e0c775ed0412e142175b66963dfca9418cb97d1c2f4d70a"
+    }
+  ],
+  "calendar_export_succeeded": true,
+  "usage": {
+    "input_tokens": 2919,
+    "input_tokens_details": {
+      "cache_write_tokens": 2916,
+      "cached_tokens": 0
+    },
+    "output_tokens": 1449,
+    "output_tokens_details": {
+      "reasoning_tokens": 136
+    },
+    "total_tokens": 4368
+  },
+  "latency_ms": 34276,
+  "conservative_estimated_usd": 0.0217875,
+  "budget": {
+    "existing_authorization_usd": 5,
+    "existing_combined_allocation_usd": 4.56384,
+    "consume_existing_hosted_slots": 1,
+    "max_conservative_request_reservation_usd": 0.205,
+    "new_allocation_usd": 0,
+    "unallocated_usd": 0.43616,
+    "hosted_calls_before": 15,
+    "hosted_calls_after": 14
+  },
+  "manual_review": {
+    "source_support": "All 18 values/statuses reviewed against quoted source: accepted 32 guests and 2 children, total 34, date/start, venue, menu and drink intent are correct. Eight unspecified fields remain unknown in the raw answer. No pending change or explicit unanswered question remains.",
+    "beverage": "AI returned Nonalcoholic service: juice and soda for everyone, no alcohol. The app rejected the colon between the known option and supported notes. No source misunderstanding was found.",
+    "result": "First-attempt end-to-end failure: calendar ready with correct 9:45 PM default; four other drafts blocked by beverage matching. Four PDF endpoints return 409. No completed PDF layouts to inspect in this attempt."
+  },
+  "limitations": [
+    "One assistant-authored fictional conversation, not an independent or representative benchmark.",
+    "Uses currently supported fictional Menu 2 and drink terms; does not establish broad language accuracy.",
+    "No app, settings, prompt or model changes before scoring. Preserve any first-attempt failure.",
+    "Draft readiness is not human approval or a restaurant booking."
+  ]
+}

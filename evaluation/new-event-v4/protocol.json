@@ -1,0 +1,56 @@
+{
+  "id": "sofia-retirement-new-event-v4",
+  "synthetic": true,
+  "author": "Development assistant, written before the model request; not an independent evaluator.",
+  "purpose": "Test first-attempt preparation of all five drafts from a new conversation with a changed guest count, no end time and no optional operational details.",
+  "conversation": "Sofia: Hi, I'm Sofia Ramirez. We're planning a retirement dinner for my mom at Linden & Fig on Friday, January 22, 2027. Could we start at 5:45 p.m. on the Garden Patio? We'd have 28 guests and 2 children, and we'd like Menu 2.\n\nCoordinator: Yes, we can arrange the Garden Patio and Menu 2 for January 22 at 5:45 p.m. What would you like to drink?\n\nSofia: Just juice and soda for everyone, please. No alcohol.\n\nCoordinator: That fits our Nonalcoholic service. I have 28 guests and 2 children, Menu 2, with juice and soda for everyone and no alcohol.\n\nSofia: A few more relatives can make it. We're now at 32 guests plus the same 2 children. Please use that as our final count. Nothing else is changing.\n\nCoordinator: Updated and confirmed: 32 guests and 2 children, January 22, 2027 at 5:45 p.m., Garden Patio, Menu 2, and the same juice and soda with no alcohol.",
+  "attempts": 1,
+  "automatic_retries": 0,
+  "manual_corrections_to_scored_output": false,
+  "lesson_policy": "Use the existing workspace settings; record the actual lesson context. Do not add or change lessons for this test.",
+  "expected": {
+    "host_name": "Sofia Ramirez",
+    "event_date": "2027-01-22",
+    "start_time": "17:45",
+    "end_time": "21:45",
+    "timezone": "America/Los_Angeles",
+    "guest_count": 34,
+    "guest_13_plus_count": 32,
+    "child_count": 2,
+    "venue": "Garden Patio",
+    "menu": "Menu 2",
+    "beverage": "Nonalcoholic service",
+    "agreed_fields": ["event_date", "start_time", "guest_count", "guest_13_plus_count", "child_count", "venue", "menu", "beverage"],
+    "raw_unknown_fields": ["end_time", "timezone", "dietary", "setup", "av", "special", "guest_notes", "staff_notes"],
+    "default_duration_hours": 4,
+    "quote_total_cents": 210400,
+    "quote_math": "32 x ($58 menu + $6 drinks) + 2 x ($22 menu + $6 drinks) = $2,104",
+    "kitchen_quantities": [4, 4, 4, 34],
+    "calendar_start_utc": "20270123T014500Z",
+    "calendar_end_utc": "20270123T054500Z",
+    "ready_documents": ["calendar", "quote", "kitchen", "staff", "guest"],
+    "pending_changes": [],
+    "open_questions": []
+  },
+  "checks": {
+    "attendance": "Use the accepted 32 guests plus 2 children, 34 total, never the superseded 28 guests.",
+    "schedule": "Raw AI leaves the missing end/timezone unknown. Preparation applies a labelled four-hour default and restaurant timezone. Calendar file is tentative with correct UTC times.",
+    "optional": "Unmentioned operational details stay unknown, with no fabricated no-allergy statement and no block solely from absence.",
+    "documents": "All five drafts ready without corrections. Quote $2,104, kitchen serves 34, staff and guest plans agree on schedule and counts. Juice, soda and no-alcohol terms survive in quote/staff/guest. Four PDFs must download and pass content and visual checks.",
+    "persistence": "Reopen the saved result without another AI call; preserve other events, corrections, reviews, settings and original receipts. Do not mark the new drafts reviewed."
+  },
+  "budget": {
+    "existing_authorization_usd": 5,
+    "existing_combined_allocation_usd": 4.56384,
+    "consume_existing_hosted_slots": 1,
+    "max_conservative_request_reservation_usd": 0.205,
+    "new_allocation_usd": 0,
+    "unallocated_usd": 0.43616
+  },
+  "limitations": [
+    "One assistant-authored fictional conversation, not an independent or representative benchmark.",
+    "Uses currently supported fictional Menu 2 and drink terms; does not establish broad language accuracy.",
+    "No app, settings, prompt or model changes before scoring. Preserve any first-attempt failure.",
+    "Draft readiness is not human approval or a restaurant booking."
+  ]
+}

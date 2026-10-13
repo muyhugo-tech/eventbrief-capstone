@@ -1,0 +1,65 @@
+{
+  "original_output_sha256": "2b275a9b2107c3888076e05bfd991de58540502ebc40371ae1757aa043450122",
+  "normalization_policy": "supported-details-v4",
+  "workflow_policy": "usable-drafts-v2",
+  "original_preserved": true,
+  "manual_corrections": 0,
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "original_ready_documents": 1,
+  "automated_checks": {
+    "checks": {
+      "latest_counts": true,
+      "source_counts": true,
+      "accepted_arrangements": true,
+      "known_details": true,
+      "raw_unknowns": true,
+      "optional_stays_unknown": true,
+      "labelled_end_default": true,
+      "restaurant_timezone": true,
+      "no_open_items": true,
+      "no_corrections": true,
+      "no_obsolete_count": true
+    },
+    "draft_checks": {
+      "calendar": true,
+      "quote": true,
+      "kitchen": true,
+      "staff": true,
+      "guest": true
+    },
+    "all_pass": true,
+    "ready_documents": 5,
+    "quote_total_cents": 210400,
+    "documents": [
+      {
+        "id": "calendar",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "quote",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "kitchen",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "staff",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "guest",
+        "state": "ready_for_review",
+        "blockers": []
+      }
+    ]
+  },
+  "beverage_option": "Nonalcoholic service",
+  "beverage_notes": "juice and soda for everyone, no alcohol.",
+  "limitation": "Saved-answer replay used to develop the fix, not another unseen test. The original first-attempt failure is retained."
+}
