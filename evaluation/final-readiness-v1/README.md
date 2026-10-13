@@ -1,6 +1,8 @@
 # Final readiness check: three new conversations
 
-**The app did not pass this final check.** One of three complete workflows matched the intended outcome. None passed every frozen check, because even the working event had a raw extraction omission. Seven of fifteen document checks passed. These are development-set observations, not general accuracy estimates.
+**The original first attempts failed the final check. The saved-answer repair now passes all 15 document checks.** Original scores and answers below remain unchanged. [Separate repair results](results/repair-2026-10-13.json) · [Hosted verification](results/hosted-repair-2026-10-13.json)
+
+Originally, one of three complete workflows matched the intended outcome. None passed every frozen check, because even the working event had a raw extraction omission. Seven of fifteen document checks passed. These are development-set observations, not general accuracy estimates.
 
 All three fictional conversations and expected outcomes were [written down first](protocol.json). They ran once each against production commit `dcab9a6adf8f8ef4e832c3590e4156c7967be533`, without changing app code, prompt, model, restaurant settings or the three existing lessons between calls. There were no retries or coordinator corrections. [Original answers and scores](results/2026-10-13.json)
 
@@ -21,13 +23,39 @@ Jordan's guest PDF returned 409 because of drinks, **not because the allergy rul
 - Saved results reopened unchanged with no AI calls. Existing six events, corrections, review marks, restaurant settings and original receipts were retained. New drafts were left unreviewed.
 - All **232 existing software tests passed** before the batch. Their passing result did not catch these new language and identity failures.
 
-## Fix next, using these saved answers
+## Repair targets identified by the first attempts
 
 1. **Guest allergy dependency:** recognize the host's source identity across first-name/full-name speaker labels. Keep restaurant-only questions and silence separate. Jordan must remain blocked for allergy even after drinks are resolved.
 2. **Drink matching:** separate the configured drink option from its included instructions without relying on punctuation. Preserve juice/soda, alcohol restrictions and unrecognized additions; do not guess prices or silently drop text.
 3. **Event purpose:** “Anniversary celebration” describes the event. It must not become a required custom service unless the source actually requests one. Preserve real unsupported requests for review.
 
-Retain these first failures. Report future saved-answer repairs separately; do not rerun paid extraction just to obtain a better score. Any broader extraction-contract change needs its own frozen test and budget check.
+These three targets were repaired using the saved answers. The first failures remain intact. Any broader extraction-contract change needs its own frozen test and budget check.
+
+## Saved-answer repair — October 13
+
+App commits `775bd6d` and `d934c5c` introduce `supported-details-v5` and `host-raised-dietary-v2`; the previous policies remain available for historical reproduction. The original scorer's criteria are unchanged, and its replay harness explicitly passes each saved readiness-policy version.
+
+| Case | Current saved-answer outcome | Document checks |
+| --- | --- | --- |
+| Diego | 26 guests, 0 children; four-hour 5–9 PM schedule; all drafts ready; **$1,664** | **5/5** |
+| Priya | 16 guests, 3 children; explicit 5:45–8:15 PM schedule; all drafts ready; **$1,300** | **5/5** |
+| Jordan | 26 guests, 2 children; 6–10 PM; calendar and **$1,720** quote ready; kitchen, staff and guest plans blocked specifically for unresolved dietary needs | **5/5** |
+
+This is **3/3 intended workflow outcomes**, but **2/3 full frozen-check passes**: Diego's original raw Guests field is still unknown. Code already derived the correct prepared count; the repair did not rewrite that raw omission or manufacture a better AI answer.
+
+Drink matching accepts a whole configured option followed by supported included notes, with or without punctuation. The exact notes remain in quote, staff and guest outputs. Unknown additions, price changes, contradictions and uncertain arrangements remain rejected. Bare purposes such as “Anniversary celebration” are labelled as purposes; requests for additional services still require review.
+
+The dietary rule recognizes an unambiguous first-name label for the extracted host and explicit host roles. Unknown speakers, restaurant questions and quoted text do not become host instructions. A sentence such as “I’ve checked with everyone: no allergies” stays within the host's message. Tests retain ambiguity and unsupported-request limits; this is bounded parsing, not universal email understanding.
+
+**Hosted verification:** all nine existing events, saved reviews, original receipts and settings were retained. Seven unaffected records and document revisions remained identical, including Maya's five approvals. The three test events had no coordinator corrections or new review marks. Reopening their saved answers returned the same prepared records and drafts. Nine allowed PDFs downloaded and were rendered and visually checked: each is one page, with correct amounts, counts and drink notes. Jordan's three blocked PDF routes returned 409. All three calendar files used the correct UTC times and tentative status. Chrome showed Priya's five ready previews and Jordan's two ready/three allergy-blocked outcomes.
+
+**240 software tests passed**, including invalid drink additions, first-name ambiguity, sentence colons, stale review rejection and blocked downloads. Existing Sofia, Lena/Noah and Alex replays also passed. This repair made **0 AI calls**, added **$0 AI cost** and left **11 preparations available**. No live Yannis code or data was changed.
+
+```sh
+node scripts/replay-final-readiness.mjs
+```
+
+This command replays the unchanged answers under current rules and confirms that the original first-attempt scores still reproduce. **Confidence: high for these saved cases; unknown for unseen-language accuracy or time savings.**
 
 ## Cost and reproduction
 

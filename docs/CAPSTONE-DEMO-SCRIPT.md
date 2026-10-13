@@ -1,8 +1,8 @@
 # EventBrief capstone video
 
-Aim for **3 minutes 50 seconds**, including screen changes. The rubric penalizes videos over four minutes. This is a practice script based on the October 13 evidence; update the evaluation paragraph if the remaining bugs are repaired before recording.
+Aim for **3 minutes 50 seconds**, including screen changes. The rubric penalizes videos over four minutes. This practice script includes the October 13 saved-answer repairs.
 
-The demo can show a working prototype today. The final check still has two workflow failures, so do not describe EventBrief as generally reliable or all tests as passing. [Current scorecard](EVALUATION-SCORECARD.md)
+The demo can show a working prototype and the repair process. Keep the two original workflow failures visible alongside their repaired replays. Do not describe EventBrief as generally reliable. [Current scorecard](EVALUATION-SCORECARD.md)
 
 ## Before you record
 
@@ -36,19 +36,19 @@ Open Diego's saved result. Show the final 26-guest message, quote and kitchen sh
 
 ## 2:15–3:20 — How we evaluated it
 
-Show the three-row table in the current scorecard. Keep failures visible.
+Show the three-row repair table, then the original first-attempt table in the scorecard.
 
 > We tested three layers: source details, application rules, and the finished documents. We wrote expected results before each call, checked counts, times, drink notes, prices and blocking reasons, and inspected the downloads. We also kept first attempts separate from later repairs.
 >
 > In the latest three new conversations, one complete workflow passed and two failed. Even the working example missed one raw count field; the app calculated it from the supplied total and children. So none passed every strict extraction check.
 >
-> The failures exposed drink-matching problems, an anniversary label treated as a service request, and an allergy check that missed a first-name speaker. Those remain work to fix. Two hundred thirty-two software checks passed, but that did not prove the AI workflow would always work. These are small synthetic development tests, not independent accuracy evidence.
+> We fixed drink matching, event-purpose handling and host-name recognition. Replaying the same answers now passes all fifteen document checks, including the three plans correctly blocked for missing allergy details. No further AI calls were needed. The raw count omission remains recorded. Two hundred forty software tests pass, but these small development tests do not establish independent accuracy.
 
 ## 3:20–3:50 — The takeaway
 
 Return to the event with its five assets visible.
 
-> What this prototype demonstrates is a working path from a changing conversation to five connected drafts, with evidence, coordinator corrections and human review. It also shows exactly where the current system fails. The next step is to repair those saved cases, then test with independent conversations and measure time saved. The goal is fewer repeated edits while the coordinator stays in control.
+> What this prototype demonstrates is a working path from a changing conversation to five connected drafts, with evidence, coordinator corrections and human review. It also preserves failures so repairs can be checked. The next step is independent conversations and measured time savings. The goal is fewer repeated edits while the coordinator stays in control.
 
 ## Recording checks
 

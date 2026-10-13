@@ -1,6 +1,6 @@
 # Demo walkthrough
 
-For the capstone video, use the [timed script and simple recording steps](CAPSTONE-DEMO-SCRIPT.md). The [latest three-case check](../evaluation/final-readiness-v1/README.md) found two workflow failures; keep those visible in the evaluation.
+For the capstone video, use the [timed script and simple recording steps](CAPSTONE-DEMO-SCRIPT.md). The [three-case check](../evaluation/final-readiness-v1/README.md) found two workflow failures; both now pass their intended outcomes when replaying the saved answers after the app repair. Keep first attempts and repaired replays separate in the evaluation.
 
 Use a fictional event. The public checkout contains no customer messages or previous user's review progress.
 
@@ -34,7 +34,7 @@ Each draft needs its own review. The guest and quote outputs should exclude inte
 
 Open the earlier example where the host's dietary reply is missing. The calendar and quote can be ready while kitchen, staff, and guest plans remain blocked. This host explicitly raised dietary needs, which is why the guest plan also needs the answer.
 
-The app must not invent “no allergies.” A blocked draft stays unreviewed. Unmentioned dietary details stay unknown and do not block solely for absence under the current draft workflow. Explicit unresolved dietary needs must block kitchen, staff and guest plans. The latest Jordan test exposed a first-name speaker bug in that guest rule; see the scorecard rather than treating this sample as a guarantee.
+The app must not invent “no allergies.” A blocked draft stays unreviewed. Unmentioned dietary details stay unknown and do not block solely for absence under the current draft workflow. Explicit unresolved dietary needs must block kitchen, staff and guest plans. Jordan's first-name speaker bug is repaired and checked with its saved answer. This bounded example does not establish general language accuracy.
 
 ## Real AI demonstration
 

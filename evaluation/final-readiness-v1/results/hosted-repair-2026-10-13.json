@@ -1,0 +1,407 @@
+{
+  "type": "Hosted saved-answer repair verification; no new extraction",
+  "app_commit": "d934c5cde0c1f84edb634ecc981fc7955cd12e96",
+  "deployment": "dpl_5MCrESyz2cZuoUoKgdNVwoc1jqM4",
+  "verified_at": "2026-10-13T19:47:34.854Z",
+  "cases": [
+    {
+      "id": "diego-count-default",
+      "checks": {
+        "checks": {
+          "latest_counts": true,
+          "source_counts": false,
+          "known_details": true,
+          "agreed_arrangements": true,
+          "evidence_quotes_present": true,
+          "restaurant_timezone": true,
+          "end_rule": true,
+          "dietary": true,
+          "no_unrelated_open_items": true,
+          "no_corrections": true,
+          "document_states": true,
+          "no_obsolete_count": true
+        },
+        "draft_checks": {
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "all_pass": false,
+        "ready_documents": 5,
+        "quote_total_cents": 166400,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "staff",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "guest",
+            "state": "ready_for_review",
+            "blockers": []
+          }
+        ],
+        "workflow_pass": true,
+        "raw_count_check_pass": false
+      },
+      "exports": [
+        {
+          "id": "quote",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "a76a176c118fca18e6bcecfd3208b169c834f97a86a077364dff9a6194f179fd",
+          "bytes": 27263
+        },
+        {
+          "id": "kitchen",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "058e2d192a809fbfa729575d7f7efac4abc018531384f1e83aa8e32e69dc1019",
+          "bytes": 22366
+        },
+        {
+          "id": "staff",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "b835edec7ee6ea40f0cd931ad52751b1a47a4461c33465780d596cbbdfcbf7aa",
+          "bytes": 24390
+        },
+        {
+          "id": "guest",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "3de42f64381750f1ff53c9ffbad2c1937f47c03b1ea2a084f8023a7c1b460b9d",
+          "bytes": 21504
+        }
+      ],
+      "calendar_export": true,
+      "saved_reopen": true,
+      "new_corrections": 0,
+      "new_review_marks": 0
+    },
+    {
+      "id": "priya-explicit-end",
+      "checks": {
+        "checks": {
+          "latest_counts": true,
+          "source_counts": true,
+          "known_details": true,
+          "agreed_arrangements": true,
+          "evidence_quotes_present": true,
+          "restaurant_timezone": true,
+          "end_rule": true,
+          "dietary": true,
+          "no_unrelated_open_items": true,
+          "no_corrections": true,
+          "document_states": true,
+          "no_obsolete_count": true
+        },
+        "draft_checks": {
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "all_pass": true,
+        "ready_documents": 5,
+        "quote_total_cents": 130000,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "staff",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "guest",
+            "state": "ready_for_review",
+            "blockers": []
+          }
+        ],
+        "workflow_pass": true,
+        "raw_count_check_pass": true
+      },
+      "exports": [
+        {
+          "id": "quote",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "b07e443e31dac6eeb9999e119cc8834771aced691188b083ee7de3a1fb7382cc",
+          "bytes": 27280
+        },
+        {
+          "id": "kitchen",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "a0c31644bfb1c9d8964b3b1803ff714d1a6ca36e387c9d04739f190223954e6d",
+          "bytes": 21925
+        },
+        {
+          "id": "staff",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "4904ce672ea114b8e24df539abf2d2e59b30e8fe46bdbf0baff92d781cfeb073",
+          "bytes": 25133
+        },
+        {
+          "id": "guest",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "79e3d013dc517687b00eba01dfc11a06948e547f0099d6b7fd5039c6fb183202",
+          "bytes": 22200
+        }
+      ],
+      "calendar_export": true,
+      "saved_reopen": true,
+      "new_corrections": 0,
+      "new_review_marks": 0
+    },
+    {
+      "id": "jordan-unresolved-allergy",
+      "checks": {
+        "checks": {
+          "latest_counts": true,
+          "source_counts": true,
+          "known_details": true,
+          "agreed_arrangements": true,
+          "evidence_quotes_present": true,
+          "restaurant_timezone": true,
+          "end_rule": true,
+          "dietary": true,
+          "no_unrelated_open_items": true,
+          "no_corrections": true,
+          "document_states": true,
+          "no_obsolete_count": true
+        },
+        "draft_checks": {
+          "calendar": true,
+          "quote": true,
+          "kitchen": true,
+          "staff": true,
+          "guest": true
+        },
+        "all_pass": true,
+        "ready_documents": 2,
+        "quote_total_cents": 172000,
+        "documents": [
+          {
+            "id": "calendar",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "quote",
+            "state": "ready_for_review",
+            "blockers": []
+          },
+          {
+            "id": "kitchen",
+            "state": "blocked",
+            "blockers": [
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements: What are the guest's food allergy details?",
+                "kind": "open_question"
+              },
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements needs coordinator review: this request is outside the supported demo options.",
+                "rule": "supported_dietary"
+              }
+            ]
+          },
+          {
+            "id": "staff",
+            "state": "blocked",
+            "blockers": [
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements: What are the guest's food allergy details?",
+                "kind": "open_question"
+              },
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements needs coordinator review: this request is outside the supported demo options.",
+                "rule": "supported_dietary"
+              }
+            ]
+          },
+          {
+            "id": "guest",
+            "state": "blocked",
+            "blockers": [
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements: What are the guest's food allergy details?",
+                "kind": "open_question"
+              },
+              {
+                "field": "dietary",
+                "reason": "Dietary requirements needs coordinator review: this request is outside the supported demo options.",
+                "rule": "supported_dietary"
+              }
+            ]
+          }
+        ],
+        "workflow_pass": true,
+        "raw_count_check_pass": true
+      },
+      "exports": [
+        {
+          "id": "quote",
+          "http_status": 200,
+          "type": "application/pdf",
+          "sha256": "80af3cc3d1ef43bcbe61062e06a8842b03b6d0dae1a989c31eb18f1f9d313125",
+          "bytes": 27436
+        },
+        {
+          "id": "kitchen",
+          "http_status": 409,
+          "type": "application/json; charset=utf-8",
+          "sha256": "e2117a2483e8090040ac9e73216f8f308a804e98b079dc22f17c698682ed4406",
+          "bytes": 73
+        },
+        {
+          "id": "staff",
+          "http_status": 409,
+          "type": "application/json; charset=utf-8",
+          "sha256": "ef50746a581fa8330ee9cf8a8d4e012ed81751cd2c17039c5d33f700b6a8a940",
+          "bytes": 71
+        },
+        {
+          "id": "guest",
+          "http_status": 409,
+          "type": "application/json; charset=utf-8",
+          "sha256": "74da2f2704a9e18b4e0c775ed0412e142175b66963dfca9418cb97d1c2f4d70a",
+          "bytes": 71
+        }
+      ],
+      "calendar_export": true,
+      "saved_reopen": true,
+      "new_corrections": 0,
+      "new_review_marks": 0
+    }
+  ],
+  "events_preserved": 9,
+  "unaffected_event_records_and_revisions_preserved": 7,
+  "original_receipts_unchanged": true,
+  "saved_reviews_unchanged": true,
+  "settings_unchanged": true,
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_preparations": 11,
+  "pdf_checks": [
+    {
+      "case": "diego-count-default",
+      "document": "guest",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "diego-count-default",
+      "document": "kitchen",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "diego-count-default",
+      "document": "quote",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "diego-count-default",
+      "document": "staff",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "jordan-unresolved-allergy",
+      "document": "quote",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "priya-explicit-end",
+      "document": "guest",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "priya-explicit-end",
+      "document": "kitchen",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "priya-explicit-end",
+      "document": "quote",
+      "pages": 1,
+      "content_checks": true
+    },
+    {
+      "case": "priya-explicit-end",
+      "document": "staff",
+      "pages": 1,
+      "content_checks": true
+    }
+  ],
+  "visual_review": {
+    "all_nine_pages_rendered_and_inspected": true,
+    "clipping_or_overlap_observed": false,
+    "all_pdfs_one_page": true
+  },
+  "calendar_checks": {
+    "expected_utc_times": true,
+    "tentative_status": true
+  },
+  "browser_checks": {
+    "browser": "Chrome",
+    "priya_five_previews": true,
+    "jordan_five_outcomes": true,
+    "maya_five_review_marks_preserved": true,
+    "public_sample_separate": true
+  },
+  "software_tests": {
+    "passed": 240,
+    "failed": 0
+  },
+  "verification_note": "An initial receipt GET returned 404; the read-only verification was repeated successfully, and all original receipt hashes matched. No event data or review decisions were changed.",
+  "limits": [
+    "Known saved answers only; unseen-language accuracy is not established.",
+    "Diego original raw Guests omission remains recorded.",
+    "Jordan kitchen, staff and guest plans remain unavailable until the outstanding allergy is resolved."
+  ]
+}

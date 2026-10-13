@@ -2,7 +2,17 @@
 
 Evidence through October 13, 2026 (Pacific time). All events are fictional. First attempts, repaired replays and software tests are reported separately.
 
-**Latest result: one of three complete workflows passed. Two failed.** None passed every frozen check: Diego's workflow worked, but its raw Guests field was missing and the app calculated it correctly. **Seven of fifteen document checks passed.** The app is not yet reliable across these new conversations. [Frozen final check and original answers](../evaluation/final-readiness-v1/README.md)
+**Current repair: all 15 document checks pass on the three saved answers, with no new AI calls or coordinator corrections.** This is a replay of known cases, not three new AI successes. [Original answers and separate repair evidence](../evaluation/final-readiness-v1/README.md)
+
+| Saved event | Current result | Details |
+| --- | --- | --- |
+| Diego | **5/5 ready** | 26 guests, 0 children; 5–9 PM; **$1,664**. The original raw Guests omission remains recorded; code derives the correct count. |
+| Priya | **5/5 ready** | 16 guests, 3 children; explicit 5:45–8:15 PM; **$1,300**. Drink instructions remain intact. Anniversary is an event purpose, not a custom service. |
+| Jordan | **2 ready; 3 correctly blocked** | 26 guests, 2 children; 6–10 PM; **$1,720** quote and calendar ready. Kitchen, staff and guest plans all wait for the host's allergy details. |
+
+The fixes recognize included drink notes without requiring punctuation and recognize an unambiguous first-name host. Unsupported drink additions, ambiguous names and unanswered allergy details still need coordinator attention. **240 software tests passed.** Confidence is **high** for these observed cases; broad real-world accuracy is **unknown**. The raw-count omission means only **2/3** repaired cases pass every frozen check, despite **3/3** intended workflow outcomes.
+
+**Original first attempts: one of three complete workflows passed. Two failed.** None passed every frozen check. **Seven of fifteen document checks passed.** Those failures remain unchanged below.
 
 | New test | Result | What passed / what needs work |
 | --- | --- | --- |
@@ -10,9 +20,9 @@ Evidence through October 13, 2026 (Pacific time). All events are fictional. Firs
 | Priya: changed count and explicit end | **1/5 assets; failed** | Correct 16 guests, 3 children and 5:45–8:15 PM. Drink wording rejected; “Anniversary celebration” also blocks staff as an unsupported special request. Expected $1,300 quote was unavailable. |
 | Jordan: missing allergy details | **1/5 assets; failed** | Correct 26 guests, 2 children and 6–10 PM default. Drink wording blocks quote unnecessarily. Kitchen/staff detect allergy; guest plan misses that dependency when “Jordan” differs from “Jordan Wells.” Its incidental drink block is not a passed allergy guard. |
 
-**Fix next:** host identity in the guest allergy rule; drink option/notes separation; event-purpose labels mistaken for special services. Use the saved answers without paid retries. Original failures remain unchanged. Existing events, reviews, settings and receipts were preserved.
+**Repair completed on the saved answers:** host identity in the guest allergy rule, drink option/notes separation and event-purpose labels. Original failures remain unchanged. The remaining evaluation gap is performance on independent, previously unseen conversations.
 
-**Cost:** three calls, estimated **$0.0666375 (about 7 cents)**; **11 preparations remain**. No new budget allocation. Existing combined allocations remain $4.56384 within $5. **232 software tests passed**, but did not catch these new cases. Confidence is **high** for the observed results; broad real-world accuracy is **unknown**.
+**Cost:** the original three calls cost an estimated **$0.0666375 (about 7 cents)**. This repair used **0 new AI calls, $0 added AI cost**; **11 preparations remain**. Existing combined allocations remain $4.56384 within $5. The **232 software tests available before the original batch** did not catch those failures; the current 240 include the new regression checks.
 
 **PDF fix complete:** saved Sofia quote and kitchen exports now fit one page with identical content. Long notes continue cleanly. [Pagination verification](PDF-PAGINATION-2026-10-13.md) · [Four-minute practice script](CAPSTONE-DEMO-SCRIPT.md)
 
@@ -37,7 +47,7 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Turn Alex's conversation into usable drafts | **Failed originally; passed after workflow fix and duration rule** | The AI kept total attendance 46, but the app left Guests blank and blocked all five assets. The repaired workflow fills Guests, uses restaurant timezone, removes optional-field gates and applies the coordinator's four-hour duration default: **5/5 ready without corrections**. [Replay](../evaluation/end-time-default-v1/README.md) |
 | Update assets after a coordinator changes attendance | **Passed** | Maya’s change to **24 guests and 2 children** updated four documents and reset their reviews. The unchanged calendar kept its review. [Attendance checks](../tests/package-edits.test.mjs) |
 | Configure menus, drink billing and venue limits | **Passed for tested settings** | Private settings save across browsers; the public sample remains separate. Menu 3 and cash-bar terms are supported. The earlier settings-only replay still produced 0/5; the later workflow repair addresses the count mapping and optional-field failures. [Settings evidence](../evaluation/restaurant-settings-v1/README.md) |
-| Block drafts when allergy details are outstanding | **Earlier cases passed; new first-name case failed** | Latest Jordan test misses the guest dependency for a first-name speaker; fix remains outstanding. Earlier result: Kitchen, staff and guest plans blocked when the host raised unresolved dietary needs. A reply resolved the issue. Silence alone does not block the guest plan. [Rehearsal](VALIDATION-2026-10-12.md) · [Rule checks](../tests/guest-dietary.test.mjs) |
+| Block drafts when allergy details are outstanding | **First-name failure repaired on saved answer** | Jordan now blocks kitchen, staff and guest plans specifically for the unanswered allergy. Quote and calendar work. Restaurant-only questions and silence do not create the guest dependency; ambiguous speaker names are not guessed. [Repair](../evaluation/final-readiness-v1/README.md) · [Rule checks](../tests/final-readiness-repair.test.mjs) |
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
 | Download event assets | **Passed** | Hosted checks returned four document PDFs. Calendar download worked as a tentative `.ics` file. Blocked dietary drafts could not export PDFs. [Saved evidence](#saved-evidence) |
