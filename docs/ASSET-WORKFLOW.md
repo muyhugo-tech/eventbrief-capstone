@@ -30,7 +30,7 @@ Use **Refresh inbox** to load changes saved from another browser. Search covers 
 | **Calendar** | Date, start and end times, restaurant timezone, and venue. | A calendar `.ics` file. |
 | **Guest quotes** | Guests, Children (0–12), menu, drinks, itemized prices, and estimated total. | A direct PDF download or printed copy. |
 | **Kitchen sheets** | Attendance, dishes, prep quantities, and allergy or dietary information. | A direct PDF download or printed checklist. |
-| **Staff event plans** | Schedule, setup, equipment, service details, and internal team instructions. | A standalone HTML plan, or a printed/PDF copy. |
+| **Staff event plans** | Event summary, pricing, schedule, food/drinks, allergies, setup, and internal team instructions. | A direct staff execution PDF or printed copy. |
 | **Guest event plans** | Schedule, venue, menu, drinks, and arrival instructions for the host. | A standalone HTML plan, or a printed/PDF copy. |
 
 Each asset list opens the matching draft for that event. A draft marked **Needs details** opens its missing-information explanation. It cannot be downloaded or printed as a completed draft until those details are resolved.
@@ -41,11 +41,14 @@ The kitchen sheet uses the fictional Menu 2 prep guide in `lib/kitchen-prep.mjs`
 
 - **Download PDF** on a guest quote saves the presented estimate directly as a PDF. The preview and PDF use one EventBrief template, including the current prices and review status. No AI call or email delivery occurs. A normal estimate fits one Letter page; longer content can continue onto more pages.
 - **Download PDF** on a kitchen sheet saves the presented prep checklist, including quantities, allergy details, empty **Prepped** and **Checked** cells, and space for handwritten notes. Saved attendance changes recalculate the demo quantities and clear the affected review. Downloads are snapshots; download a fresh PDF after changes.
-- **Download reviewed draft** saves an HTML file for a staff plan or guest plan. Open the file in a browser to present it or print it. An unreviewed download is labeled **Draft · not reviewed**.
+- **Download PDF** on a staff plan saves the presented execution sheet. Its pricing comes from the current ready guest quote; if pricing is blocked, the sheet asks for confirmation instead of displaying an old total. Saved changes update the staff sheet and clear an affected review.
+- **Download reviewed draft** saves an HTML file for a guest plan. Open the file in a browser to present it or print it. An unreviewed download is labeled **Draft · not reviewed**.
 - **Print / Save PDF** opens the browser's print window for the selected draft. Choose a printer or **Save as PDF**.
 - **Download calendar file (.ics)** saves a tentative calendar entry. Open that file in your calendar app to import it yourself. EventBrief does not connect to or synchronize an external calendar. Importing is not a reservation or invitation.
 
 Calendar files remain tentative even after review. Their times use the event's restaurant timezone, and their description retains the draft and fictional-data labels.
+
+The staff timeline shows the saved event start and end. Separate course times and a named coordinator are not fields in the current extraction contract; the sheet asks the team to confirm them. Add confirmed operational instructions through **Edit event details → Internal staff notes**. These notes print exactly as saved under **Team instructions**; they are not parsed into new timeline rows or a coordinator assignment. Check any times written in notes after changing the main event schedule. The photo supplies the layout, not its operational facts, service fees or payment instructions.
 
 **Download review package** is different: it saves the full internal review record, including source messages, corrections, staff notes, and review marks. Use an individual draft download for its intended audience.
 

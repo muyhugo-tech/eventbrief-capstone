@@ -1,6 +1,7 @@
 import { approvedDocumentRows, reusedInternalDocument } from './package-export.mjs';
 import { renderGuestQuote, standaloneGuestQuote } from './quote-document.mjs';
 import { renderKitchenSheet, standaloneKitchenSheet } from './kitchen-document.mjs';
+import { renderStaffSheet, standaloneStaffSheet } from './staff-document.mjs';
 
 export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -35,6 +36,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
   }
   if(document.id==='quote')return renderGuestQuote(document,prepared,{reviewed,interactive});
   if(document.id==='kitchen')return renderKitchenSheet(document,prepared,{reviewed,interactive});
+  if(document.id==='staff')return renderStaffSheet(document,prepared,{reviewed,interactive});
   const facts = (fields, className = 'draft-facts') => {
     const selected = fields.map(field => rows.find(row => row.field === field)).filter(Boolean);
     return selected.length ? `<dl class="${className}">${selected.map(row => `<div class="draft-fact"><dt>${esc(row.field === 'guest_count' ? 'Total attendance' : row.label)}</dt><dd>${esc(displayValue(row))}${interactive ? sourceButton(row.field) : ''}</dd></div>`).join('')}</dl>` : '';
@@ -46,15 +48,9 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
       (selected && interactive ? '<p class="draft-note">Menu items come from the fictional restaurant menu.</p>' : '');
   };
   const beverage = () => facts(['beverage']) + (document.beverage_note ? `<p class="draft-note">${esc(document.beverage_note)}</p>` : '');
-  let content = section('Event details', facts(document.id === 'staff' ? overviewFields.filter(field => !['start_time','end_time'].includes(field)) : overviewFields));
+  let content = section('Event details', facts(overviewFields));
 
-  if (document.id === 'staff') {
-    content += section('Event schedule', facts(['start_time','end_time'], 'draft-facts asset-timeline'));
-    content += section('Service plan', menu() + beverage());
-    content += section('Allergies &amp; dietary needs', facts(['dietary']));
-    content += section('Setup &amp; equipment', facts(['setup', 'av', 'special']));
-    content += section('For the event team', facts(['staff_notes']));
-  } else if (document.id === 'guest') {
+  if (document.id === 'guest') {
     content += section('Your menu &amp; drinks', menu() + beverage());
     content += section('Your arrival &amp; event notes', facts(['guest_notes']));
   }
@@ -65,6 +61,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
 export function standaloneDocument(document, prepared, reviewed) {
   if(document.id==='quote'&&document.state==='ready_for_review')return standaloneGuestQuote(document,prepared,reviewed);
   if(document.id==='kitchen'&&document.state==='ready_for_review')return standaloneKitchenSheet(document,prepared,reviewed);
+  if(document.id==='staff'&&document.state==='ready_for_review')return standaloneStaffSheet(document,prepared,reviewed);
   const reused = reusedInternalDocument(document, prepared, reviewed);
   if (reused) return reused;
   // Each export receives only its audience-approved rows, never the full thread.

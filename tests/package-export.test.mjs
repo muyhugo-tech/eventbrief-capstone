@@ -23,7 +23,7 @@ const asset=(prepared,id)=>prepared.documents.find(document=>document.id===id);
 
 test('four usable assets retain supplied schedule, place, attendance and distinct audience sections',()=>{
   const prepared=prepareEventPackage({...complete,corrections:{guest_13_plus_count:correction(18),child_count:correction(12)}});
-  const expected={quote:/Itemized estimate/,kitchen:/Allergies &amp; dietary needs/,staff:/Setup &amp; add-ons/,guest:/Your arrival &amp; event notes/};
+  const expected={quote:/Itemized estimate/,kitchen:/Allergies &amp; dietary needs/,staff:/Setup \/ floor plan/,guest:/Your arrival &amp; event notes/};
   for(const id of ['quote','kitchen','staff','guest']) {
     const html=standaloneDocument(asset(prepared,id),prepared,true);
     assert.match(html,expected[id],id);

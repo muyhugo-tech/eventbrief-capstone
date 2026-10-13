@@ -111,7 +111,7 @@ The owner's screenshot governs the dashboard composition. It supplies five white
 | Month calendar with a narrow-screen agenda | Yanni's event calendar behavior. | Entries open the saved event's calendar draft. Undated events remain visible. No reservation or external calendar connection is created. |
 | Dedicated asset lists | Yanni's event-to-document and quote workflows. | Each row opens the selected event's guest quote, kitchen sheet, staff plan, or guest plan, with its saved readiness and review state. |
 | Itemized quote and clear total | Yanni's quote preview and printable document pattern. | EventBrief's fictional prices and deterministic cents calculation remain authoritative. No production commercial terms are copied. |
-| Useful print outputs | Existing kitchen and event-order builders, plus the owner's quote PDF. | Kitchen and staff HTML reuse those builders through an audience filter. Quotes use a shared preview/PDF template; the browser also provides Print / Save PDF. |
+| Useful print outputs | Existing kitchen and event-order builders, plus the owner's quote PDF. | The original kitchen and staff HTML builders provide reference patterns; current quotes, kitchen sheets, and staff plans use shared preview/PDF templates with audience filters. |
 
 The UI uses ordinary words and visible actions: **New event**, **Prepare five drafts**, **Mark this draft reviewed**, and **Download reviewed draft**. It does not present a board stage as a booking status. Exact controls and current boundaries are recorded in [the asset workflow](docs/ASSET-WORKFLOW.md).
 
@@ -187,6 +187,18 @@ Source mode, local-demo status, and draft review labels are small contextual tag
 
 ### Asset previews and copies
 
+The staff execution sheet uses the owner's staff-sheet photo as its primary reference: centered restaurant name, left-aligned uppercase document title, a bordered two-column event summary, gray leading rows, a service timeline, and plain food/beverage and setup sections. The existing event-order builder supplies the audience boundary and internal-note grouping. The kitchen sheet supplies the already packaged sans-serif fonts, black/gray print palette, and shared preview/PDF delivery. Refero's typography guidance supports compact, neutral hierarchy for scanning during service; live Refero tools were unavailable.
+
+| Staff-sheet decision | Source and role | Boundary |
+| --- | --- | --- |
+| Event summary and service timeline tables | Owner's staff-facing execution-sheet photo. | Use saved event times, location, attendance and menu. Do not substitute the photo's event, coordinator, pricing or serving times. |
+| Plain headings and bullet notes | Photo and existing event-order grouping. | Food/beverage, dietary, setup/equipment, and team instructions stay distinct. No decorative colors or guest-quote styling. |
+| Internal pricing summary | Photo's pricing row; existing EventBrief quote calculation. | Reuse current quote cents when the quote is ready. Show a confirmation prompt when pricing is blocked. Staff pricing never enters the kitchen or guest event plan. |
+| Explicit missing operational details | Saved-record contract. | Coordinator and course times are not separate fields. Do not infer them from the host or handover notes. Existing internal notes remain verbatim and editable through Event details. |
+| Matching preview and PDF | Existing quote/kitchen infrastructure. | One shared staff template, saved revision/review checks, source controls outside paper, no AI call. |
+
+The reference lock is white Letter paper, thin gray table rules, shaded lead rows, black sans-serif text, bold section headings, and compact event metadata. `public/staff-document.mjs` owns the rendered sheet. Long notes flow to additional pages without clipping or shrinking below the print text size.
+
 The kitchen sheet is reference-locked to the owner's photographed prep checklist: white Letter paper, a centered uppercase title, compact event facts, gray table headings, quantities, and two empty checkoff columns. The reused kitchen builder supplies the high-contrast, plain sans-serif approach; Refero's typography guidance supplies clear hierarchy and tabular quantities. No live Refero tools were available. The existing quote's embedded-font and download infrastructure supplies PDF delivery, without its decorative serif or colored total band.
 
 | Kitchen decision | Source and role | Boundary |
@@ -203,7 +215,7 @@ The guest quote is reference-locked to the owner's one-page Yannis wedding estim
 
 Previews group approved facts for their audience. Quotes lead into an itemized estimate and draft total. Kitchen sheets emphasize courses and dietary requirements. Staff plans expose schedule, setup, and internal instructions. Guest plans show the host's schedule, food, drinks, and arrival information without internal notes, prices, or individual dietary details.
 
-Standalone HTML preserves source-mode, fictional-data, and review labels. The kitchen and staff exports retain their reused template typography; that print styling does not alter dashboard styles. Print / Save PDF isolates the selected draft. The calendar download is a tentative `.ics` import file; it does not synchronize a calendar or confirm a booking.
+Standalone HTML preserves source-mode, fictional-data, and review labels. The kitchen and staff exports use the photo-referenced templates described above; their print styling does not alter dashboard styles. Print / Save PDF isolates the selected draft. The calendar download is a tentative `.ics` import file; it does not synchronize a calendar or confirm a booking.
 
 ### Public and private scope
 

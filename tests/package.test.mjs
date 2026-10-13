@@ -157,7 +157,7 @@ test('audience-specific HTML exports preserve draft labels and exclude internal 
   const staff = standaloneDocument(doc(prepared, 'staff'), prepared, true);
   assert.match(staff, /Riley will lead the event handover/);
   assert.match(staff, /Reviewed draft/);
-  assert.match(staff, /Internal · event team/);
+  assert.match(staff, /Internal staff copy/);
 });
 
 test('untrusted text is escaped in rendered and downloaded drafts', () => {
