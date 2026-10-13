@@ -70,6 +70,8 @@ The hosted build adds one direct dependency, `@vercel/blob`. `npm run build` cop
 
 ## Evaluation
 
+Start with the [simple evaluation scorecard](docs/EVALUATION-SCORECARD.md): recorded passes, issues fixed during rehearsals, and what still needs testing. It separates actual model results from application checks and coordinator-assisted outcomes.
+
 ```sh
 npm test
 npm run check:fixtures
