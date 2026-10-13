@@ -1,8 +1,8 @@
 # EventBrief evaluation scorecard
 
-Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes two actual AI calls for a beverage lesson comparison, followed by an offline replay of the same answers after app fixes.
+Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, its saved-answer replay, and one newly authored event tested against the updated app.
 
-**Both saved beverage answers now produce five reviewable drafts and the expected $1,300 quote after app fixes. The original AI comparison still failed in both conditions; it did not demonstrate a benefit from the lesson.**
+**The latest new event failed on its first attempt: only the calendar was ready. A recorded coordinator correction produced all five drafts and the expected $1,776 quote, without another AI call. Ordinary drink wording still needs work.** Earlier saved beverage answers replay successfully after app fixes, but that did not generalize to this new wording.
 
 ## What passed and what needs work
 
@@ -11,17 +11,36 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. Incl
 | Check | Result | What we observed |
 | --- | --- | --- |
 | Make five drafts from a complete conversation | **Passed** | The hosted Alex example produced a calendar entry, quote, kitchen sheet, staff plan and guest plan, all ready for human review. [Evidence](HOSTED-VALIDATION-2026-10-12.md) |
+| Handle a new conversation with changed counts and times | **Needs work; coordinator recovery succeeded** | Noah's new event retained **26 guests, 4 children and 6–9 PM**, but beverage matching blocked four drafts. One coordinator correction made **5/5 ready at $1,776**. [New-event check](../evaluation/new-event-v1/README.md) |
 | Use the latest confirmed guest count | **Passed** | The actual-AI rehearsal retained **22 guests and 2 children**, with the expected **$1,464** quote. [Evidence](VALIDATION-2026-10-12.md) |
 | Update assets after a coordinator changes attendance | **Passed** | Maya’s change to **24 guests and 2 children** updated four documents and reset their reviews. The unchanged calendar kept its review. [Attendance checks](../tests/package-edits.test.mjs) |
 | Block drafts when allergy details are outstanding | **Passed after a fix** | Kitchen, staff and guest plans blocked when the host raised unresolved dietary needs. A reply resolved the issue. Silence alone does not block the guest plan. [Rehearsal](VALIDATION-2026-10-12.md) · [Rule checks](../tests/guest-dietary.test.mjs) |
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
 | Download event assets | **Passed** | Hosted checks returned four document PDFs. Calendar download worked as a tentative `.ics` file. Blocked dietary drafts could not export PDFs. [Saved evidence](#saved-evidence) |
-| Interpret natural beverage wording | **Passed after an app fix for the tested wording** | The original Elena runs both blocked. Replaying those same answers now separates the saved drink option from included notes, calculates a missing attendance total and matches table capitalization. Both yield **5/5 drafts and $1,300**. Custom drink arrangements still need correction. [Replay](../evaluation/lesson-comparison-v1/APP-REPLAY.md) |
+| Interpret natural beverage wording | **Needs work** | Elena's two saved answers yield **5/5 drafts and $1,300** after the app fix. Noah's new wording, “juice and soda for everyone, with no alcohol,” still blocked four drafts. The fix handles the earlier examples but is too narrow. [Replay](../evaluation/lesson-comparison-v1/APP-REPLAY.md) · [New event](../evaluation/new-event-v1/README.md) |
 | Edit drink notes and keep assets consistent | **Passed** | Notes save separately, survive reload and appear in the quote, staff and guest outputs. Notes-only edits reset those three reviews and retain the calendar and kitchen reviews. [Checks](../tests/package-normalization.test.mjs) |
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
 
-## New beverage comparison
+## Latest new-event check
+
+One new synthetic conversation, one AI attempt, expectations saved before the request. No app or prompt changes were made for this test. No saved lessons were present in the request.
+
+| Draft | First attempt | After one coordinator correction |
+| --- | --- | --- |
+| Calendar | **Passed** | Correct date, 6–9 PM Pacific, patio and tentative calendar file |
+| Guest quote | **Blocked** | Correct 26 guests, 4 children and **$1,776**; PDF checked |
+| Kitchen sheet | **Blocked** | Correct 30 people, menu, dietary confirmation and prep quantities; PDF checked |
+| Staff event plan | **Blocked** | Correct schedule, setup and internal instruction; PDF checked |
+| Guest event plan | **Blocked** | Correct details, thankful wording and arrival instruction; no staff-only note; PDF checked |
+
+The AI supplied `Nonalcoholic service; juice and soda for everyone, with no alcohol`. The app could not match it to the supported priced option. Selecting **Nonalcoholic service** through a saved coordinator correction unblocked the assets. The original failed output remains unchanged; this is **not an unassisted AI pass**.
+
+Source excerpts were checked against all 18 fields. All four PDFs were visually inspected. Blocked exports correctly rejected download before correction. A reload retained the correction, and existing events were unchanged. **Limitation:** the recovered PDFs use general nonalcoholic-service wording; the specific juice-and-soda request remains only in the source and correction reason. Owner review marks remain pending.
+
+**Estimated AI cost: $0.02701 (about three cents).** One existing hosted slot used; **17 remain**. No additional AI calls for recovery or checks. Existing allocations stay within the $5 authorization. [Conversation, method, original output and recovery](../evaluation/new-event-v1/README.md)
+
+## Beverage lesson comparison
 
 Same fictional conversation and model settings; one attempt per condition; no retries or manual corrections.
 
@@ -68,11 +87,11 @@ The app-fix run reports **207 passed, 0 failed, 0 skipped** using `node --test -
 
 ## What still needs work
 
-1. **Broader beverage wording:** the app fix handles a bounded set of included drink notes. Check new phrases and custom drink requests; do not assume this pair demonstrates general understanding or improved lesson effectiveness.
-2. **Unseen conversations:** check new examples, whether source excerpts support the facts, and whether follow-up questions make sense.
+1. **Drink options and details:** ordinary juice-and-soda wording still blocks four assets, including the kitchen sheet. Preserve the supported price option separately from requested drink details. Avoid losing those details during coordinator recovery.
+2. **More new conversations:** this one new event exposed a failure. Check more independently written examples after fixing it, including source support and follow-up questions. One case is not a general accuracy estimate.
 3. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. A new beverage example failed with and without a saved lesson. We fixed the app’s handling of drink notes, attendance totals and table names, then replayed both saved answers: each produced five reviewable drafts and the expected $1,300 quote, without another AI call. Human review remains part of the workflow.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. A later new-event test correctly tracked changed counts and times but exposed a drink-matching failure. One recorded coordinator correction produced all five drafts and the expected $1,776 quote without another AI call. We preserve the original failure and still need to improve drink-detail handling.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 

@@ -1,0 +1,513 @@
+{
+  "id": "noah-retirement-new-event-v1",
+  "tested_at": "2026-10-13T03:38:36.040Z",
+  "predeclared_at": "2026-10-13T03:37:31.184Z",
+  "app_commit": "7a713eba3100642b2592f7d82331e552ef30260e",
+  "protocol_sha256": "1f32a7bea9c2341596cf1d8147050b7db83016c138ac8ebc5a4972e79f64ea74",
+  "request_sha256": "60153badad7e27243967678f28665bbc746549121f16463b64738dab01a56d38",
+  "receipt_sha256": "9bce28259bc3e4e4d10ff7149248c8ab23b895d1536d97a92657922b43ce8be6",
+  "normalization_policy": "supported-details-v1",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "max_output_tokens": 7500,
+  "lesson_count": 0,
+  "ai_calls": 1,
+  "automatic_retries": 0,
+  "original_output": {
+    "schema_version": "eventbrief.package-record.v3",
+    "fields": {
+      "host_name": {
+        "value": "Noah Bennett",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "HOST — Noah Bennett:"
+          }
+        ]
+      },
+      "booking_status": {
+        "value": "Confirmed in the conversation",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Your booking is confirmed."
+          }
+        ]
+      },
+      "event_date": {
+        "value": "2027-12-04",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Confirmed for December 4, 2027, from 6:00 PM to 9:00 PM, America/Los_Angeles time, on the Garden Patio."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "start_time": {
+        "value": "18:00",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Confirmed for December 4, 2027, from 6:00 PM to 9:00 PM, America/Los_Angeles time, on the Garden Patio."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "end_time": {
+        "value": "21:00",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Confirmed for December 4, 2027, from 6:00 PM to 9:00 PM, America/Los_Angeles time, on the Garden Patio."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "timezone": {
+        "value": "America/Los_Angeles",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Confirmed for December 4, 2027, from 6:00 PM to 9:00 PM, America/Los_Angeles time, on the Garden Patio."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "guest_count": {
+        "value": 30,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "The final count is 26 guests and 4 children, 30 people total."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "guest_13_plus_count": {
+        "value": 26,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "The final count is 26 guests and 4 children, 30 people total."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "child_count": {
+        "value": 4,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "The final count is 26 guests and 4 children, 30 people total."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "venue": {
+        "value": "Garden Patio",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Confirmed for December 4, 2027, from 6:00 PM to 9:00 PM, America/Los_Angeles time, on the Garden Patio."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "menu": {
+        "value": "Menu 2",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Menu 2, three tables of ten and nonalcoholic drinks for everyone are confirmed."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "beverage": {
+        "value": "Nonalcoholic service; juice and soda for everyone, with no alcohol",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "We're keeping juice and soda for everyone, with no alcohol."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Menu 2, three tables of ten and nonalcoholic drinks for everyone are confirmed."
+          }
+        ]
+      },
+      "dietary": {
+        "value": "No allergies or dietary restrictions",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Everyone has replied: no allergies or dietary restrictions."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "I've noted no allergies or dietary restrictions, no AV required and no special requirements."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "setup": {
+        "value": "three tables of ten",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Menu 2, three tables of ten and nonalcoholic drinks for everyone are confirmed."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "av": {
+        "value": "No AV required",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "I've noted no allergies or dietary restrictions, no AV required and no special requirements."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "special": {
+        "value": "No special requirements",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "I've noted no allergies or dietary restrictions, no AV required and no special requirements."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Perfect, those final details are correct."
+          }
+        ]
+      },
+      "guest_notes": {
+        "value": "Please use the garden gate and check in with Noah on the patio.",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Please put this in the guest instructions: Please use the garden gate and check in with Noah on the patio."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "We'll include that guest instruction."
+          }
+        ]
+      },
+      "staff_notes": {
+        "value": "Sam will check the place settings before guests arrive.",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Sam will check the place settings before guests arrive."
+          }
+        ]
+      }
+    },
+    "pending_changes": [],
+    "open_questions": []
+  },
+  "initial": {
+    "accepted": true,
+    "ready_documents": 1,
+    "quote_total_cents": null,
+    "manual_corrections": 0,
+    "documents": [
+      {
+        "id": "calendar",
+        "state": "ready_for_review",
+        "blockers": []
+      },
+      {
+        "id": "quote",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          },
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      },
+      {
+        "id": "kitchen",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      },
+      {
+        "id": "staff",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          },
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      },
+      {
+        "id": "guest",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          },
+          {
+            "field": "menu",
+            "reason": "This menu and beverage combination is not supported by the demo profile.",
+            "rule": "menus.Menu 2.beverages"
+          }
+        ]
+      }
+    ],
+    "pdf_exports": [
+      {
+        "id": "quote",
+        "state": "blocked",
+        "http_status": 409,
+        "type": "application/json; charset=utf-8",
+        "bytes": 65,
+        "sha256": "40f01901b30c98b3c9d4ebb30937ae51ab1bfc2072c5f2cae5190c8a206c6679"
+      },
+      {
+        "id": "kitchen",
+        "state": "blocked",
+        "http_status": 409,
+        "type": "application/json; charset=utf-8",
+        "bytes": 73,
+        "sha256": "e2117a2483e8090040ac9e73216f8f308a804e98b079dc22f17c698682ed4406"
+      },
+      {
+        "id": "staff",
+        "state": "blocked",
+        "http_status": 409,
+        "type": "application/json; charset=utf-8",
+        "bytes": 71,
+        "sha256": "ef50746a581fa8330ee9cf8a8d4e012ed81751cd2c17039c5d33f700b6a8a940"
+      },
+      {
+        "id": "guest",
+        "state": "blocked",
+        "http_status": 409,
+        "type": "application/json; charset=utf-8",
+        "bytes": 71,
+        "sha256": "74da2f2704a9e18b4e0c775ed0412e142175b66963dfca9418cb97d1c2f4d70a"
+      }
+    ]
+  },
+  "recovery": {
+    "type": "coordinator correction, not an AI pass",
+    "corrections": {
+      "beverage": {
+        "value": "Nonalcoholic service",
+        "status": "agreed",
+        "reason": "Evaluation recovery only: the source confirms juice and soda for everyone, with no alcohol. Selected the existing Nonalcoholic service price. The original AI wording and initial failure remain saved; this is a coordinator correction, not an AI pass.",
+        "notes": "",
+        "resolved": true
+      }
+    },
+    "feedback": [
+      {
+        "reason": "Evaluation recovery only: the source confirms juice and soda for everyone, with no alcohol. Selected the existing Nonalcoholic service price. The original AI wording and initial failure remain saved; this is a coordinator correction, not an AI pass.",
+        "changes": [
+          {
+            "field": "beverage",
+            "before": {
+              "value": "Nonalcoholic service; juice and soda for everyone, with no alcohol",
+              "status": "agreed",
+              "evidence": [
+                {
+                  "message_id": "pasted",
+                  "quote": "We're keeping juice and soda for everyone, with no alcohol."
+                },
+                {
+                  "message_id": "pasted",
+                  "quote": "Menu 2, three tables of ten and nonalcoholic drinks for everyone are confirmed."
+                }
+              ]
+            },
+            "after": {
+              "value": "Nonalcoholic service",
+              "status": "agreed",
+              "evidence": [],
+              "provenance": "coordinator_correction",
+              "reason": "Evaluation recovery only: the source confirms juice and soda for everyone, with no alcohol. Selected the existing Nonalcoholic service price. The original AI wording and initial failure remain saved; this is a coordinator correction, not an AI pass.",
+              "notes": "",
+              "resolved": true
+            }
+          }
+        ],
+        "lesson": "",
+        "lesson_enabled": false,
+        "fields": [
+          "beverage"
+        ],
+        "id": "change-1",
+        "saved_at": "2026-10-13T03:41:51.355Z"
+      }
+    ],
+    "ready_documents": 5,
+    "quote_total_cents": 177600,
+    "checks": {
+      "exports": [
+        {
+          "id": "calendar",
+          "type": "text/calendar",
+          "bytes": 634,
+          "sha256": "e9b4fb87e77375295f4a0f056cf2ed3428ec64152331d66e67f5b8490bae1d26",
+          "note": "Built from the hosted record with the same browser export function; no calendar write."
+        },
+        {
+          "id": "quote",
+          "http_status": 200,
+          "type": "application/pdf",
+          "bytes": 26607,
+          "sha256": "8674fc900ca3411d94282e2de334b473ec88fb629218755cd103dd216396b32d"
+        },
+        {
+          "id": "kitchen",
+          "http_status": 200,
+          "type": "application/pdf",
+          "bytes": 21564,
+          "sha256": "d256bce016df3f6a18d415c05bfe979fec4f19dfbebe89ca451d43f15e89b3c3"
+        },
+        {
+          "id": "staff",
+          "http_status": 200,
+          "type": "application/pdf",
+          "bytes": 24561,
+          "sha256": "3858df81cf6843793b5d3137e7492fcf805459dfb26c92d155a8ad28aeed395f"
+        },
+        {
+          "id": "guest",
+          "http_status": 200,
+          "type": "application/pdf",
+          "bytes": 21167,
+          "sha256": "3a777c79ec586047e0bc53d8af6d67928e4160240d3a9fd90b8ac2f81755913c"
+        }
+      ],
+      "saved_reload": true,
+      "original_unchanged": true,
+      "other_events_unchanged": true,
+      "new_ai_calls": 0,
+      "remaining": 17
+    },
+    "additional_ai_calls": 0
+  },
+  "usage": {
+    "input_tokens": 2932,
+    "input_tokens_details": {
+      "cache_write_tokens": 2929,
+      "cached_tokens": 0
+    },
+    "output_tokens": 1968,
+    "output_tokens_details": {
+      "reasoning_tokens": 185
+    },
+    "total_tokens": 4900
+  },
+  "latency_ms": 40153,
+  "conservative_estimated_usd": 0.02701,
+  "budget": {
+    "existing_authorization_usd": 5,
+    "existing_combined_allocation_usd": 4.56384,
+    "existing_hosted_allocation_usd": 4.1,
+    "consume_existing_hosted_slots": 1,
+    "max_conservative_request_reservation_usd": 0.205,
+    "new_allocation_usd": 0,
+    "unallocated_usd": 0.43616,
+    "note": "Use one already-reserved hosted slot. Do not create a new allowance, refill a ledger or retry. Unknown outcomes retain the reservation. Actual usage is reported separately as an estimate, not an invoice.",
+    "hosted_calls_before": 18,
+    "hosted_calls_after": 17
+  },
+  "manual_review": {
+    "reviewer": "development assistant",
+    "source_support": "Checked all 18 extracted fields against the source excerpts. Final counts and times use the accepted reply; beverage meaning is supported but the value is incompatible with the application option list. No unanswered requests remain.",
+    "pdf_layout": "All four recovered PDFs contain one page. Rendered pages inspected for clipping, overlap and unreadable content.",
+    "calendar": "Verified 18:00–21:00 America/Los_Angeles maps to 02:00–05:00 UTC next day in the tentative calendar file.",
+    "scope": "Reviewed the generated drafts; owner review marks remain pending.",
+    "limitation": "Recovered documents say Nonalcoholic service / Nonalcoholic drinks for all guests. Exact juice-and-soda wording remains in the original conversation and correction note, not a separate drink note on the PDFs."
+  },
+  "limitations": [
+    "One newly authored synthetic event; not an independent blinded benchmark",
+    "No app or prompt fixes were made for this run",
+    "Original first-attempt failure is preserved",
+    "Manual recovery is reported separately",
+    "No saved lessons were present in the actual request; this run does not measure lesson effectiveness"
+  ]
+}

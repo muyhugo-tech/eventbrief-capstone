@@ -6,6 +6,8 @@ The hosted app is live at `https://eventbrief-capstone.vercel.app`. Public sampl
 
 ## Run and check
 
+The [new Noah event check](evaluation/new-event-v1/README.md) exposed another beverage-matching failure against `7a713eb`: calendar ready, four documents blocked. One separately recorded coordinator correction yields 5/5 ready and $1,776, but the PDFs omit the specific juice-and-soda wording. No app/prompt change was made. Run `node scripts/check-new-event.mjs` offline to reproduce both stages. Keep this initial failure unchanged when implementing a future fix. One existing hosted slot was used (18 → 17 remaining), estimated $0.02701; combined allocations remain $4.56384. Preserve ignored `out/new-event-v1/` receipts, frozen expectations, exports and recovery evidence.
+
 The beverage app fix has a [saved-answer replay](evaluation/lesson-comparison-v1/APP-REPLAY.md): both original failed answers now yield five ready drafts and $1,300 with no new AI calls. `lib/package-normalization.mjs` runs only after extraction/corrections and preserves originals. Keep its matching conservative. Drink notes live on the prepared/corrected beverage field, outside the unchanged model schema. The historical scorer uses `as-extracted-v1`; do not retroactively inflate the original scores. Current scorecard: [evaluation](docs/EVALUATION-SCORECARD.md).
 
 ```sh
