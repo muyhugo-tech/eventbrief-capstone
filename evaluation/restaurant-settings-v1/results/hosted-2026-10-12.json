@@ -1,0 +1,147 @@
+{
+  "checked_at": "2026-10-13T05:36:12.986Z",
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_hosted_calls": 15,
+  "settings_revision": 1,
+  "private_public_separate": true,
+  "original_receipt_preserved": true,
+  "existing_reviews_and_corrections_preserved": true,
+  "other_events_unchanged": true,
+  "alex": {
+    "checks": {
+      "original_preserved": true,
+      "no_event_corrections": true,
+      "latest_total": true,
+      "menu_supported": true,
+      "capacity_supported": true,
+      "configured_drinks": true,
+      "exact_terms_kept": true,
+      "missing_fields_not_invented": true,
+      "unsupported_arrangement_issues_removed": true,
+      "guest_dietary_silence_not_blocked": true,
+      "all_five_still_require_details": true,
+      "no_price_or_kitchen_quantities_invented": true
+    },
+    "ready_documents": 0,
+    "documents": [
+      {
+        "id": "calendar",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "end_time",
+            "reason": "End time: not supplied."
+          },
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          }
+        ]
+      },
+      {
+        "id": "quote",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "guest_13_plus_count",
+            "reason": "Guests: not supplied."
+          },
+          {
+            "field": "child_count",
+            "reason": "Children (0–12): not supplied."
+          }
+        ]
+      },
+      {
+        "id": "kitchen",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "dietary",
+            "reason": "Dietary requirements: not supplied."
+          }
+        ]
+      },
+      {
+        "id": "staff",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "end_time",
+            "reason": "End time: not supplied."
+          },
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "dietary",
+            "reason": "Dietary requirements: not supplied."
+          },
+          {
+            "field": "setup",
+            "reason": "Table setup: not supplied."
+          },
+          {
+            "field": "av",
+            "reason": "AV needs: not supplied."
+          },
+          {
+            "field": "special",
+            "reason": "Special requirements: not supplied."
+          },
+          {
+            "field": "staff_notes",
+            "reason": "Internal staff notes: not supplied."
+          }
+        ]
+      },
+      {
+        "id": "guest",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "end_time",
+            "reason": "End time: not supplied."
+          },
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "guest_notes",
+            "reason": "Guest instructions: not supplied."
+          }
+        ]
+      }
+    ],
+    "boundary": "A settings replay of one known answer, not a new AI trial or five completed documents."
+  },
+  "exports": [
+    {
+      "id": "quote",
+      "status": 409,
+      "error": "This quote needs details before it can be downloaded."
+    },
+    {
+      "id": "kitchen",
+      "status": 409,
+      "error": "This kitchen sheet needs details before it can be downloaded."
+    },
+    {
+      "id": "staff",
+      "status": 409,
+      "error": "This staff sheet needs details before it can be downloaded."
+    },
+    {
+      "id": "guest",
+      "status": 409,
+      "error": "This guest sheet needs details before it can be downloaded."
+    }
+  ]
+}

@@ -37,6 +37,8 @@ The [October 12 validation note](docs/VALIDATION-2026-10-12.md) records the comp
 
 ## Preserve these boundaries
 
+Restaurant settings deployment `349d78b` was verified in production with the actual Chrome and in-app browsers. Private settings revision 1 is the explicit fictional rehearsal example. Public settings remain original; other events, saved reviews/corrections and Alex's original receipt are unchanged. All four Alex PDFs correctly return 409 for the remaining missing details. Budget is still 15 hosted preparations. Preserve `out/settings-v1/`; public evidence is in `evaluation/restaurant-settings-v1/`. Next: collect or explicitly confirm Alex's missing event details through the existing coordinator editor; do not infer zero children or an end time from the conversation.
+
 - Do not add customer records, production credentials, database clients, or sending routes.
 - Use only the independent EventBrief Vercel project and its private Blob store. Never import Yannis environment settings or attach its storage.
 - Preserve original AI receipts and failures. Corrections are separate reviewer decisions.

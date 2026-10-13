@@ -35,3 +35,13 @@ Run `node scripts/replay-restaurant-settings.mjs` to reproduce the saved result 
 - Full automated suite: **221 tests passed**, fake providers only. Added AI calls/cost: **0 / $0**.
 
 Source checks: [settings tests](../../tests/restaurant-settings.test.mjs), [hosted boundary tests](../../tests/hosted-handler.test.mjs), [recorded replay](results/2026-10-12.json).
+
+## Deployed verification
+
+Verified October 12, 2026 (Pacific) on app commit `349d78b425b7325026b1aa99c42e6f071988df44`, Vercel production deployment `dpl_2nncz7cwHfu7tcwahy2ZeSfzcs78`, at [EventBrief](https://eventbrief-capstone.vercel.app/).
+
+The coordinator saved fictional rehearsal settings as revision 1 through the in-app browser. Chrome then displayed the same revision, 60-person patio, two menus and three drink options. A separate public session still returned the original capacity 40 and Menu 2 only. The deployed replay retained the original Alex receipt, all original messages and ten unknown fields. All existing saved corrections/reviews and the other four event summaries remained unchanged. All four Alex PDF endpoints still returned 409 for the remaining missing details; the calendar exporter also refused the blocked draft.
+
+The global allowance was **15 before and 15 after**; no AI requests or event corrections occurred. Private audit evidence stays under ignored `out/settings-v1/`. [Sanitized hosted result](results/hosted-2026-10-12.json).
+
+A separate, isolated local complete fixture generated four one-page PDFs plus a tentative calendar file. Text extraction and rendered-page review confirmed Menu 3 dishes, a $1,920 food-only estimate for 30 guests, visible separate drink terms, no invented prep quantities and no layout overflow. These exports are test artifacts, not completed outputs for the incomplete Alex rehearsal inquiry.
