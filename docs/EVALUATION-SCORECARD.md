@@ -2,7 +2,7 @@
 
 Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, two assistant-authored events and one user-authored rehearsal-dinner test.
 
-**Alex's original workflow failed. The repaired saved-answer replay now fills 46 Guests and produces four usable document drafts; the original conversation still needs an end time for calendar export.** Children stay unspecified, and the $2,944 food quote clearly states its standard-rate assumption. The existing private event, with its earlier saved end-time/dietary/timezone corrections, locally replays to all five drafts. No new AI call or new event correction. [Workflow repair](../evaluation/draft-workflow-v1/README.md)
+**Alex's original workflow failed. The repaired saved-answer replay now fills 46 Guests and produces four usable document drafts; the original conversation still needs an end time for calendar export.** Children stay unspecified, and the $2,944 food quote clearly states its standard-rate assumption. The existing private event, with its earlier saved end-time/dietary/timezone corrections, now shows all five drafts ready on the live app. No new AI call or new event correction. [Workflow repair](../evaluation/draft-workflow-v1/README.md)
 
 The original user-authored test passed narrow extraction and blocking checks under the old rules, but delivered **0/5 documents: an end-to-end failure**. The checks reflected overly restrictive implementation rules, not successful event preparation. That historical result remains unchanged. [Original test](../evaluation/new-event-v3/README.md)
 
@@ -27,6 +27,20 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Interpret natural beverage wording | **Passed after app fix for saved examples** | Combined supported instructions now match while preserving the exact drink notes. Lena and Noah both replay to 5/5 ready; unsupported extras and contradictions remain blocked. Broader language accuracy remains unproven. [Original Lena failure](../evaluation/new-event-v2/README.md) · [Current replay](../evaluation/drink-matcher-v3/README.md) |
 | Edit drink notes and keep assets consistent | **Passed** | Notes save separately, survive reload and appear in the quote, staff and guest outputs. Notes-only edits reset those three reviews and retain the calendar and kitchen reviews. [Checks](../tests/package-normalization.test.mjs) |
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
+
+## Latest repair: Alex's saved event
+
+| Check | Result |
+| --- | --- |
+| Guests populate automatically | **Passed: 46**, from the accepted attendance; superseded 40 is not used |
+| Blank optional details | **Passed:** guest/staff notes, setup, AV and special details no longer prevent drafts |
+| Untouched conversation replay | **4/5 ready:** only calendar export needs the missing end time |
+| Existing saved event, with earlier corrections | **5/5 ready:** calendar, quote, kitchen, staff and guest |
+| Price | **$2,944 food estimate:** 46 at the standard guest rate; children unspecified; drinks excluded |
+| Downloads | **Passed:** four one-page PDFs visually checked; correct tentative calendar file |
+| Preserve data and budget | **Passed:** receipt, prior corrections/reviews and settings unchanged; **0 AI calls, $0, 15 preparations left** |
+
+Children and Menu 3 prep quantities still need confirmation before final pricing/service. The original failure is retained; these replays do not establish unseen-event accuracy. [Reproducible method and hosted evidence](../evaluation/draft-workflow-v1/README.md)
 
 ## Latest new conversation: Alex's rehearsal dinner
 

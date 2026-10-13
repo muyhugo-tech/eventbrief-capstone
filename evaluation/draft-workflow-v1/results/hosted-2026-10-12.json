@@ -1,0 +1,47 @@
+{
+  "original_receipt_unchanged": true,
+  "existing_corrections_and_reviews_preserved": true,
+  "settings_unchanged": true,
+  "public_private_separate": true,
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "remaining_preparations": 15,
+  "ready": 5,
+  "guests": 46,
+  "children": null,
+  "quote_cents": 294400,
+  "quote_provisional": true,
+  "exports": [
+    "calendar.ics",
+    "quote.pdf",
+    "kitchen.pdf",
+    "staff.pdf",
+    "guest.pdf"
+  ],
+  "pdf_checks": [
+    {
+      "draft": "quote",
+      "pages": 1,
+      "content_check": true
+    },
+    {
+      "draft": "kitchen",
+      "pages": 1,
+      "content_check": true
+    },
+    {
+      "draft": "staff",
+      "pages": 1,
+      "content_check": true
+    },
+    {
+      "draft": "guest",
+      "pages": 1,
+      "content_check": true
+    }
+  ],
+  "calendar_times_correct": true,
+  "verified_at": "2026-10-12 (Pacific)",
+  "app_commit": "100bad6ce65b1cf42b1fb3541c0ffefdf969a376",
+  "deployment": "dpl_4r5BT4uMHxh9Sg2bviF3Spy5CPwS"
+}

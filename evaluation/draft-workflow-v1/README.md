@@ -17,11 +17,11 @@ This repair reuses the original saved model answer and the already configured fi
 
 | Draft | Untouched saved answer | Existing private event with earlier saved corrections |
 | --- | --- | --- |
-| Calendar | End time missing; export blocked | Local replay ready using the previously saved 9:30 PM end time |
-| Guest quote | Ready: provisional $2,944 food estimate; 46 guests; children unspecified | Local replay ready, same estimate |
-| Kitchen sheet | Ready: 46 people, Menu 3; dietary reminder; prep quantities marked Confirm | Local replay ready, retains earlier dietary correction |
-| Staff event plan | Ready: known details, drink terms, missing end/setup clearly flagged | Local replay ready; blank optional notes do not block |
-| Guest event plan | Ready: known details and thanks; end time flagged | Local replay ready; blank arrival notes do not block |
+| Calendar | End time missing; export blocked | Verified live using the previously saved 9:30 PM end time |
+| Guest quote | Ready: provisional $2,944 food estimate; 46 guests; children unspecified | Verified live, same estimate |
+| Kitchen sheet | Ready: 46 people, Menu 3; dietary reminder; prep quantities marked Confirm | Verified live, retains earlier dietary correction |
+| Staff event plan | Ready: known details, drink terms, missing end/setup clearly flagged | Verified live; blank optional notes do not block |
+| Guest event plan | Ready: known details and thanks; end time flagged | Verified live; blank arrival notes do not block |
 
 The raw conversation produces **4/5 ready**, with one legitimate follow-up for the calendar. The existing private event already has end-time, timezone and dietary corrections; replaying those produces **5/5** without adding or editing any corrections. These are distinct results, not an unassisted five-draft claim.
 
@@ -37,3 +37,7 @@ node scripts/replay-restaurant-settings.mjs
 [Recorded original-answer replay](results/2026-10-12.json). Historical scorers explicitly select `strict-drafts-v1`, preserving original failure evidence. Current application preparation uses `usable-drafts-v1`. Existing complete events retain document revisions; changed fields/content invalidate the affected reviews.
 
 Remaining limits: this is a replay of a known answer, not a fresh AI accuracy trial. Children were not specified, and Menu 3 has no saved kitchen quantity rules. Confirm both before final pricing/service. The initial failure remains recorded.
+
+## Hosted verification
+
+The deployed EventBrief event now shows **5/5 ready and 46 Guests**. Its existing 9:30 PM end time, timezone and dietary correction were retained. All four PDFs downloaded, fit on one page and passed content/visual inspection. The calendar file has the correct 5:30–9:30 PM Pacific interval and remains tentative. Original AI receipt, saved corrections/reviews, restaurant settings and public/private separation were unchanged. **0 new AI calls; $0 added AI cost; 15 preparations remain.** [Sanitized hosted evidence](results/hosted-2026-10-12.json).

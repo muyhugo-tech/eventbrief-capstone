@@ -368,7 +368,7 @@ function renderSelected() {
   $('#print-document').textContent={quote:'Print quote',kitchen:'Print kitchen sheet',staff:'Print staff sheet',guest:'Print guest sheet'}[selected.id]??'Print / Save PDF';
   const ready = data.documents.filter(doc => doc.state === 'ready_for_review').length;
   const reviewed = data.documents.filter(isReviewed).length;
-  $('#package-summary').textContent = isEarlier() ? `Earlier version · ${data.record.fields.guest_count.value ?? 'Unknown'} people · saved for comparison` : `${ready} of 5 drafts ready for review · ${5 - ready} need details · ${data.record.fields.guest_count.value ?? 'Unknown'} people`;
+  $('#package-summary').textContent = isEarlier() ? `Earlier version · ${data.record.fields.guest_count.value ?? 'Unknown'} people · saved for comparison` : `${ready} of 5 drafts ready for review · ${5 - ready} blocked · ${data.record.fields.guest_count.value ?? 'Unknown'} people`;
   $('#review-progress').textContent = isEarlier() ? 'Read only' : `${reviewed} / 5 reviewed`;
   const fields = data.record.fields;
   $('#edit-event').disabled = busy || isEarlier() || !workspace;
