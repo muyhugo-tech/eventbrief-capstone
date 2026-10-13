@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createHostedFetch } from '../lib/hosted/handler.mjs';
 import { demoInput, demoText, demoReply, demoRecord } from '../lib/package-demo.mjs';
 import { replyInput } from '../lib/package-workspace.mjs';
+import { rehearsalExample } from '../public/restaurant-example.mjs';
 
 const origin = 'https://eventbrief-test.example';
 const env = {
@@ -82,6 +83,55 @@ function setup({ duringTransport, quotePdfRenderer, inspectRequest } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
+
+test('private settings are shared, isolate the public sample, preserve receipts and budget, and invalidate only affected reviews', async () => {
+  const requests=[];
+  const system=setup({inspectRequest:request=>requests.push(request),quotePdfRenderer:async()=>Buffer.from('%PDF-fake')}), owner=system.visitor(), other=system.visitor(), visitor=system.visitor();
+  for(const browser of [owner,other]) await browser.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
+  const initial=(await owner.request('/api/package/settings')).data;
+  assert.equal(initial.revision,0); assert.equal(initial.editable,true);
+  const settings=rehearsalExample(initial.settings);
+  assert.equal((await visitor.request('/api/package/settings',{settings,revision:0,reason:'Public write'})).status,403);
+  assert.equal((await owner.request('/api/package/settings',{settings,revision:0,reason:'Cross-site write'},{headers:{Origin:'https://bad.example'}})).status,403);
+  await owner.request('/api/package/messages',{text:demoText});
+  const reply=await owner.request('/api/package/reply',{scenario_id:demoInput.id,text:demoReply,role:'host'});
+  const before=(await owner.request('/api/package/analyze',{scenario_id:reply.data.input.id})).data;
+  const identity={scenario_id:reply.data.input.id,run_id:before.extraction.run_id};
+  const marks=Object.fromEntries(before.documents.map(doc=>[doc.id,{decision:'reviewed',revision:doc.revision,reviewed_at:new Date().toISOString()}]));
+  assert.equal((await owner.request('/api/package/review',{...identity,corrections:{},reviews:marks,sequence:0})).status,200);
+  const receiptBefore=(await owner.request(`/api/package/attempts/${identity.run_id}`)).data;
+  const allowanceBefore=(await owner.request('/api/package/scenarios')).data.live;
+  const saved=await owner.request('/api/package/settings',{settings,revision:0,reason:'Fictional rehearsal setup'});
+  assert.equal(saved.status,200,saved.data.error); assert.equal(saved.data.revision,1);
+  assert.deepEqual((await other.request('/api/package/settings')).data.settings,settings);
+  assert.equal((await other.request('/api/package/settings',{settings:initial.settings,revision:0,reason:'Stale tab'})).status,409);
+  const publicSettings=(await visitor.request('/api/package/settings')).data;
+  assert.equal(publicSettings.revision,0); assert.equal(publicSettings.editable,false);
+  assert.deepEqual(publicSettings.settings,initial.settings);
+  const unchanged=await other.request('/api/package/review/load',identity);
+  assert.equal(unchanged.status,200,unchanged.data.error);
+  assert.deepEqual(unchanged.data.saved.reviews,marks);
+  assert.equal(unchanged.data.data.restaurant_settings.revision,1);
+  const changedSettings=structuredClone(settings); changedSettings.menus['Menu 2'].prices_cents.guest_13_plus_count+=100;
+  assert.equal((await other.request('/api/package/settings',{settings:changedSettings,revision:1,reason:'Fictional price change'})).status,200);
+  const changed=await owner.request('/api/package/review/load',identity);
+  assert.equal(changed.status,200,changed.data.error);
+  assert.deepEqual(Object.keys(changed.data.saved.reviews),['calendar','kitchen','guest']);
+  assert.deepEqual(changed.data.data.original_record,before.original_record);
+  assert.equal((await owner.request('/api/package/quote/pdf',{...identity,sequence:1,revision:before.documents.find(d=>d.id==='quote').revision})).status,409);
+  assert.equal((await owner.request('/api/package/review',{...identity,sequence:1,corrections:{},reviews:marks})).status,400);
+  const valid=await owner.request('/api/package/quote/pdf',{...identity,sequence:1,revision:changed.data.data.documents.find(d=>d.id==='quote').revision});
+  assert.equal(valid.status,200);
+  assert.deepEqual((await owner.request(`/api/package/attempts/${identity.run_id}`)).data,receiptBefore);
+  assert.deepEqual((await owner.request('/api/package/scenarios')).data.live,allowanceBefore);
+  assert.equal(system.calls(),1); // The only request was the fake provider before changing settings.
+  // Changing operational settings must not change the frozen request envelope
+  // or refill the global ledger. A later fake request uses the same vocabulary.
+  const next=await other.request('/api/package/analyze',{scenario_id:reply.data.input.id});
+  assert.equal(next.status,200,next.data.error);
+  assert.deepEqual(requests[1],requests[0]);
+  assert.equal(next.data.remaining,allowanceBefore.remaining-1);
+});
 
 test('confirmed correction unblocks, saves an auditable lesson, feeds the next request and can be disabled',async()=>{
   const requests=[];

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/workspace-board.css">
   <link rel="stylesheet" href="/workspace-calendar.css">
   <link rel="stylesheet" href="/workspace-inbox.css">
+  <link rel="stylesheet" href="/restaurant-settings.css">
   <script type="module" src="/package.js"></script>
 </head>
 <body class="package-page">
@@ -31,6 +32,7 @@
       <button data-workspace="staff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6m2 4c3 1 3 3 3 6"/></svg>Staff event plans</button>
       <button data-workspace="guest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6m-6 4h6m-6 4h4"/></svg>Guest event plans</button>
       <button id="new-event"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>New event</button>
+      <button data-workspace="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor"/><circle cx="15" cy="12" r="2" fill="currentColor"/><circle cx="9" cy="18" r="2" fill="currentColor"/></svg>Restaurant settings</button>
     </nav>
     <div class="recent-events"><h2>Recent events</h2><nav id="recent-events" aria-label="Recent events"></nav></div>
     <div class="rail-note"><span class="sample-label">Synthetic data only</span><p>Prepare, check, then share.<br>Nothing is sent or booked.</p><a href="/">Extraction examples</a></div>
@@ -83,6 +85,7 @@
     <section id="calendar-overview" class="tool-overview" hidden aria-label="Event calendar"><div class="overview-heading"><div><h2>Event calendar</h2><p>Open a date to check its event. Entries are drafts, not reservations.</p></div></div><div id="calendar-content"></div></section>
     <section id="assets-overview" class="tool-overview" hidden aria-labelledby="assets-heading"><div class="overview-heading"><div><h2 id="assets-heading">Guest quotes</h2><p id="assets-help">Open a quote, check the details, then download or print it.</p></div></div><label class="event-search" for="asset-search">Find an event<input id="asset-search" type="search" placeholder="Search by event name" autocomplete="off"></label><div id="asset-library"></div></section>
     <p id="workspace-error" class="error" role="alert" hidden></p>
+    <section id="restaurant-settings" class="restaurant-settings" hidden aria-label="Restaurant settings"></section>
     <div id="event-workbench">
     <button class="text-button back-to-events" data-workspace="events">← Back to events</button>
     <div class="workbench-heading"><p id="workbench-help">Paste a conversation. Get five drafts. Check the details.</p><span id="package-mode-label" class="mode-label">Authored demo · no AI call</span></div>

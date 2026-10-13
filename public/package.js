@@ -4,6 +4,7 @@ import { assetFilename } from '/package-export.mjs';
 import { renderBoard, renderAssetLibrary } from '/workspace-board.mjs';
 import { renderCalendar, calendarMonth, shiftMonth, calendarFile } from '/workspace-calendar.mjs';
 import { inboxThreads, renderInboxThreads, renderInboxDetail } from '/workspace-inbox.mjs';
+import { restaurantSettingsPanel } from '/restaurant-settings.mjs';
 
 const $ = selector => document.querySelector(selector);
 const sessions = new Map();
@@ -27,6 +28,7 @@ let eventLayout = 'board';
 let calendarViewMonth = null;
 let accessInitialized = false;
 let eventEdit = null;
+let restaurantSettingsRevision = 0;
 let inboxId = null;
 let inboxData = null;
 let inboxReviews = {};
@@ -40,7 +42,8 @@ const editGroups = [
   ['times', 'Event times', ['start_time', 'end_time']],
   ...['host_name', 'venue', 'menu', 'beverage', 'dietary', 'setup', 'av', 'special', 'guest_notes', 'staff_notes', 'timezone', 'booking_status'].map(field => [field, FIELD_DEFINITIONS[field].label, [field]])
 ];
-const viewNames = {inbox:'Inbox',events:'Events',calendar:'Calendar',quote:'Guest quotes',kitchen:'Kitchen sheets',staff:'Staff event plans',guest:'Guest event plans'};
+const viewNames = {inbox:'Inbox',events:'Events',calendar:'Calendar',quote:'Guest quotes',kitchen:'Kitchen sheets',staff:'Staff event plans',guest:'Guest event plans',settings:'Restaurant settings'};
+const settingsPanel = restaurantSettingsPanel($('#restaurant-settings'), {request, lock:setBusy, changed:async()=>{sessions.clear(); openSession(); inboxData=null; await refreshListing();}});
 // Retain existing public/local browser drafts; private selections and unsent
 // text have separate keys and are never restored into the public sample.
 const browserKey = suffix => `eventbrief.package.${hosted?.workspace === 'private' ? 'private.' : ''}${suffix}`;
@@ -69,6 +72,7 @@ function renderReplyCost() {
   $('#submit-reply').textContent = busy ? 'Updating drafts…' : guided || canAnalyze() ? 'Update drafts' : 'Save reply';
 }
 function applyListing(data) {
+  restaurantSettingsRevision = data.restaurant_settings_revision ?? 0;
   scenarios = data.scenarios; live = data.live; updates = data.updates; history = data.history ?? []; workspace = data.workspace;
   events = data.events ?? []; sourceVersions = data.source_versions ?? {}; demo = data.demo ?? null;
   hosted = data.hosted ?? null;
@@ -213,7 +217,8 @@ function showOverview(value, view = 'events') {
   $('#assets-overview').hidden = !value || ['events','calendar'].includes(workspaceView);
   $('#event-workbench').hidden = value;
   $('#inbox-overview').hidden = !value || workspaceView !== 'inbox';
-  if(workspaceView==='inbox') $('#assets-overview').hidden = true;
+  $('#restaurant-settings').hidden = !value || workspaceView !== 'settings';
+  if(['inbox','settings'].includes(workspaceView)) $('#assets-overview').hidden = true;
   $('#page-title').textContent = value ? viewNames[workspaceView] : currentId === 'new' ? 'New event' : 'Event workspace';
   $('#assets-heading').textContent = viewNames[workspaceView];
   $('#assets-help').textContent = {quote:'Open a quote. Check the price and details, then download or print it.',kitchen:'Open a kitchen sheet. Check the menu, numbers and dietary details.',staff:'Open a staff plan. Check the schedule, setup and team instructions.',guest:'Open a guest plan. Check what the host and their guests need to know.'}[workspaceView] ?? '';
@@ -269,6 +274,7 @@ function setBusy(value) {
   $('#package-mode').closest('label').hidden = isPasted() || sourceVersions[currentId]?.reference_available;
   $('#event-messages').disabled = value;
   for (const control of document.querySelectorAll('#inbox-overview button, #inbox-overview input, #inbox-overview select, #inbox-overview textarea, #event-inbox-source')) control.disabled = value;
+  for (const control of document.querySelectorAll('#restaurant-settings button, #restaurant-settings input, #restaurant-settings select, #restaurant-settings textarea')) control.disabled = value || Boolean(hosted && !hosted.unlocked && !control.matches('[data-section],[data-reload]'));
   $('#paste-example').disabled = value;
   $('#download-attempt').disabled = value;
   $('#add-update').disabled = value || !updates?.available || currentId !== 'patio-complete' || !session()?.data;
@@ -339,7 +345,7 @@ function renderPolicy() {
   $('#policy-content').innerHTML = `<h2>${esc(profile.name)} · ${esc(profile.version)}</h2><p>These are deliberately small fictional rules for this example. Other dietary, AV, or special requirements require coordinator review; they are not assumed safe.</p>
     <p>Service: ${esc(profile.opening_time)}–${esc(profile.closing_time)}, ${esc(profile.timezone)}. Same-day events only. These rules do not establish availability.</p>
     <ul>${Object.entries(profile.venues).map(([name, venue]) => `<li>${esc(name)}: capacity ${venue.capacity}; setups: ${venue.setups.map(esc).join(', ')}.</li>`).join('')}</ul>
-    <h3>Fictional prices per guest · USD</h3><ul>${[...Object.entries(profile.menus), ...Object.entries(profile.beverages)].map(([name, option]) => `<li>${esc(name)}: ${Object.entries(option.prices_cents).map(([field, cents]) => `${esc(profile.categories[field].label)} $${(cents / 100).toFixed(2)}`).join('; ')}.</li>`).join('')}</ul>
+    <h3>Fictional prices per guest · USD</h3><ul>${[...Object.entries(profile.menus), ...Object.entries(profile.beverages)].map(([name, option]) => `<li>${esc(name)}: ${option.billing === 'pay_separately' ? 'Drinks paid separately; excluded from the food estimate' : Object.entries(option.prices_cents).map(([field, cents]) => `${esc(profile.categories[field].label)} $${(cents / 100).toFixed(2)}`).join('; ')}.</li>`).join('')}</ul>
     <p>${esc(profile.quote_note)}</p><h3>Document requirements</h3><p>The guest event plan needs allergy and dietary details only when the host brings them up. If those details are still missing or unresolved, the guest plan stays blocked.</p><ul>${session().data.documents.map(doc => `<li><strong>${esc(doc.title)}:</strong> ${doc.dependencies.map(field => esc(FIELD_DEFINITIONS[field].label)).join(', ')}. ${profile.readiness[doc.id].agreed.length ? `Agreement required for ${profile.readiness[doc.id].agreed.map(field => esc(FIELD_DEFINITIONS[field].label)).join(', ')}.` : 'Specified pricing inputs are enough for a draft; a confirmed booking is not required.'}</li>`).join('')}</ul>`;
 }
 
@@ -632,6 +638,7 @@ async function openWorkspace(view) {
     sessions.clear(); openSession();
     showOverview(true, view);
     if(view==='inbox') await loadInbox(inboxId);
+    if(view==='settings') await settingsPanel.load();
   } catch (error) { $('#workspace-error').textContent = error.message; $('#workspace-error').hidden = false; }
   finally { setBusy(false); }
 }
@@ -834,6 +841,10 @@ async function checkLatest({allowEarlier = false} = {}) {
     if(isEarlier() && !allowEarlier){announce('New messages have arrived. Choose the latest messages before reviewing or downloading.');return false;}
     if (workspace && session()?.data) {
       const s = session(), runId = s.data.extraction?.run_id ?? null;
+      if ((s.data.restaurant_settings?.revision ?? 0) !== restaurantSettingsRevision) {
+        await openSaved(runId); renderPackage();
+        announce('Restaurant settings changed. Check the updated draft before reviewing or downloading.'); return false;
+      }
       const loaded = await post('/api/package/review/load', {scenario_id: currentId, run_id: runId});
       if ((loaded.saved?.sequence ?? 0) !== s.sequence ||
           JSON.stringify(loaded.saved?.corrections ?? {}) !== JSON.stringify(s.corrections) ||
@@ -1022,6 +1033,7 @@ async function init() {
     setBusy(false);
     if (selection?.view && Object.hasOwn(viewNames,selection.view)) { showOverview(true,selection.view); if(selection.view==='inbox') { setBusy(true);try{await loadInbox(inboxId);}finally{setBusy(false);} } }
     else if ((hosted?.unlocked && currentId === 'new') || (!selection && eventRows().length)) showOverview(true);
+    if (selection?.view === 'settings') { setBusy(true); try {await settingsPanel.load();} finally {setBusy(false);} }
     if (hosted && !hosted.unlocked && new URLSearchParams(window.location.search).get('sample') === '1') {
       window.history.replaceState(null, '', window.location.pathname);
       await tryDemo();

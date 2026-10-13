@@ -19,6 +19,7 @@ import { demoText, demoReply, demoRecord } from './lib/package-demo.mjs';
 import { packageSummary } from './lib/package-summary.mjs';
 import { eventEditCorrections } from './lib/package-edits.mjs';
 import { feedbackEntry } from './lib/coordinator-feedback.mjs';
+import { createRestaurantSettingsStore, applyRestaurantSettings, settingsFromProfile } from './lib/restaurant-settings.mjs';
 import { quoteStyles } from './public/quote-document.mjs';
 import { kitchenStyles } from './public/kitchen-document.mjs';
 import { staffStyles } from './public/staff-document.mjs';
@@ -46,7 +47,8 @@ assets.set('/quote-document.mjs', ['public/quote-document.mjs', 'text/javascript
 assets.set('/kitchen-document.mjs', ['public/kitchen-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/staff-document.mjs', ['public/staff-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/guest-document.mjs', ['public/guest-document.mjs', 'text/javascript; charset=utf-8']);
-for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox']) {
+assets.set('/restaurant-example.mjs', ['public/restaurant-example.mjs', 'text/javascript; charset=utf-8']);
+for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox', 'restaurant-settings']) {
   assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
   assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);
 }
@@ -57,7 +59,7 @@ assets.set('/package-contract.mjs', ['lib/package-contract.mjs', 'text/javascrip
 export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol', maxCalls = 3, provider = analyze,
   packageTransport = responsesTransport, packageStore = createAttemptStore(fileURLToPath(new URL('out/model-attempts/package-v1/', root))),
   packageRunMode = 'live', packageAllowance = null, packageMaxOutputTokens = 10000, packageUpdates = null, packageWorkspace = null,
-  hostedOrigin = null, hosted = null, quotePdfRenderer = renderQuotePdf } = {}) {
+  hostedOrigin = null, hosted = null, quotePdfRenderer = renderQuotePdf, restaurantSettingsStore = null } = {}) {
   if (!['live', 'simulated'].includes(packageRunMode)) throw new Error('Invalid package provider mode.');
   if (packageAllowance && packageStore !== packageAllowance.store) throw new Error('The spending allowance must use its own attempt store.');
   let calls = 0;
@@ -68,10 +70,19 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
   const updateState = async () => ({ ...(packageUpdates ? await packageUpdates.status() : {}), ...(packageWorkspace ? await packageWorkspace.status() : {}) });
   const isSuperseded = (id, state) => Boolean(id.startsWith('pasted-') ? state?.source_versions?.[id]?.superseded : state?.active_scenario_id && state.active_scenario_id !== id);
   const available = (id, state) => id.startsWith('pasted-') || packageFixtures.has(id) || state?.active_scenario_id === id;
+  const settingsState = async () => restaurantSettingsStore ? await restaurantSettingsStore.load() : {revision: 0, settings: settingsFromProfile(packageFixtures.values().next().value.profile), saved_at: null, reason: null};
+  const withSettings = async bundle => {
+    if (!bundle || !restaurantSettingsStore) return bundle;
+    const {settings, ...metadata} = await settingsState();
+    return {...bundle, baselineProfile: bundle.profile, profile: applyRestaurantSettings(bundle.profile, settings), restaurantSettings: metadata};
+  };
+  const ensureSettingsCurrent = async bundle => {
+    if (restaurantSettingsStore && (await settingsState()).revision !== bundle.restaurantSettings.revision) throw new SourceConflictError('Restaurant settings changed. Open the event again before continuing.');
+  };
   const getBundle = async id => {
     const bundle = bundles.get(id) ?? (packageWorkspace ? await packageWorkspace.get(id) : null);
     const authored = bundle && demoRecord(bundle.input);
-    return authored ? { ...bundle, original: authored } : bundle;
+    return withSettings(authored ? { ...bundle, original: authored } : bundle);
   };
   const sourceVersion = (id, state) => {
     const version = state?.source_versions?.[id];
@@ -102,16 +113,16 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       let original = authored, summary = null;
       if (entry) {
         const receipt = await packageStore.read(entry.run_id), source = pasted.find(bundle => bundle.input.id === entry.scenario_id);
-        if (receipt.status !== 'succeeded' || receipt.scenario_id !== entry.scenario_id || !source || receipt.input_hash !== fingerprint(source.input)) throw new Error('The saved result does not match its source messages.');
+        if (receipt.status !== 'succeeded' || receipt.scenario_id !== entry.scenario_id || !source || receipt.input_hash !== fingerprint(source.input) || receipt.profile_hash !== fingerprint(source.profile)) throw new Error('The saved result does not match its source messages and extraction profile.');
         original = receipt.parsed_output;
         if (entry.scenario_id === event.current_scenario_id) {
           const saved = await packageWorkspace.loadReview(entry.scenario_id,entry.run_id);
-          const prepared = prepareEventPackage({...current,original,corrections:saved?.corrections??{},extraction:{run_id:entry.run_id,mode:receipt.mode}});
+          const prepared = prepareEventPackage({...await withSettings(current),original,corrections:saved?.corrections??{},extraction:{run_id:entry.run_id,mode:receipt.mode}});
           summary = packageSummary(prepared, saved?.reviews);
         }
       }
       if (!summary && authored) {
-        const saved = await packageWorkspace.loadReview(current.input.id,null), prepared = prepareEventPackage({...current,original:authored,corrections:saved?.corrections??{}});
+        const saved = await packageWorkspace.loadReview(current.input.id,null), prepared = prepareEventPackage({...await withSettings(current),original:authored,corrections:saved?.corrections??{}});
         summary = packageSummary(prepared, saved?.reviews);
       }
       const host = summary?.host_name ?? original?.fields.host_name?.value;
@@ -122,6 +133,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
     return { mode: 'authored_reference', ...(hosted ? {hosted} : {}), workspace: Boolean(packageWorkspace), scenarios: [...bundles.values(), ...pasted].filter(({input}) => available(input.id,state)).map(({input}) => input),
       live: await packageLive(state?.active_scenario_id), updates: state,
       events: eventSummaries, source_versions: sourceVersions,
+      restaurant_settings_revision: (await settingsState()).revision,
       demo: { available: Boolean(packageWorkspace), reply: demoReply, label: 'Guided example · authored results · no AI call' },
       history: history.map(entry => ({...entry, event_id: sourceVersion(entry.scenario_id, state).event_id, superseded: isSuperseded(entry.scenario_id, state)})) };
   };
@@ -151,6 +163,19 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       }
       if (req.method === 'GET' && pathname === '/api/package/scenarios') {
         return send(200, await packageListing());
+      }
+      if (req.method === 'GET' && pathname === '/api/package/settings') return send(200, {...await settingsState(), editable: Boolean(restaurantSettingsStore) && (!hosted || hosted.unlocked)});
+      if (req.method === 'POST' && pathname === '/api/package/settings') {
+        if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403, {error: 'Open EventBrief before changing settings.'});
+        if (!restaurantSettingsStore || (hosted && !hosted.unlocked)) return send(403, {error: 'Open your private workspace to change restaurant settings.'});
+        if (!req.headers['content-type']?.startsWith('application/json')) return send(415, {error: 'JSON is required.'});
+        const chunks = []; let bytes = 0;
+        for await (const chunk of req) { chunks.push(chunk); bytes += chunk.length; if (bytes > 65536) return send(413, {error: 'These settings are too large.'}); }
+        try {
+          const data = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+          if (!data || Object.keys(data).sort().join('|') !== 'reason|revision|settings') throw new Error('Save the settings with their version and a short change note.');
+          return send(200, {...await restaurantSettingsStore.save(data.settings, data.revision, data.reason), editable: true});
+        } catch (error) { return send(error instanceof SourceConflictError ? 409 : 400, {error: error.message}); }
       }
       if (req.method === 'POST' && ['/api/package/messages','/api/package/reply','/api/package/demo','/api/package/review','/api/package/review/load','/api/package/edit','/api/package/feedback','/api/package/quote/pdf','/api/package/kitchen/pdf','/api/package/staff/pdf','/api/package/guest/pdf'].includes(pathname)) {
         if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site']==='cross-site') return send(403,{error:'Open the app locally first.'});
@@ -197,7 +222,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
           let original=bundle.original,extraction=null;
           if(data.run_id) {
             const receipt=await packageStore.read(data.run_id);
-            if(receipt.status!=='succeeded'||receipt.scenario_id!==data.scenario_id||receipt.input_hash!==fingerprint(bundle.input)||receipt.profile_hash!==fingerprint(bundle.profile))throw new Error('The saved result does not match these messages and restaurant rules.');
+            if(receipt.status!=='succeeded'||receipt.scenario_id!==data.scenario_id||receipt.input_hash!==fingerprint(bundle.input)||receipt.profile_hash!==fingerprint(bundle.baselineProfile ?? bundle.profile))throw new Error('The saved result does not match these messages and its original extraction profile.');
             original=receipt.parsed_output;extraction={run_id:receipt.run_id,mode:receipt.mode,meta:receipt.meta,receipt_saved:true};
           }
           if(!original)throw new Error('Prepare these messages with AI first.');
@@ -210,6 +235,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             try {pdf=await quotePdfRenderer(await ({quote:quotePdfHtml,kitchen:kitchenPdfHtml,staff:staffPdfHtml,guest:guestPdfHtml}[exportId])(doc,prepared,saved?.reviews?.[exportId]?.revision===doc.revision));}
             catch {return send(503,{error:`The PDF could not be created. Your ${exportLabel} is saved. Please try again.`});}
             const latest=await updateState(),latestReview=await packageWorkspace.loadReview(data.scenario_id,data.run_id);
+            await ensureSettingsCurrent(bundle);
             if(isSuperseded(data.scenario_id,latest)||(latestReview?.sequence??0)!==data.sequence)throw new SourceConflictError(`The event changed while the PDF was being created. Open the latest ${exportLabel} and download it again.`);
             return send(200,pdf,'application/pdf',{'Content-Disposition':`attachment; filename="${assetFilename(doc,prepared,'pdf')}"`});
           }
@@ -217,6 +243,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             if(isSuperseded(data.scenario_id,state))throw new SourceConflictError('Open the latest event before changing its lessons.');
             const prepared=prepareEventPackage({...bundle,original,extraction,corrections:saved?.corrections??{}});
             const reviews=Object.fromEntries(Object.entries(saved?.reviews??{}).filter(([id,review])=>prepared.documents.some(doc=>doc.id===id&&doc.revision===review.revision&&doc.state==='ready_for_review')));
+            await ensureSettingsCurrent(bundle);
             return send(200,{saved:await packageWorkspace.saveReview(prepared,reviews,data.sequence,{lessonState:{id:data.feedback_id,enabled:data.enabled}})});
           }
           if(editing) {
@@ -232,17 +259,19 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             const feedback=feedbackEntry(before,prepared,data.reason,data.lesson??'');
             feedback.fields=[...new Set(Object.keys(data.changes).map(field=>field==='beverage_notes'?'beverage':field))];
             if(feedback.lesson && (!data.resolve || !data.reason.trim() || feedback.fields.some(field=>prepared.record.fields[field]?.value===null) || prepared.documents.some(doc=>doc.blockers.some(blocker=>feedback.fields.includes(blocker.field)))))throw new Error('Resolve the selected detail before saving it as a lesson.');
+            await ensureSettingsCurrent(bundle);
             const result=await packageWorkspace.saveReview(prepared,reviews,data.sequence,{feedback});
             return send(200,{saved:result,data:withVersion(prepared,finalState),changed_documents:changed});
           }
           const prepared=prepareEventPackage({...bundle,original,extraction,corrections:loading?saved.corrections:data.corrections});
           const finalState=await updateState();
           if(loading) {
-            if(saved.source_revision!==prepared.source_revision||saved.profile_revision!==prepared.profile_revision)throw new Error('The source or restaurant rules changed. A fresh review is needed.');
+            if(saved.source_revision!==prepared.source_revision)throw new Error('The source changed. A fresh review is needed.');
             const reviews=Object.fromEntries(Object.entries(saved.reviews).filter(([id,review])=>prepared.documents.some(doc=>doc.id===id&&doc.revision===review.revision&&doc.state==='ready_for_review')));
             return send(200,{saved:{...saved,reviews},data:withVersion(prepared,finalState)});
           }
           if(isSuperseded(data.scenario_id,finalState))return send(409,{error:'Review the latest messages instead.'});
+          await ensureSettingsCurrent(bundle);
           return send(200,{saved:await packageWorkspace.saveReview(prepared,data.reviews,data.sequence)});
         } catch(error){return send(error instanceof SourceConflictError?409:400,{error:error.message});}
       }
@@ -292,8 +321,8 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
         busy = true;
         calls++;
         try {
-          const { input, profile } = bundle;
-          const lessons = packageWorkspace?.lessons ? await packageWorkspace.lessons() : [];
+          const input = bundle.input, profile = bundle.baselineProfile ?? bundle.profile;
+          const lessons = packageWorkspace?.lessons ? await packageWorkspace.lessons({profileRevision:fingerprint(bundle.profile)}) : [];
           const extractionPrompt=input.source_kind==='pasted'?pastedPrompt(packagePrompt):packagePrompt;
           const execute = async () => {
             if (isSuperseded(data.scenario_id, await updateState())) throw new PackageAllowanceError('New messages need a new preparation. Choose the latest messages.');
@@ -313,7 +342,7 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
           if (!result.ok) return send(result.dispatched ? 502 : 503, { ...result, remaining: live.remaining, paused: live.paused, in_flight: live.in_flight });
           const extraction = { run_id: result.run_id, meta: result.meta, mode: result.mode, receipt_saved: result.receipt_saved };
           if(packageWorkspace) await packageWorkspace.rememberResult(input,extraction);
-          return send(200, { ...withVersion(prepareEventPackage({ input, profile, original: result.output, extraction }), await updateState()), remaining: live.remaining, paused: live.paused });
+          return send(200, { ...withVersion(prepareEventPackage({ ...await getBundle(input.id), original: result.output, extraction }), await updateState()), remaining: live.remaining, paused: live.paused });
         } finally { busy = false; }
       }
       if (req.method === 'POST' && pathname === '/api/package/prepare') {
@@ -338,10 +367,10 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
           if (isSuperseded(data.scenario_id,sourceState) && (!data.corrections || typeof data.corrections!=='object' || Object.keys(data.corrections).length)) return send(409,{error:'This is an earlier version. Correct the latest messages instead.'});
           if (Object.hasOwn(data, 'run_id')) {
             const receipt = await packageStore.read(data.run_id);
-            if (receipt.status !== 'succeeded' || !['live', 'simulated'].includes(receipt.mode) || receipt.scenario_id !== data.scenario_id || receipt.input_hash !== fingerprint(fixture.input) || receipt.profile_hash !== fingerprint(fixture.profile)) return send(409, { error: 'This attempt cannot be used with the current source and restaurant rules.' });
+            if (receipt.status !== 'succeeded' || !['live', 'simulated'].includes(receipt.mode) || receipt.scenario_id !== data.scenario_id || receipt.input_hash !== fingerprint(fixture.input) || receipt.profile_hash !== fingerprint(fixture.baselineProfile ?? fixture.profile)) return send(409, { error: 'This attempt cannot be used with the current source and original extraction profile.' });
             const finalSourceState = await updateState();
             if (isSuperseded(data.scenario_id,finalSourceState) && Object.keys(data.corrections ?? {}).length) return send(409,{error:'New messages arrived while opening this result. Correct the latest version instead.'});
-            return send(200, withVersion(prepareEventPackage({ input: fixture.input, profile: fixture.profile, original: receipt.parsed_output, corrections: data.corrections,
+            return send(200, withVersion(prepareEventPackage({ ...fixture, original: receipt.parsed_output, corrections: data.corrections,
               extraction: { run_id: receipt.run_id, mode: receipt.mode, meta: receipt.meta, receipt_saved: true } }),finalSourceState));
           }
           if(!fixture.original)return send(400,{error:'Pasted messages need an AI result. Click Prepare five drafts first.'});
@@ -407,6 +436,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     updateRequest:buildPackageRequest(updatedBundle.input,updatedBundle.profile,packagePrompt,model,{maxOutputTokens}),
     updateScenarioId:updatedBundle.input.id,updateStore:packageUpdates}) : null;
   const packageWorkspace=await createPackageWorkspace(fileURLToPath(new URL('out/package-workspace/',root)),updatedBundle.profile);
+  const restaurantSettingsStore = await createRestaurantSettingsStore(fileURLToPath(new URL('out/restaurant-settings/', root)), updatedBundle.profile);
   let appAllowance=previousAllowance ? await createFlexiblePackageAllowance({previous:previousAllowance,directory:fileURLToPath(new URL('out/app-live/package-pasted-v1/',root)),template:buildPackageRequest(updatedBundle.input,updatedBundle.profile,packagePrompt,model,{maxOutputTokens}),extraTemplates:[buildPackageRequest(updatedBundle.input,updatedBundle.profile,pastedPrompt(packagePrompt),model,{maxOutputTokens})]}) : null;
   const extensionCents = Number(process.env.EVENTBRIEF_EXTENSION_BUDGET_CENTS ?? 0);
   const extensionCalls = Number(process.env.EVENTBRIEF_EXTENSION_MAX_CALLS ?? 30);
@@ -415,6 +445,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     budgetCents: extensionCents, maxAttempts: extensionCalls,
     templates: [packagePrompt,pastedPrompt(packagePrompt)].map(text=>buildPackageRequest(updatedBundle.input,updatedBundle.profile,text,model,{maxOutputTokens})) });
   const app = createApp({ key, enabled, model, maxCalls: maxCalls + (extensionCents > 0 ? extensionCalls : 0), packageAllowance: appAllowance, packageMaxOutputTokens: maxOutputTokens,packageUpdates,packageWorkspace,
-    ...(appAllowance ? { packageStore: appAllowance.store } : {}) });
+    restaurantSettingsStore, ...(appAllowance ? { packageStore: appAllowance.store } : {}) });
   app.listen(port, '127.0.0.1', () => console.log(`EventBrief: http://127.0.0.1:${port}`));
 }

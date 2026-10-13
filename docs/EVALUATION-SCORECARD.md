@@ -2,7 +2,9 @@
 
 Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, two assistant-authored events and one user-authored rehearsal-dinner test.
 
-**The latest user-authored test passed extraction and protective checks, but produced 0/5 completed documents.** Alex's accepted 46 guests, Menu 3 and à la carte/cash-bar terms were retained. The demo's menu, beverage and capacity settings do not support that request, and necessary details are missing. Those expected blocks are not successful asset generation. [Latest test](../evaluation/new-event-v3/README.md)
+**Restaurant configuration now passes its saved-answer replay. Alex still has 0/5 completed documents because his conversation is incomplete.** Editable fictional settings now support Menu 3, a 60-person patio and separately billed à la carte/cash-bar drinks. His ten unknown fields remain unknown. No new AI call or event correction was used. [Settings replay](../evaluation/restaurant-settings-v1/README.md)
+
+The original user-authored test passed extraction and protective checks under the old profile, with 0/5 completed documents. That historical result remains unchanged. [Original test](../evaluation/new-event-v3/README.md)
 
 Lena's and Noah's saved answers still pass all five draft checks after the combined-drink fix, at $1,420 and $1,776. Those were replays without another AI call; their original failures remain recorded. [Replay evidence](../evaluation/drink-matcher-v3/README.md)
 
@@ -17,6 +19,7 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Use the latest confirmed guest count | **Passed** | The actual-AI rehearsal retained **22 guests and 2 children**, with the expected **$1,464** quote. [Evidence](VALIDATION-2026-10-12.md) |
 | Handle a user-authored custom event honestly | **Extraction/blocking passed; assets unsupported** | Alex's **46 guests**, Menu 3, à la carte drinks and cash bar were preserved. Missing fields stayed unknown. All five drafts correctly blocked under the narrow demo profile; no invented prices or completed documents. [Evidence](../evaluation/new-event-v3/README.md) |
 | Update assets after a coordinator changes attendance | **Passed** | Maya’s change to **24 guests and 2 children** updated four documents and reset their reviews. The unchanged calendar kept its review. [Attendance checks](../tests/package-edits.test.mjs) |
+| Configure menus, drink billing and venue limits | **Passed for tested settings and saved answer** | Private settings save across browsers; the public sample remains separate. Exact cash-bar wording is preserved. Separate drinks are excluded from food estimates. Alex's configuration blocks are removed, but his missing details still block all five drafts. 221 software tests pass; no new AI calls. [Evidence](../evaluation/restaurant-settings-v1/README.md) |
 | Block drafts when allergy details are outstanding | **Passed after a fix** | Kitchen, staff and guest plans blocked when the host raised unresolved dietary needs. A reply resolved the issue. Silence alone does not block the guest plan. [Rehearsal](VALIDATION-2026-10-12.md) · [Rule checks](../tests/guest-dietary.test.mjs) |
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
@@ -40,7 +43,7 @@ The user wrote this fictional inquiry. It was submitted unchanged once, with exp
 | Staff event plan | **Correctly blocked:** unsupported arrangements, capacity and missing operational details |
 | Guest event plan | **Correctly blocked:** unsupported arrangements, capacity and missing schedule/arrival details; dietary silence did not block it |
 
-The fictional profile only defines Menu 2, two fixed drink packages and a patio limit of 40. Those are EventBrief settings, not Yanni's actual restaurant policies. All four PDF exports returned 409; the calendar export function also refused the blocked draft. **No completed document bodies or layouts were available to inspect.** Saved reopening preserved the original answer and left other events unchanged.
+At the time of this original test, the fictional profile only defined Menu 2, two fixed drink packages and a patio limit of 40. Those are EventBrief settings, not Yanni's actual restaurant policies. All four PDF exports returned 409; the calendar export function also refused the blocked draft. **No completed document bodies or layouts were available to inspect.** Saved reopening preserved the original answer and left other events unchanged. The subsequent [settings replay](../evaluation/restaurant-settings-v1/README.md) removes those configuration issues without inventing the remaining event details.
 
 **One AI call, no retry/correction, estimated cost $0.019585 (about two cents). 15 hosted preparations remain.** This shows faithful extraction and appropriate refusal to invent facts, while exposing incomplete restaurant configuration. [Conversation, method and result](../evaluation/new-event-v3/README.md)
 

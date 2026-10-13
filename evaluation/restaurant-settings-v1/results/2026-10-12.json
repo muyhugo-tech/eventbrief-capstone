@@ -1,0 +1,199 @@
+{
+  "schema_version": "eventbrief.settings-replay.v1",
+  "case": "Alex rehearsal dinner",
+  "kind": "saved-answer replay with explicit fictional restaurant settings",
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "source_result": "evaluation/new-event-v3/results/2026-10-12.json",
+  "original_output_sha256": "02fe75fb0c36f643b608a199c9c118054efcbc0a13e6ac661bacbde263647889",
+  "settings": {
+    "venues": {
+      "Garden Patio": {
+        "capacity": 60,
+        "setups": [
+          "One long table",
+          "Three tables of ten"
+        ]
+      }
+    },
+    "menus": {
+      "Menu 2": {
+        "description": "Family-style seasonal dinner",
+        "courses": [
+          "Garden salad",
+          "Roast squash and herb chicken, served family-style",
+          "Apple crumble"
+        ],
+        "prices_cents": {
+          "guest_13_plus_count": 5800,
+          "child_count": 2200
+        },
+        "beverages": [
+          "Beer and wine service",
+          "Nonalcoholic service"
+        ]
+      },
+      "Menu 3": {
+        "description": "Fictional rehearsal dinner menu",
+        "courses": [
+          "Mediterranean salad",
+          "Lemon herb chicken with roasted vegetables",
+          "Chocolate dessert"
+        ],
+        "prices_cents": {
+          "guest_13_plus_count": 6400,
+          "child_count": 2400
+        },
+        "beverages": [
+          "Beer and wine service",
+          "Nonalcoholic service",
+          "À la carte + cash bar"
+        ]
+      }
+    },
+    "beverages": {
+      "Beer and wine service": {
+        "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+        "prices_cents": {
+          "guest_13_plus_count": 1800,
+          "child_count": 600
+        },
+        "billing": "per_person",
+        "aliases": []
+      },
+      "Nonalcoholic service": {
+        "description": "Nonalcoholic drinks for all guests",
+        "prices_cents": {
+          "guest_13_plus_count": 600,
+          "child_count": 600
+        },
+        "billing": "per_person",
+        "aliases": []
+      },
+      "À la carte + cash bar": {
+        "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+        "prices_cents": {
+          "guest_13_plus_count": 0,
+          "child_count": 0
+        },
+        "billing": "pay_separately",
+        "aliases": [
+          "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+          "Beverages à la carte, cash bar"
+        ]
+      }
+    }
+  },
+  "checks": {
+    "original_preserved": true,
+    "no_event_corrections": true,
+    "latest_total": true,
+    "menu_supported": true,
+    "capacity_supported": true,
+    "configured_drinks": true,
+    "exact_terms_kept": true,
+    "missing_fields_not_invented": true,
+    "unsupported_arrangement_issues_removed": true,
+    "guest_dietary_silence_not_blocked": true,
+    "all_five_still_require_details": true,
+    "no_price_or_kitchen_quantities_invented": true
+  },
+  "ready_documents": 0,
+  "documents": [
+    {
+      "id": "calendar",
+      "state": "blocked",
+      "blockers": [
+        {
+          "field": "end_time",
+          "reason": "End time: not supplied."
+        },
+        {
+          "field": "timezone",
+          "reason": "Timezone: not supplied."
+        }
+      ]
+    },
+    {
+      "id": "quote",
+      "state": "blocked",
+      "blockers": [
+        {
+          "field": "guest_13_plus_count",
+          "reason": "Guests: not supplied."
+        },
+        {
+          "field": "child_count",
+          "reason": "Children (0–12): not supplied."
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "state": "blocked",
+      "blockers": [
+        {
+          "field": "timezone",
+          "reason": "Timezone: not supplied."
+        },
+        {
+          "field": "dietary",
+          "reason": "Dietary requirements: not supplied."
+        }
+      ]
+    },
+    {
+      "id": "staff",
+      "state": "blocked",
+      "blockers": [
+        {
+          "field": "end_time",
+          "reason": "End time: not supplied."
+        },
+        {
+          "field": "timezone",
+          "reason": "Timezone: not supplied."
+        },
+        {
+          "field": "dietary",
+          "reason": "Dietary requirements: not supplied."
+        },
+        {
+          "field": "setup",
+          "reason": "Table setup: not supplied."
+        },
+        {
+          "field": "av",
+          "reason": "AV needs: not supplied."
+        },
+        {
+          "field": "special",
+          "reason": "Special requirements: not supplied."
+        },
+        {
+          "field": "staff_notes",
+          "reason": "Internal staff notes: not supplied."
+        }
+      ]
+    },
+    {
+      "id": "guest",
+      "state": "blocked",
+      "blockers": [
+        {
+          "field": "end_time",
+          "reason": "End time: not supplied."
+        },
+        {
+          "field": "timezone",
+          "reason": "Timezone: not supplied."
+        },
+        {
+          "field": "guest_notes",
+          "reason": "Guest instructions: not supplied."
+        }
+      ]
+    }
+  ],
+  "boundary": "A settings replay of one known answer, not a new AI trial or five completed documents."
+}

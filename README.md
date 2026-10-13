@@ -34,7 +34,9 @@ The workspace keeps these states separate:
 - **Reviewed:** a person checked this particular draft version.
 - **Blocked:** a required detail is missing, unresolved, conflicting, or outside the fictional restaurant rules.
 
-[Simple setup](docs/SETUP.md) · [Using the calendar and assets](docs/ASSET-WORKFLOW.md) · [Hosting and maintenance](docs/HOSTING.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
+[Simple setup](docs/SETUP.md) · [Restaurant settings](docs/RESTAURANT-SETTINGS.md) · [Using the calendar and assets](docs/ASSET-WORKFLOW.md) · [Hosting and maintenance](docs/HOSTING.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
+
+**Restaurant settings** lets coordinators save fictional spaces, capacity, menu dishes/prices, allowed drink combinations and separate drink billing. Settings are shared privately and rebuild saved drafts without another AI call. Only affected documents lose review marks. The public sample keeps the original settings; saved extraction receipts and spending records remain unchanged. [Alex's settings replay](evaluation/restaurant-settings-v1/README.md) removes configuration issues while retaining missing event details.
 
 ## How it works
 

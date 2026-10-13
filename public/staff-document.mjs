@@ -44,7 +44,7 @@ function pricingSummary(pricing) {
     if(!lines.length)return '';
     return `<span class="staff-pricing-line">${esc(label)}: ${lines.map(line=>`${money(line.unit_cents)} ${line.source_fields.includes('menu')?'menu':'drinks'}`).join(' + ')} per person</span>`;
   }).join('');
-  return `${prices}<span class="staff-total">Estimated total: ${money(pricing.total_cents)}</span><span class="staff-small">Fictional prices; all demo charges included.</span>`;
+  return `${prices}<span class="staff-total">${esc(pricing.total_label ?? 'Estimated total')}: ${money(pricing.total_cents)}</span><span class="staff-small">${esc(pricing.beverages_excluded ? pricing.note : 'Fictional prices; all demo charges included.')}</span>`;
 }
 
 export function renderStaffSheet(document,prepared,{reviewed=false,interactive=false}={}) {

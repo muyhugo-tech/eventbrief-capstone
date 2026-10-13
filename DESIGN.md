@@ -258,3 +258,16 @@ Button color/border transitions use .16s easing. Reduced-motion preferences disa
 - **Don't** add decorative charts or invented agent progress.
 - **Don't** apply the old extraction page's purple tokens to new event-workspace surfaces.
 - **Don't** treat printed document styling as the dashboard's component system.
+
+## Restaurant settings reference lock
+
+Direct extension of the existing EventBrief workspace. Primary references: this design system, the existing event-edit form and the owner's compact CRM dashboard reference. The Refero craft guide supplies visible labels, focus rings, input types and error recovery; no external Refero tools were available. No images are needed for this form.
+
+| Decision | Source and role | Application |
+| --- | --- | --- |
+| White canvas, gray rail, Segoe UI, thin green-gray rules | Existing workspace | Reuse the current navigation and form density |
+| Green selected state and save action | Existing control tokens | Reserve green for the active section, saved status and primary button |
+| Spaces / Menus / Drinks sections | User's simple-steps preference | Show one group of settings at a time |
+| Plain labels, visible focus and field validation | Refero craft-details guide | Reveal the section containing a missing input before focusing it |
+| Change note, revision, unsaved state | Existing coordinator edit workflow | Distinguish drafts in the form from saved shared settings |
+| Fictional rehearsal example | Synthetic-only project boundary | Fill a reviewable form, then save explicitly |

@@ -13,6 +13,7 @@ const files = new Map([
   ...quoteFonts.map(font=>[`quote-fonts/${font.file}`,`node_modules/@fontsource/${font.package}/files/${font.file}`]),
   ...['montserrat','playfair-display'].map(name=>[`quote-fonts/${name}-LICENSE.txt`,`node_modules/@fontsource/${name}/LICENSE`]),
   ['package-contract.mjs', 'lib/package-contract.mjs'],
+  ...['restaurant-settings.mjs', 'restaurant-settings.css', 'restaurant-example.mjs'].map(name => [name, `public/${name}`]),
   ...['kitchen', 'event'].map(name => [`lib/reused-yannis/templates/${name}.mjs`, `lib/reused-yannis/templates/${name}.mjs`])
 ]);
 for (const [target, source] of files) {
