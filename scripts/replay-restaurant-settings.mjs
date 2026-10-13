@@ -31,7 +31,7 @@ export function checkConfiguredAlex(data, original, unknownFields) {
 export async function replayRestaurantSettings() {
   const originalResult=await read('evaluation/new-event-v3/results/2026-10-12.json'), protocol=await read('evaluation/new-event-v3/protocol.json');
   const baseline=await read('fixtures/package/restaurant-v2.json'), settings=rehearsalExample(settingsFromProfile(baseline));
-  const data=prepareEventPackage({input:pastedInput(protocol.conversation),original:originalResult.original_output,
+  const data=prepareEventPackage({workflowPolicy: 'strict-drafts-v1',input:pastedInput(protocol.conversation),original:originalResult.original_output,
     profile:applyRestaurantSettings(baseline,settings),baselineProfile:baseline});
   return {schema_version:'eventbrief.settings-replay.v1',case:'Alex rehearsal dinner',kind:'saved-answer replay with explicit fictional restaurant settings',
     new_ai_calls:0,added_ai_cost_usd:0,source_result:'evaluation/new-event-v3/results/2026-10-12.json',

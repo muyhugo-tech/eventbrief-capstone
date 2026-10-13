@@ -41,8 +41,8 @@ export function checksFor(data) {
 }
 // Historical runs use their recorded preparation policy, even after app fixes.
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-const initial=prepareEventPackage({input,profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
-const recovered=prepareEventPackage({input,profile,original:saved.original_output,corrections:saved.recovery.corrections,normalizationPolicy:saved.normalization_policy});
+const initial=prepareEventPackage({workflowPolicy: 'strict-drafts-v1',input,profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
+const recovered=prepareEventPackage({workflowPolicy: 'strict-drafts-v1',input,profile,original:saved.original_output,corrections:saved.recovery.corrections,normalizationPolicy:saved.normalization_policy});
 const initialResult=checksFor(initial), recoveredResult=checksFor(recovered);
 // Verify the frozen expectations and reproduce the recorded failure honestly.
 // A later application fix should get a separate replay report, not rewrite this result.

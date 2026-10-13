@@ -1,0 +1,69 @@
+{
+  "schema_version": "eventbrief.workflow-replay.v1",
+  "source": "evaluation/new-event-v3/results/2026-10-12.json",
+  "original_output_sha256": "02fe75fb0c36f643b608a199c9c118054efcbc0a13e6ac661bacbde263647889",
+  "workflow_policy": "usable-drafts-v1",
+  "new_ai_calls": 0,
+  "added_ai_cost_usd": 0,
+  "manual_corrections": 0,
+  "original_receipt_preserved": true,
+  "guests": 46,
+  "children": null,
+  "timezone_from_restaurant": true,
+  "ready_documents": 4,
+  "documents": [
+    {
+      "id": "calendar",
+      "state": "blocked",
+      "blockers": [
+        {
+          "field": "end_time",
+          "reason": "End time: not supplied."
+        }
+      ],
+      "notices": []
+    },
+    {
+      "id": "quote",
+      "state": "ready_for_review",
+      "blockers": [],
+      "notices": [
+        "Estimate uses the standard guest rate for 46 guests. Children were not specified; confirm the child count before final pricing."
+      ],
+      "total_cents": 294400,
+      "provisional": true,
+      "drinks_excluded": true
+    },
+    {
+      "id": "kitchen",
+      "state": "ready_for_review",
+      "blockers": [],
+      "notices": [
+        "Children were not specified. Confirm any child count with the host.",
+        "Allergy and dietary details have not been supplied. Confirm them before food service."
+      ],
+      "kitchen_quantities_calculated": false
+    },
+    {
+      "id": "staff",
+      "state": "ready_for_review",
+      "blockers": [],
+      "notices": [
+        "Estimate uses the standard guest rate for 46 guests. Children were not specified; confirm the child count before final pricing.",
+        "End time has not been supplied. Please confirm it.",
+        "Allergy and dietary details have not been supplied. Confirm them before food service.",
+        "Table setup has not been supplied. Confirm it before setup."
+      ]
+    },
+    {
+      "id": "guest",
+      "state": "ready_for_review",
+      "blockers": [],
+      "notices": [
+        "Children were not specified. Please confirm whether any children are attending.",
+        "End time has not been supplied. Please confirm it."
+      ]
+    }
+  ],
+  "limitation": "Saved-answer replay with configured fictional restaurant settings. The original conversation has no end time; calendar export remains blocked. Child count and Menu 3 prep quantities need confirmation. This is not an unseen AI test."
+}

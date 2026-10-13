@@ -2,9 +2,9 @@
 
 Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, two assistant-authored events and one user-authored rehearsal-dinner test.
 
-**Restaurant configuration now passes its saved-answer replay. Alex still has 0/5 completed documents because his conversation is incomplete.** Editable fictional settings now support Menu 3, a 60-person patio and separately billed à la carte/cash-bar drinks. His ten unknown fields remain unknown. No new AI call or event correction was used. [Settings replay](../evaluation/restaurant-settings-v1/README.md)
+**Alex's original workflow failed. The repaired saved-answer replay now fills 46 Guests and produces four usable document drafts; the original conversation still needs an end time for calendar export.** Children stay unspecified, and the $2,944 food quote clearly states its standard-rate assumption. The existing private event, with its earlier saved end-time/dietary/timezone corrections, locally replays to all five drafts. No new AI call or new event correction. [Workflow repair](../evaluation/draft-workflow-v1/README.md)
 
-The original user-authored test passed extraction and protective checks under the old profile, with 0/5 completed documents. That historical result remains unchanged. [Original test](../evaluation/new-event-v3/README.md)
+The original user-authored test passed narrow extraction and blocking checks under the old rules, but delivered **0/5 documents: an end-to-end failure**. The checks reflected overly restrictive implementation rules, not successful event preparation. That historical result remains unchanged. [Original test](../evaluation/new-event-v3/README.md)
 
 Lena's and Noah's saved answers still pass all five draft checks after the combined-drink fix, at $1,420 and $1,776. Those were replays without another AI call; their original failures remain recorded. [Replay evidence](../evaluation/drink-matcher-v3/README.md)
 
@@ -17,9 +17,9 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Make five drafts from a complete conversation | **Passed** | The earlier hosted Alex Morgan example produced a calendar entry, quote, kitchen sheet, staff plan and guest plan, all ready for human review. It is separate from the new Alex rehearsal-dinner test. [Evidence](HOSTED-VALIDATION-2026-10-12.md) |
 | Handle a new conversation with changed counts and times | **Passed after app fix on saved answer** | Noah's original run retained **26 guests, 4 children and 6–9 PM**, but blocked four drafts. Replaying the unchanged answer now yields **5/5 ready at $1,776**, with no coordinator corrections to the replay. [Original](../evaluation/new-event-v1/README.md) · [Replay](../evaluation/new-event-v1/APP-REPLAY.md) |
 | Use the latest confirmed guest count | **Passed** | The actual-AI rehearsal retained **22 guests and 2 children**, with the expected **$1,464** quote. [Evidence](VALIDATION-2026-10-12.md) |
-| Handle a user-authored custom event honestly | **Extraction/blocking passed; assets unsupported** | Alex's **46 guests**, Menu 3, à la carte drinks and cash bar were preserved. Missing fields stayed unknown. All five drafts correctly blocked under the narrow demo profile; no invented prices or completed documents. [Evidence](../evaluation/new-event-v3/README.md) |
+| Turn Alex's conversation into usable drafts | **Failed originally; improved after workflow fix** | The AI kept total attendance 46, but the app left Guests blank and blocked all five assets. The saved-answer repair fills Guests automatically, uses restaurant timezone and removes optional-field gates: **4/5 ready without corrections**, with end time still needed for the calendar. [Repair](../evaluation/draft-workflow-v1/README.md) |
 | Update assets after a coordinator changes attendance | **Passed** | Maya’s change to **24 guests and 2 children** updated four documents and reset their reviews. The unchanged calendar kept its review. [Attendance checks](../tests/package-edits.test.mjs) |
-| Configure menus, drink billing and venue limits | **Passed for tested settings and saved answer** | Private settings save across browsers; the public sample remains separate. Exact cash-bar wording is preserved. Separate drinks are excluded from food estimates. Alex's configuration blocks are removed, but his missing details still block all five drafts. 221 software tests pass; no new AI calls. [Evidence](../evaluation/restaurant-settings-v1/README.md) |
+| Configure menus, drink billing and venue limits | **Passed for tested settings** | Private settings save across browsers; the public sample remains separate. Menu 3 and cash-bar terms are supported. The earlier settings-only replay still produced 0/5; the later workflow repair addresses the count mapping and optional-field failures. [Settings evidence](../evaluation/restaurant-settings-v1/README.md) |
 | Block drafts when allergy details are outstanding | **Passed after a fix** | Kitchen, staff and guest plans blocked when the host raised unresolved dietary needs. A reply resolved the issue. Silence alone does not block the guest plan. [Rehearsal](VALIDATION-2026-10-12.md) · [Rule checks](../tests/guest-dietary.test.mjs) |
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
 | Save progress and share private events between browsers | **Passed** | Reload and Chrome/in-app browser checks restored saved events and reviews. Public samples stayed separate. [Saved evidence](#saved-evidence) |
@@ -29,6 +29,8 @@ Lena's and Noah's saved answers still pass all five draft checks after the combi
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
 
 ## Latest new conversation: Alex's rehearsal dinner
+
+**Historical first attempt, before settings and workflow repairs. Overall outcome: failed.** The table below reports narrower checks; “correctly blocked” means consistent with the then-current rules, not that those rules met the user's needs.
 
 The user wrote this fictional inquiry. It was submitted unchanged once, with expectations saved before the request and no app/profile/prompt changes or corrections.
 
@@ -151,16 +153,16 @@ The **60/60** readiness score uses the original policy; the later dietary rule w
 
 ## App checks
 
-The latest app-fix run reported **215 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers. They are not 215 AI trials; older totals are not added to them. Hosted checks verified both saved answers, unchanged corrections/reviews and allowance, eight PDF exports and two calendar files. Separate historical checkers still reproduce the original failures under their recorded policies.
+The workflow repair suite reported **226 passed, 0 failed, 0 skipped** using `node --test --test-concurrency=1 tests/*.test.mjs`. These software checks use synthetic data, saved responses and fake providers, not 226 AI trials. The new checks cover automatic Guests, explicit price assumptions, optional fields, unresolved requests, source preservation and review invalidation. Historical checkers still reproduce the original failures under their recorded policies.
 
 ## What still needs work
 
-1. **Restaurant configuration:** Alex's realistic request cannot produce assets because Menu 3, à la carte/cash-bar pricing and a suitable venue capacity are not configured. Add explicit coordinator-managed rules before claiming broader event coverage; do not invent or silently relax them to pass a test.
-2. **Broader drink requests:** the saved soda-and-juice cases pass. Alex's custom terms were faithfully extracted but cannot be priced by the current app. Matching and extraction are separate from supported billing behavior.
+1. **Genuine follow-ups:** Alex's original conversation lacks an end time and child count. Drafts now show what is known; the calendar still needs the end time, and the price assumption needs confirmation. Menu 3 kitchen quantities also require confirmation.
+2. **Broader drink requests:** the saved soda/juice examples and configured à la carte/cash-bar wording pass. Other arrangements still need supported settings or coordinator review. This is not broad language coverage.
 3. **Independent conversations:** one user-authored case is now recorded. A broader independent set is still needed to measure performance, including source support and follow-up questions.
 4. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later examples exposed drink-matching failures, which we fixed and replayed without another AI call. A user-authored rehearsal-dinner test then preserved the changed count and cash-bar terms, left missing facts unknown and blocked unsupported outputs. The supported workflow works on the demonstrated cases; broader restaurant configuration and independent testing remain unfinished.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later real-use tests exposed drink matching and workflow failures. Alex's total of 46 was extracted but did not populate the usable Guests field. We fixed that mapping and removed optional-field blocks, then replayed the saved answer without another AI call. Four drafts now work directly; the calendar still needs an end time. Broader independent testing and measured time savings remain unfinished.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 

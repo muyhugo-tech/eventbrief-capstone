@@ -60,7 +60,7 @@ const protocol=JSON.parse(await readFile(new URL('../evaluation/new-event-v3/pro
 const saved=JSON.parse(await readFile(new URL('../evaluation/new-event-v3/results/2026-10-12.json',import.meta.url),'utf8'));
 const alex = {input:pastedInput(protocol.conversation),original:saved.original_output};
 test('Alex replay accepts configured Menu 3, capacity and exact cash-bar wording without inventing ten unknown fields', () => {
-  const data=prepareEventPackage({...alex,baselineProfile:baseline,profile:applyRestaurantSettings(baseline,example())});
+  const data=prepareEventPackage({workflowPolicy:'strict-drafts-v1',...alex,baselineProfile:baseline,profile:applyRestaurantSettings(baseline,example())});
   assert.equal(data.record.fields.guest_count.value,46);
   assert.equal(data.record.fields.beverage.value,'À la carte + cash bar');
   assert.equal(data.record.fields.beverage.notes,alex.original.fields.beverage.value);

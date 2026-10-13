@@ -50,7 +50,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const profile=await json('fixtures/package/restaurant-v2.json');
   assert.equal(createHash('sha256').update(await readFile(new URL('evaluation/new-event-v2/protocol.json',root))).digest('hex'),saved.protocol_sha256);
   assert.equal(saved.ai_calls,1);assert.equal(saved.manual_corrections,0);
-  const prepared=prepareEventPackage({input:pastedInput(protocol.conversation),profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
+  const prepared=prepareEventPackage({workflowPolicy: 'strict-drafts-v1',input:pastedInput(protocol.conversation),profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
   const result=checkLena(prepared);
   assert.deepEqual(result,saved.automated_checks,'Reproduced outcome differs from the saved first attempt. Preserve the original result and record app replays separately.');
   console.log(JSON.stringify({reproduced:true,...result,new_ai_calls:0},null,2));

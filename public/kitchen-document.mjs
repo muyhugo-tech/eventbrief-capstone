@@ -1,4 +1,4 @@
-import { approvedDocumentRows } from './package-export.mjs';
+import { approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
 import { quoteFontCss } from './quote-document.mjs';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -52,10 +52,10 @@ export function renderKitchenSheet(document, prepared, {reviewed=false,interacti
   const mode=prepared.mode==='authored_reference'?'Authored example - no AI call':prepared.label;
   return `<article class="kitchen-paper"><header class="kitchen-heading"><div class="kitchen-restaurant">${esc(prepared.profile.name)}</div><h2 class="kitchen-title">Kitchen prep sheet</h2></header>
     <dl class="kitchen-meta">${fact('Event',`${values.host_name} - event`)}${fact('Date',date(values.event_date))}${fact('Event time',`${[time(values.start_time),time(values.end_time)].filter(Boolean).join(' - ')} (${values.timezone})`)}${fact('Location',values.venue)}${fact('Guests',values.guest_13_plus_count)}${fact('Children (0–12)',values.child_count)}${fact('Total attendance',values.guest_count)}${fact('Service',plan.service)}${fact('Menu',values.menu)}</dl>
-    <section class="kitchen-dietary"><h3>Allergies &amp; dietary needs</h3><p>${esc(values.dietary)}</p></section>
+    <section class="kitchen-dietary"><h3>Allergies &amp; dietary needs</h3><p>${esc(values.dietary ?? 'Not supplied — confirm before food service.')}</p></section>
     ${tables}<p class="kitchen-basis">${esc(plan.basis)}</p>
     <section class="kitchen-notes"><strong>Kitchen notes / changes</strong><div class="kitchen-write-line"></div></section>
-    <footer class="kitchen-footer"><strong>${reviewed?'Reviewed draft':'Draft - not reviewed'}</strong> · EventBrief · Fictional capstone example<br>${esc(mode)} · ${esc(plan.version)}<br>Event time is not a course serve time. Confirm service timing with the event team.</footer></article>
+    ${draftReviewNotes(document)}<footer class="kitchen-footer"><strong>${reviewed?'Reviewed draft':'Draft - not reviewed'}</strong> · EventBrief · Fictional capstone example<br>${esc(mode)} · ${esc(plan.version)}<br>Event time is not a course serve time. Confirm service timing with the event team.</footer></article>
     ${interactive?`<details class="kitchen-source-checks"><summary>Check the source details</summary>${rows.map(row=>`<button class="fact-source" data-field="${esc(row.field)}">${esc(row.field==='guest_count'?'Total attendance':row.label)}</button>`).join('')}<p>Prep quantities use the fictional guide printed on the sheet. They do not come from the host's messages.</p></details>`:''}`;
 }
 

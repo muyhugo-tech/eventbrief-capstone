@@ -3,6 +3,9 @@ import { buildDocumentHtml } from '../lib/reused-yannis/templates/event.mjs';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+export const draftReviewNotes = document => (document.notices ?? []).length
+  ? `<section aria-label="Details to confirm"><h3>Details to confirm</h3>${document.notices.map(note => `<p>${esc(note)}</p>`).join('')}</section>` : '';
+
 const eventFields = ['host_name','event_date','start_time','end_time','timezone','venue'];
 const attendanceFields = ['guest_count','guest_13_plus_count','child_count'];
 const audienceFields = {

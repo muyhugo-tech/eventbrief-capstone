@@ -41,7 +41,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const saved=await json('evaluation/new-event-v3/results/2026-10-12.json');
   assert.equal(createHash('sha256').update(await readFile(new URL('evaluation/new-event-v3/protocol.json',root))).digest('hex'),saved.protocol_sha256);
   const profile=await json('fixtures/package/restaurant-v2.json');
-  const data=prepareEventPackage({input:pastedInput(protocol.conversation),profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
+  const data=prepareEventPackage({workflowPolicy: 'strict-drafts-v1',input:pastedInput(protocol.conversation),profile,original:saved.original_output,normalizationPolicy:saved.normalization_policy});
   const result=checkAlexRehearsal(data);assert.deepEqual(result,saved.automated_checks);
   console.log(JSON.stringify({reproduced:true,...result,new_ai_calls:0},null,2));
 }
