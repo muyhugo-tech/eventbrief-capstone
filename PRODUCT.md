@@ -8,7 +8,7 @@ The intended outcome is one action that prepares five consistent drafts for huma
 
 ## Scope
 
-One event conversation produces a shared record and five views: calendar entry, guest quote, kitchen sheet, staff event plan, and guest event plan. All bundled people, conversations, restaurant settings, and prices are fictional. The demo uses local storage adapters and has no live inbox, database, sending, booking, or calendar write connection.
+One event conversation produces a shared record and five views: calendar entry, guest quote, kitchen sheet, staff event plan, and guest event plan. All bundled people, conversations, restaurant settings, and prices are fictional. The demo supports local storage and a separate hosted private workspace with saved events and reviews. The public sample stays separate. Messages are pasted; there is no live email inbox, sending, booking, or external calendar-write connection.
 
 The implementation uses native Node.js HTTP/fetch and browser JavaScript. Pure workflow and document modules from the owner's existing event application are adapted where they fit this local demo; production clients, operational data, and delivery routes are excluded. See [the reuse inventory](docs/ATTRIBUTION.md).
 
@@ -28,7 +28,7 @@ The implementation uses native Node.js HTTP/fetch and browser JavaScript. Pure w
 
 ## Fictional policy boundary
 
-The profile supports one venue, one menu, two beverage choices, and same-day service. Prices are placeholders. Capacity and operating hours checks do not establish availability. Unsupported options require coordinator attention. Real tax, deposits, cancellation terms, binding quote rules, multi-event scheduling, and external integrations are outside this capstone.
+The public sample starts with one venue, one menu and two beverage choices. Private restaurant settings can define additional supported spaces, menus and drinks; the current rehearsal profile also includes Menu 3 and separate drink billing. Service remains same-day and all prices are fictional. Capacity and operating hours checks do not establish availability. Unsupported options require coordinator attention. Real tax, deposits, cancellation terms, binding quote rules, multi-event scheduling, and external integrations are outside this capstone.
 
 The LLM extracts facts; code calculates the quote and checks output requirements. Five drafts do not imply five model calls or five autonomous agents. The coordinator stays responsible for reviewing every ready output.
 
@@ -39,3 +39,5 @@ The repository contains frozen fictional development cases, automated checks, sc
 No independent accuracy, comparative benefit, time savings, or production suitability is established. Formatting can be refined after the complete workflow works. The capstone video should demonstrate one bounded task, explain the evaluation method and observed failures, and stay under four minutes.
 
 Coordinator feedback keeps before/after values and a reason in the saved review history. Optional general lessons can be enabled or disabled by the coordinator. Up to five newest enabled lessons are passed as bounded reference context on future extractions within that workspace; original event facts are not automatically copied into lessons. This is application memory, not model training. Corrected drafts do not improve the original AI evaluation score. The first paired beverage test failed its main check with and without a lesson; broader effectiveness remains unknown. See [the recorded comparison](evaluation/lesson-comparison-v1/README.md).
+
+The latest three-case development check found one complete workflow success and two failures. A first-name/full-name mismatch can omit the guest dietary dependency; beverage language and event-purpose handling also need repair. These are known implementation gaps, not exceptions to the product rules above. See [current evidence](evaluation/final-readiness-v1/README.md).

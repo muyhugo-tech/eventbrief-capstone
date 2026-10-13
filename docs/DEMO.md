@@ -1,5 +1,7 @@
 # Demo walkthrough
 
+For the capstone video, use the [timed script and simple recording steps](CAPSTONE-DEMO-SCRIPT.md). The [latest three-case check](../evaluation/final-readiness-v1/README.md) found two workflow failures; keep those visible in the evaluation.
+
 Use a fictional event. The public checkout contains no customer messages or previous user's review progress.
 
 ## Complete the workflow without a key
@@ -12,7 +14,7 @@ Use a fictional event. The public checkout contains no customer messages or prev
 6. Check **30 Guests**, **0 Children**, and the **$2,280** fictional quote.
 7. Review each draft, then refresh. The five review marks should remain.
 8. Open **Earlier versions & saved results**. The old version is preserved and cannot be treated as current.
-9. Open the latest version and choose **Download reviewed draft** for a printable HTML file.
+9. Open the latest version. Document previews offer **Download PDF**; the calendar offers **Download calendar file (.ics)**.
 
 This path is an exact authored demonstration, with no model request. The sample reply is:
 
@@ -26,13 +28,13 @@ If you have already used the guided example, **Try the full workflow** reopens i
 
 Choose the complete birthday example in **Saved example** mode, then prepare the five drafts. Open a source quote to find the supporting message. The example is authored; no AI call happens. It is a separate fixture from the guided conversation above.
 
-Each draft needs its own review. The guest and quote outputs should exclude internal staff notes. Downloads are optional; a reviewed draft can be downloaded as printable HTML.
+Each draft needs its own review. The guest and quote outputs should exclude internal staff notes. Downloads are optional. Quotes, kitchen sheets, staff plans and guest plans have PDF downloads; the calendar uses a tentative `.ics` file.
 
 ## Then: inspect missing information
 
 Open the earlier example where the host's dietary reply is missing. The calendar and quote can be ready while kitchen, staff, and guest plans remain blocked. This host explicitly raised dietary needs, which is why the guest plan also needs the answer.
 
-The app must not invent “no allergies.” A blocked draft stays unreviewed. An event whose host never raises dietary needs does not gain that guest-plan requirement merely from silence; kitchen and staff checks still apply.
+The app must not invent “no allergies.” A blocked draft stays unreviewed. Unmentioned dietary details stay unknown and do not block solely for absence under the current draft workflow. Explicit unresolved dietary needs must block kitchen, staff and guest plans. The latest Jordan test exposed a first-name speaker bug in that guest rule; see the scorecard rather than treating this sample as a guarantee.
 
 ## Real AI demonstration
 

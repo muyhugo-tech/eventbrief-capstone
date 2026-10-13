@@ -35,3 +35,7 @@ Confidence is high for these observed outputs. Broader unseen-conversation accur
 [Production verification](results/hosted-replay-2026-10-13.json) passed on `3d0c1b6`: all five previews opened; four PDF endpoints returned 200; the calendar file had the correct times; reopening the saved result was free. Other events, review revisions, corrections, settings and the original AI receipt were unchanged. No new event corrections or review marks were added. All 232 software checks passed.
 
 PDF content and all six pages were inspected. The quote and kitchen sheet currently spill their footer onto a second page; staff and guest sheets fit one page. All event content is present and readable. **Footer pagination still needs formatting polish.**
+
+## Subsequent print fix
+
+The October 13 print change now keeps the hosted Sofia quote and kitchen sheet to one page each, with identical text after whitespace normalization. Long-note versions continue onto a second page without an isolated footer. This changes the layout, not the first-attempt failure or replay score. [Verified pagination](../../docs/PDF-PAGINATION-2026-10-13.md)
