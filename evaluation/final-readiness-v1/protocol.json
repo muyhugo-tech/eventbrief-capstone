@@ -1,0 +1,35 @@
+{
+  "id": "final-readiness-v1",
+  "synthetic": true,
+  "author": "Development assistant; not an independent evaluator.",
+  "purpose": "Three first-attempt workflow checks after the earlier repairs. Freeze conversations and expectations before all three model requests; do not change the app, profile, prompt, model or lessons between requests.",
+  "attempts_per_case": 1,
+  "automatic_retries": 0,
+  "manual_corrections_to_scored_output": false,
+  "budget": {"existing_authorization_usd": 5, "existing_combined_allocation_usd": 4.56384, "consume_existing_hosted_slots": 3, "max_conservative_request_reservation_usd": 0.205, "max_batch_reservation_usd": 0.615, "new_allocation_usd": 0, "unallocated_usd": 0.43616},
+  "checks": {
+    "fields": "Latest mutually accepted counts, date, time, venue, menu and beverage; raw source excerpts must occur in the conversation. Verify meanings manually as well as automated comparisons.",
+    "defaults": "Unspecified end/timezone stay unknown in the raw answer; prepared defaults are labelled. An explicit accepted end overrides the four-hour rule.",
+    "assets": "Check all five document states, exact quote arithmetic, kitchen quantities when available, counts/schedule and preserved drink notes. Export every ready document; blocked PDFs must return 409.",
+    "persistence": "Reopen saved output without AI. Existing events, corrections, reviews and settings remain unchanged. Do not mark new drafts reviewed.",
+    "reporting": "Report expected allergy blocks as successful safeguards, separately from completed assets. Retain any first-attempt failure; a repaired replay is never a first-attempt success."
+  },
+  "cases": [
+    {
+      "id": "diego-count-default",
+      "conversation": "Diego: Hello, I'm Diego Chen. Can we bring our project team to Linden & Fig on May 14, 2027? We are looking at 5 p.m., Garden Patio, and Menu 2. There will be 22 guests and no children.\n\nCoordinator: We can confirm that date, the 5 p.m. start, Garden Patio and Menu 2. What should we arrange for beverages?\n\nDiego: Juice and soda for everyone, please. No alcohol.\n\nCoordinator: Confirmed as Nonalcoholic service, with juice and soda for everyone and no alcohol.\n\nDiego: Our last four teammates just said yes. Please change our booking to 26 guests, still no children. Everything else stays the same.\n\nCoordinator: All updated: 26 guests and 0 children for May 14, 2027 at 5 p.m., Garden Patio, Menu 2, and the same Nonalcoholic service with juice and soda and no alcohol.",
+      "expected": {"host_name": "Diego Chen", "event_date": "2027-05-14", "start_time": "17:00", "end_time": "21:00", "timezone": "America/Los_Angeles", "guest_count": 26, "guest_13_plus_count": 26, "child_count": 0, "old_guest_count": 22, "venue": "Garden Patio", "menu": "Menu 2", "beverage": "Nonalcoholic service", "default_end": true, "dietary_pending": false, "dietary_silent": true, "drink_terms": ["juice", "soda", "no alcohol"], "quote_total_cents": 166400, "quote_math": "26 x (58 + 6) = 1664 dollars", "kitchen_quantities": [3, 3, 3, 26], "calendar_start_utc": "20270515T000000Z", "calendar_end_utc": "20270515T040000Z", "ready_documents": ["calendar", "quote", "kitchen", "staff", "guest"]}
+    },
+    {
+      "id": "priya-explicit-end",
+      "conversation": "Priya: Hi, I'm Priya Shah. I'd like to celebrate our anniversary at Linden & Fig on June 12, 2027, on the Garden Patio with Menu 2. We have 12 guests and 2 children. Could we do 5:15 to 8 p.m.?\n\nCoordinator: Yes, those arrangements work. What drinks would you like, and are there any allergies or dietary restrictions?\n\nPriya: Beer and wine service, please, with juice and soda for the children. No spirits or cocktails. I've checked with everyone: no allergies or dietary restrictions.\n\nCoordinator: Confirmed. Beer and wine only for guests confirmed to be 21 or older, juice and soda for the children, and no spirits or cocktails. We have your no-allergy reply.\n\nPriya: We need to update two things. The final count is 16 guests and 3 children. Please also move the event to 5:45 p.m. through 8:15 p.m. We have a ride booked afterward, so that end time matters.\n\nCoordinator: Confirmed: June 12, 2027, 5:45 to 8:15 p.m., Garden Patio, 16 guests and 3 children, Menu 2. The beer and wine service and children's juice and soda stay as agreed, with no spirits or cocktails.",
+      "expected": {"host_name": "Priya Shah", "event_date": "2027-06-12", "start_time": "17:45", "end_time": "20:15", "timezone": "America/Los_Angeles", "guest_count": 19, "guest_13_plus_count": 16, "child_count": 3, "old_guest_count": 12, "venue": "Garden Patio", "menu": "Menu 2", "beverage": "Beer and wine service", "default_end": false, "dietary_pending": false, "dietary_silent": false, "drink_terms": ["juice", "soda", "no spirits or cocktails"], "quote_total_cents": 130000, "quote_math": "16 x (58 + 18) + 3 x (22 + 6) = 1300 dollars", "kitchen_quantities": [2, 2, 2, 19], "calendar_start_utc": "20270613T004500Z", "calendar_end_utc": "20270613T031500Z", "ready_documents": ["calendar", "quote", "kitchen", "staff", "guest"]}
+    },
+    {
+      "id": "jordan-unresolved-allergy",
+      "conversation": "Jordan: Hello, I'm Jordan Wells. I'm organizing a family dinner at Linden & Fig on August 20, 2027 at 6 p.m. We'd like the Garden Patio and Menu 2 for 24 guests and 2 children.\n\nCoordinator: We can arrange that. What would you like for drinks?\n\nJordan: Nonalcoholic service with juice and soda for everyone, and no alcohol.\n\nCoordinator: Confirmed: August 20 at 6 p.m., Garden Patio, Menu 2 and those drinks.\n\nJordan: Two more relatives are joining us, so the final count is 26 guests and 2 children. Also, one guest has a food allergy. I don't have the details yet; I'll send them when she replies.\n\nCoordinator: The new count is confirmed at 26 guests and 2 children. All other arrangements stay the same. We'll wait for your allergy details before finalizing the kitchen instructions and event plans.",
+      "expected": {"host_name": "Jordan Wells", "event_date": "2027-08-20", "start_time": "18:00", "end_time": "22:00", "timezone": "America/Los_Angeles", "guest_count": 28, "guest_13_plus_count": 26, "child_count": 2, "old_guest_count": 24, "venue": "Garden Patio", "menu": "Menu 2", "beverage": "Nonalcoholic service", "default_end": true, "dietary_pending": true, "dietary_silent": false, "drink_terms": ["juice", "soda", "no alcohol"], "quote_total_cents": 172000, "quote_math": "26 x (58 + 6) + 2 x (22 + 6) = 1720 dollars", "kitchen_quantities": null, "calendar_start_utc": "20270821T010000Z", "calendar_end_utc": "20270821T050000Z", "ready_documents": ["calendar", "quote"]}
+    }
+  ],
+  "limitations": ["Three assistant-authored fictional conversations using configured options; this is a small development check, not independent or representative accuracy evidence.", "The existing workspace lessons may influence output and must be recorded without changes.", "Draft readiness is not human approval, a sent message or a confirmed restaurant booking.", "No time-saving or business-impact claim is measured by this check."]
+}

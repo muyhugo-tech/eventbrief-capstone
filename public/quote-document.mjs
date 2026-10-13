@@ -42,6 +42,19 @@ export const quoteStyles = `${quoteFontCss}
 #document-preview:has(.quote-paper){background:#f2f4f3;padding:20px;border-radius:5px}
 @media(max-width:700px){.quote-paper{padding:25px 21px}.quote-paper .quote-header{flex-wrap:wrap;gap:10px}.quote-paper .quote-preparer{text-align:left}.quote-paper .quote-brand{font-size:28px}.quote-paper .quote-title{font-size:27px}.quote-paper .quote-details{gap:12px 14px;padding:12px}.quote-paper .quote-amount{font-size:32px}#document-preview:has(.quote-paper){padding:8px}}
 @media print{.quote-paper{border:0;margin:0;padding:0;max-width:none}.quote-paper .quote-header{flex-wrap:nowrap}.quote-paper .quote-preparer{text-align:right}.quote-paper .quote-brand{font-size:34px}.quote-paper .quote-title{font-size:31px}.quote-paper .quote-amount{font-size:38px}.quote-paper .quote-details{padding:13px;gap:8px 26px}.quote-paper .quote-total,.quote-paper .quote-details{-webkit-print-color-adjust:exact;print-color-adjust:exact}.quote-source-tools{display:none!important}#document-preview:has(.quote-paper){padding:0;background:white}}
+@media print{
+  .quote-paper .quote-header{padding-bottom:12px;margin-bottom:14px}
+  .quote-paper .quote-title{margin:6px 0 8px}
+  .quote-paper .quote-details{margin:12px 0}
+  .quote-paper .quote-total{margin-top:12px;padding:11px 16px}
+  .quote-paper .quote-breakdown{margin-bottom:10px}
+  .quote-paper .quote-breakdown td,.quote-paper .quote-breakdown th{padding:5px 0}
+  .quote-paper .quote-terms{margin:10px 0}
+  .quote-paper .quote-closing{break-inside:avoid}
+  .quote-paper .quote-closing h3{font-size:12.67px;line-height:1.4;margin:10px 0 6px}
+  .quote-paper .quote-closing p{margin:5px 0}
+  .quote-paper .quote-footer{margin-top:12px;padding-top:8px}
+}
 `;
 
 export function renderGuestQuote(document, prepared, {reviewed=false,interactive=false}={}) {
@@ -58,7 +71,7 @@ export function renderGuestQuote(document, prepared, {reviewed=false,interactive
     <div class="quote-total"><div class="quote-kicker">${esc(document.quote.total_label ?? 'Estimated total')} · USD</div><div class="quote-amount">${money(document.quote.total_cents)}</div></div>
     <table class="quote-breakdown"><caption>Itemized estimate · fictional prices</caption><tbody>${document.quote.lines.map(line=>`<tr><td>${esc(line.description)} · ${line.quantity} × ${money(line.unit_cents)}</td><td>${money(line.amount_cents)}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row">${esc(document.quote.total_label ?? 'Estimated total')}</th><td>${money(document.quote.total_cents)}</td></tr></tfoot></table>
     <div class="quote-terms"><p>${esc(document.quote.note)}</p>${document.beverage_notes?`<p><strong>Drink notes:</strong> ${esc(document.beverage_notes)}</p>`:''}${document.beverage_note?`<p>${esc(document.beverage_note)}</p>`:''}<p>This estimate is for review. It does not reserve the venue or confirm a booking.</p></div>
-    ${draftReviewNotes(document)}<footer class="quote-footer"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · Fictional capstone example<br>${mode}. Prepared with ${esc(prepared.profile.version)} restaurant rules.<br>EventBrief · ${esc(prepared.profile.name)}</footer>
+    <div class="quote-closing">${draftReviewNotes(document)}<footer class="quote-footer"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · Fictional capstone example<br>${mode}. Prepared with ${esc(prepared.profile.version)} restaurant rules.<br>EventBrief · ${esc(prepared.profile.name)}</footer></div>
   </article>${interactive?`<nav class="quote-source-tools" aria-label="Check quote sources"><span>Check source details:</span>${rows.map(row=>`<button class="fact-source" data-field="${esc(row.field)}">${esc(row.label)}</button>`).join('')}<button class="fact-source" data-policy="true">Pricing rules</button></nav>`:''}`;
 }
 

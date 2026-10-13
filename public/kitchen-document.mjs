@@ -42,6 +42,16 @@ export const kitchenStyles = `${quoteFontCss}
 .kitchen-source-checks .fact-source{margin:4px 4px 0 0}
 @media screen and (max-width:700px){.kitchen-paper{padding:24px 16px;font-size:12px}.kitchen-paper .kitchen-title{font-size:21px}.kitchen-paper .kitchen-restaurant{font-size:17px}.kitchen-paper .kitchen-table th,.kitchen-paper .kitchen-table td{padding:7px 5px}.kitchen-paper .kitchen-table .kitchen-item{width:39%}.kitchen-paper .kitchen-table .kitchen-qty{width:31%}.kitchen-paper .kitchen-table .kitchen-check{width:15%;font-size:9px;padding:7px 2px}.kitchen-paper .kitchen-meta div{flex-wrap:wrap;gap:0 5px}}
 @media print{.kitchen-paper{max-width:none;border:0;padding:0;margin:0;font-size:10pt;line-height:1.45}.kitchen-paper .kitchen-heading{margin-bottom:18pt}.kitchen-paper .kitchen-restaurant{font-size:15pt}.kitchen-paper .kitchen-title{font-size:18pt}.kitchen-paper .kitchen-section{margin:13pt 0}.kitchen-paper .kitchen-table th,.kitchen-paper .kitchen-table td{padding:6pt 7pt}.kitchen-paper .kitchen-table td{height:31pt}.kitchen-paper .kitchen-table .kitchen-check{font-size:8pt}.kitchen-paper .kitchen-qty-note,.kitchen-paper .kitchen-basis,.kitchen-paper .kitchen-footer{font-size:8pt}.kitchen-paper .kitchen-table thead{display:table-header-group}.kitchen-paper .kitchen-heading,.kitchen-paper .kitchen-meta div,.kitchen-paper .kitchen-dietary,.kitchen-paper tr,.kitchen-paper .kitchen-basis,.kitchen-paper .kitchen-notes,.kitchen-paper .kitchen-footer{break-inside:avoid}.kitchen-paper th{-webkit-print-color-adjust:exact;print-color-adjust:exact}.kitchen-source-checks{display:none}}
+@media print{
+  .kitchen-paper .kitchen-heading{margin-bottom:14pt}
+  .kitchen-paper .kitchen-meta{margin-bottom:12px}
+  .kitchen-paper .kitchen-dietary{margin:10px 0 14px;padding:7px 10px}
+  .kitchen-paper .kitchen-section{margin:9pt 0}
+  .kitchen-paper .kitchen-basis,.kitchen-paper .kitchen-notes{margin-top:12px}
+  .kitchen-paper .kitchen-closing{break-inside:avoid}
+  .kitchen-paper .kitchen-closing h3{font-size:10pt;line-height:1.4;margin:10px 0 6px}
+  .kitchen-paper .kitchen-footer{margin-top:12px;padding-top:7px}
+}
 `;
 
 export function renderKitchenSheet(document, prepared, {reviewed=false,interactive=false}={}) {
@@ -55,7 +65,7 @@ export function renderKitchenSheet(document, prepared, {reviewed=false,interacti
     <section class="kitchen-dietary"><h3>Allergies &amp; dietary needs</h3><p>${esc(values.dietary ?? 'Not supplied — confirm before food service.')}</p></section>
     ${tables}<p class="kitchen-basis">${esc(plan.basis)}</p>
     <section class="kitchen-notes"><strong>Kitchen notes / changes</strong><div class="kitchen-write-line"></div></section>
-    ${draftReviewNotes(document)}<footer class="kitchen-footer"><strong>${reviewed?'Reviewed draft':'Draft - not reviewed'}</strong> · EventBrief · Fictional capstone example<br>${esc(mode)} · ${esc(plan.version)}<br>Event time is not a course serve time. Confirm service timing with the event team.</footer></article>
+    <div class="kitchen-closing">${draftReviewNotes(document)}<footer class="kitchen-footer"><strong>${reviewed?'Reviewed draft':'Draft - not reviewed'}</strong> · EventBrief · Fictional capstone example<br>${esc(mode)} · ${esc(plan.version)}<br>Event time is not a course serve time. Confirm service timing with the event team.</footer></div></article>
     ${interactive?`<details class="kitchen-source-checks"><summary>Check the source details</summary>${rows.map(row=>`<button class="fact-source" data-field="${esc(row.field)}">${esc(row.field==='guest_count'?'Total attendance':row.label)}</button>`).join('')}<p>Prep quantities use the fictional guide printed on the sheet. They do not come from the host's messages.</p></details>`:''}`;
 }
 
