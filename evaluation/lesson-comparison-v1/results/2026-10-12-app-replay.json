@@ -1,0 +1,173 @@
+{
+  "id": "beverage-saved-response-replay-v1",
+  "type": "post-fix app replay, not a new AI evaluation",
+  "original_results_sha256": "160e3c32ff90ca0cc916f715cb97115cd283c4b1fc2c0bb3b434e77a9210d4cd",
+  "protocol_sha256": "b629ce4057c2ae46d77ec666d0b7d96e19677348b929e388a98772de1093051c",
+  "profile_sha256": "4653e10e974728d7407e627b65a5329408bb39d94f5381644b4bc4fe331d5046",
+  "implementation_sha256": {
+    "lib/event-package.mjs": "d4fd1f10742cec9a07118d1de0dfa5162565946fa9538b2450f1102e9ce60a3e",
+    "lib/package-normalization.mjs": "45cdd6198e9c9b4aa75c4052219ddf79053f0cbacfeddd3f77fe2c773b09a2da",
+    "lib/package-contract.mjs": "e2c1fff4eb8f31721263e3ab166084c482a932540313d03fbd96be282d667eb7",
+    "scripts/replay-beverage-pair.mjs": "b5b4eaef00216ecd87b77ed18a38f3c7a408482dc98fe047d4710d21e98db22a"
+  },
+  "new_ai_calls": 0,
+  "additional_ai_cost_usd": 0,
+  "manual_corrections": 0,
+  "conditions": [
+    {
+      "condition": "without_lesson",
+      "original_primary_pass": false,
+      "original_output_sha256": "91ec1851ae490106cbf2be67a365b76cc156c4359fb4998a455affc8f80c80f7",
+      "before_ready": 1,
+      "after_ready": 5,
+      "quote_total_cents": 130000,
+      "beverage": {
+        "value": "Beer and wine service",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Beer and wine will only be served to guests confirmed to be 21 or older."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ],
+        "notes": "with juice and soda for the children. No spirits or cocktails. Beer and wine will only be served to guests confirmed to be 21 or older.",
+        "preparation": {
+          "kind": "supported_beverage",
+          "original_value": "Beer and wine service, with juice and soda for the children. No spirits or cocktails. Beer and wine will only be served to guests confirmed to be 21 or older.",
+          "description": "Matched the saved drink option. Included drink details are kept separately as notes."
+        }
+      },
+      "attendance": {
+        "value": 19,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "We have 16 guests and 3 children."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ],
+        "preparation": {
+          "kind": "calculated_total",
+          "source_fields": [
+            "guest_13_plus_count",
+            "child_count"
+          ],
+          "original_value": null,
+          "description": "Calculated from 16 guests + 3 children = 19 people. The total was not supplied by the AI."
+        }
+      },
+      "setup": {
+        "value": "One long table",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Menu 2 and one long table are confirmed."
+          }
+        ],
+        "preparation": {
+          "kind": "equivalent_setup",
+          "original_value": "one long table",
+          "description": "Matched the saved table setup using capitalization and spacing only."
+        }
+      },
+      "checks": {
+        "five_ready": true,
+        "expected_quote": true,
+        "expected_attendance": true,
+        "supported_drink_option": true,
+        "notes_preserved": true,
+        "original_unchanged": true
+      }
+    },
+    {
+      "condition": "with_lesson",
+      "original_primary_pass": false,
+      "original_output_sha256": "4c50da11147f959d9d6acca81589a61098f7d891dc4941037859888b0da47d82",
+      "before_ready": 1,
+      "after_ready": 5,
+      "quote_total_cents": 130000,
+      "beverage": {
+        "value": "Beer and wine service",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "For drinks, we would like beer and wine, with juice and soda for the children. We do not need spirits or cocktails."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "The beer and wine arrangement is confirmed, with nonalcoholic drinks for the children. Beer and wine will only be served to guests confirmed to be 21 or older."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ],
+        "notes": "juice and soda for the children; no spirits or cocktails. Beer and wine only for guests confirmed to be 21 or older.",
+        "preparation": {
+          "kind": "supported_beverage",
+          "original_value": "Beer and wine service; juice and soda for the children; no spirits or cocktails. Beer and wine only for guests confirmed to be 21 or older.",
+          "description": "Matched the saved drink option. Included drink details are kept separately as notes."
+        }
+      },
+      "attendance": {
+        "value": 19,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Yes, we can confirm December 11, 2027, 6:00 PM to 9:00 PM in America/Los_Angeles time, on the Garden Patio, for 16 guests and 3 children."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ]
+      },
+      "setup": {
+        "value": "One long table",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Menu 2 and one long table are confirmed."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Thank you, everything you listed is correct."
+          }
+        ]
+      },
+      "checks": {
+        "five_ready": true,
+        "expected_quote": true,
+        "expected_attendance": true,
+        "supported_drink_option": true,
+        "notes_preserved": true,
+        "original_unchanged": true
+      }
+    }
+  ],
+  "interpretation": "Both saved answers now work after deterministic app fixes. Original AI failures remain failures. This does not establish a lesson benefit, unseen-event accuracy, or an independent holdout result."
+}

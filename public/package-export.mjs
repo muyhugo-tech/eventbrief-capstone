@@ -56,7 +56,7 @@ export function reusedInternalDocument(document, prepared, reviewed) {
   const event={title:`${values.host_name} · ${document.title}`,contact_name:values.host_name,start_at:start,
     end_at:values.end_time?venueInstant(values.event_date,values.end_time,values.timezone):null,
     patios:values.venue?{name:values.venue}:null,guest_count:values.guest_count,status:'draft',event_type:null,
-    occasion:null,coordinator:null,bar_arrangement:null,bar_notes:[values.beverage,document.beverage_note].filter(Boolean).join('\n'),
+    occasion:null,coordinator:null,bar_arrangement:null,bar_notes:[values.beverage,document.beverage_notes,document.beverage_note].filter(Boolean).join('\n'),
     setup_notes:notes(['setup','av','special']),menu_notes:[values.menu,...document.menu_courses].join('\n'),
     internal_notes:notes(['staff_notes']),company:null,contact_email:null,contact_phone:null};
   let html;

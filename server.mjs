@@ -223,14 +223,14 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
             if(isSuperseded(data.scenario_id,state))throw new SourceConflictError('New messages have arrived. Open the latest event before editing.');
             if(!Number.isSafeInteger(data.sequence)||data.sequence!==(saved?.sequence??0))throw new SourceConflictError('This event changed in another browser. Cancel this edit, open the event again, and try your change on the latest details.');
             const before=prepareEventPackage({...bundle,original,extraction,corrections:saved?.corrections??{}});
-            const corrections=eventEditCorrections(original,before.corrections,data.changes,data.reason,{resolve:data.resolve??false,acceptCustom:data.accept_custom??false});
+            const corrections=eventEditCorrections(original,before.corrections,data.changes,data.reason,{resolve:data.resolve??false,acceptCustom:data.accept_custom??false,currentRecord:before.record});
             const prepared=prepareEventPackage({...bundle,original,extraction,corrections});
             const finalState=await updateState();
             if(isSuperseded(data.scenario_id,finalState))throw new SourceConflictError('New messages have arrived. Open the latest event before editing.');
             const changed=prepared.documents.filter(doc=>before.documents.find(old=>old.id===doc.id)?.revision!==doc.revision).map(doc=>({id:doc.id,title:doc.title,state:doc.state}));
             const reviews=Object.fromEntries(Object.entries(saved?.reviews??{}).filter(([id,review])=>prepared.documents.some(doc=>doc.id===id&&doc.revision===review.revision&&doc.state==='ready_for_review')));
             const feedback=feedbackEntry(before,prepared,data.reason,data.lesson??'');
-            feedback.fields=Object.keys(data.changes);
+            feedback.fields=[...new Set(Object.keys(data.changes).map(field=>field==='beverage_notes'?'beverage':field))];
             if(feedback.lesson && (!data.resolve || !data.reason.trim() || feedback.fields.some(field=>prepared.record.fields[field]?.value===null) || prepared.documents.some(doc=>doc.blockers.some(blocker=>feedback.fields.includes(blocker.field)))))throw new Error('Resolve the selected detail before saving it as a lesson.');
             const result=await packageWorkspace.saveReview(prepared,reviews,data.sequence,{feedback});
             return send(200,{saved:result,data:withVersion(prepared,finalState),changed_documents:changed});

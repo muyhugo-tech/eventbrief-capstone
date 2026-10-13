@@ -327,8 +327,8 @@ function renderFields() {
     const detail = data.record.fields[field];
     const corrected = Object.hasOwn(data.corrections, field);
     return `<details class="field-entry" id="pkg-field-${field}"><summary><span>${esc(definition.label)}</span><strong>${esc(detail.value ?? statusText(detail.status))}</strong></summary>
-      <span class="status ${esc(detail.status)}">${statusText(detail.status)}</span>${evidenceHtml(detail)}
-      ${corrected ? `<details><summary>Original ${data.mode === 'authored_reference' ? 'authored' : 'extracted'} value</summary><p class="correction-note">${esc(data.original_record.fields[field].value ?? 'Missing')}</p>${evidenceHtml(data.original_record.fields[field])}</details>` : ''}
+      <span class="status ${esc(detail.status)}">${statusText(detail.status)}</span>${detail.preparation?`<p class="correction-note">${esc(detail.preparation.description)}</p>`:''}${detail.notes?`<p><strong>Drink notes:</strong> ${esc(detail.notes)}</p>`:''}${evidenceHtml(detail)}
+      ${corrected || detail.preparation ? `<details><summary>Original ${data.mode === 'authored_reference' ? 'authored' : 'extracted'} value</summary><p class="correction-note">${esc(data.original_record.fields[field].value ?? 'Missing')}</p>${evidenceHtml(data.original_record.fields[field])}</details>` : ''}
       <div class="item-actions"><button class="text-button" data-edit="${field}">Correct ${esc(definition.label.toLowerCase())}</button>${corrected ? `<button class="text-button" data-undo="${field}">Undo correction</button>` : ''}</div><div id="pkg-edit-${field}"></div></details>`;
   }).join('');
 }
@@ -374,7 +374,7 @@ function renderSelected() {
 function renderFeedback() {
   const entries=session()?.feedback??[];
   $('#feedback-panel').hidden=!entries.length;
-  $('#feedback-history').innerHTML=[...entries].reverse().map(entry=>`<article class="feedback-entry"><p><strong>Coordinator change</strong> · ${esc(new Date(entry.saved_at).toLocaleString())}</p><p>${esc(entry.reason||'Event details updated.')}</p><ul>${entry.changes.map(change=>`<li><strong>${esc(FIELD_DEFINITIONS[change.field].label)}:</strong> ${esc(change.before.value??'Missing')} → ${esc(change.after.value??'Missing')}${change.after.resolved?' · Confirmed by coordinator':''}${change.after.accept_custom?' · Custom arrangement checked':''}</li>`).join('')}</ul>${entry.lesson?`<p><strong>${entry.lesson_enabled?'Remember for future drafts':'Lesson turned off'}:</strong> ${esc(entry.lesson)}</p><button type="button" class="text-button" data-lesson-id="${esc(entry.id)}" data-enabled="${!entry.lesson_enabled}" ${busy||isEarlier()?'disabled':''}>${entry.lesson_enabled?'Stop using this lesson':'Use this lesson again'}</button>`:''}</article>`).join('');
+  $('#feedback-history').innerHTML=[...entries].reverse().map(entry=>`<article class="feedback-entry"><p><strong>Coordinator change</strong> · ${esc(new Date(entry.saved_at).toLocaleString())}</p><p>${esc(entry.reason||'Event details updated.')}</p><ul>${entry.changes.map(change=>`<li><strong>${esc(FIELD_DEFINITIONS[change.field].label)}:</strong> ${esc(change.before.value??'Missing')} → ${esc(change.after.value??'Missing')}${change.field==='beverage'&&(change.before.notes??'')!==(change.after.notes??'')?`<br>Drink notes: ${esc(change.before.notes||'None')} → ${esc(change.after.notes||'None')}`:''}${change.after.resolved?' · Confirmed by coordinator':''}${change.after.accept_custom?' · Custom arrangement checked':''}</li>`).join('')}</ul>${entry.lesson?`<p><strong>${entry.lesson_enabled?'Remember for future drafts':'Lesson turned off'}:</strong> ${esc(entry.lesson)}</p><button type="button" class="text-button" data-lesson-id="${esc(entry.id)}" data-enabled="${!entry.lesson_enabled}" ${busy||isEarlier()?'disabled':''}>${entry.lesson_enabled?'Stop using this lesson':'Use this lesson again'}</button>`:''}</article>`).join('');
 }
 
 function renderPackage() {
@@ -708,6 +708,7 @@ function editField(field) {
   const detail = session().data.record.fields[field];
   const type = definition.type === 'integer' ? 'number' : definition.type;
   $(`#pkg-edit-${field}`).innerHTML = `<form class="edit-form" data-correct="${field}"><label>Correct ${esc(definition.label.toLowerCase())}<input name="value" type="${type}" value="${esc(detail.value ?? '')}" ${type === 'number' ? `min="${definition.minimum}" max="10000" step="1"` : ''}></label>
+    ${field==='beverage'?`<label>Drink notes<textarea name="notes" maxlength="1000">${esc(detail.notes??'')}</textarea></label>`:''}
     <label>Status in the conversation<select name="status">${PACKAGE_STATUSES.map(status => `<option value="${status}"${detail.status === status ? ' selected' : ''}>${statusText(status)}</option>`).join('')}</select></label>
     <label>Reason for correction<textarea name="reason" required maxlength="1000"></textarea></label>
     <p>Missing or conflicting values are left blank. This correction replaces the extracted value, not the original message. Affected drafts must be reviewed again.</p>
@@ -741,7 +742,7 @@ function renderEventEditInputs() {
     } else if (['dietary', 'special', 'guest_notes', 'staff_notes', 'av'].includes(field)) {
       control = `<textarea id="${id}" name="${field}" rows="3" maxlength="1000">${esc(value)}</textarea>`;
     } else control = `<input id="${id}" name="${field}" type="${type}" value="${esc(value)}" ${type === 'number' ? 'min="0" max="10000" step="1" required' : type === 'text' ? 'maxlength="1000"' : ''}>`;
-    return `<label for="${id}">${esc(definition.label)}${control}</label>`;
+    return `<label for="${id}">${esc(field==='beverage'?'Drink option':definition.label)}${control}</label>${field==='beverage'?`<label for="event-edit-beverage-notes">Drink notes<textarea id="event-edit-beverage-notes" name="beverage_notes" rows="3" maxlength="1000">${esc(eventEdit.fields.beverage.notes??'')}</textarea></label><p class="live-note">Keep included drink details here, such as juice and soda for the children. Extra drinks need a saved price.</p>`:''}`;
   }).join('') + (fields.includes('child_count') ? '<p id="event-edit-total" class="event-edit-total" aria-live="polite"></p>' : fields.includes('start_time') ? '<p class="event-edit-total">The schedule updates in each draft. Check any arrival or staff notes that mention the old time, too.</p>' : '');
   $('#event-edit-error').hidden = true;
   const custom=fields.every(field=>['dietary','setup','av','special'].includes(field));
@@ -774,7 +775,7 @@ $('#event-edit-form').addEventListener('submit', async event => {
   const changes = {};
   for (const control of $('#event-edit-inputs').querySelectorAll('[name]')) {
     const raw = control.value.trim();
-    changes[control.name] = raw === '' ? null : FIELD_DEFINITIONS[control.name].type === 'integer' ? Number(raw) : raw;
+    changes[control.name] = control.name==='beverage_notes' ? raw : raw === '' ? null : FIELD_DEFINITIONS[control.name].type === 'integer' ? Number(raw) : raw;
   }
   const {scenario_id,run_id,sequence} = eventEdit;
   setBusy(true); $('#event-edit-error').hidden = true; announce(''); announce('', true);
@@ -911,6 +912,7 @@ $('#package-fields').addEventListener('submit', async event => {
   const raw = String(form.get('value')).trim();
   const value = ['unknown', 'conflicting'].includes(status) ? null : FIELD_DEFINITIONS[field].type === 'integer' ? (raw === '' ? null : Number(raw)) : raw;
   const correction = { value, status, reason: String(form.get('reason')).trim() };
+  if(field==='beverage')correction.notes=String(form.get('notes')??'').trim();
   await prepare({ ...session().corrections, [field]: correction }, 'Correction saved separately. Affected drafts were rebuilt and need fresh review.');
   focusField(field);
 });

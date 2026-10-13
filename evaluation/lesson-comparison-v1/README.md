@@ -42,6 +42,6 @@ The calls used 5,822 input and 4,315 output tokens. At conservative rates of $2.
 
 The isolated local allowance permanently reserved two $0.205 slots, **$0.41** total. Keeping the existing hosted $4.10 reservation and earlier $0.05384 local estimate gives **$4.56384 allocated against the existing $5 budget**, leaving **$0.43616 unallocated**. Hosted slots were not consumed or reset by this local test; local and hosted ledgers require explicit reconciliation.
 
-**Next fix:** separate the supported beverage option from its extra notes, calculate supported attendance totals consistently, and handle equivalent setup capitalization. Preserve custom requests rather than silently mapping unsupported arrangements. Retest under a separately recorded plan after any change.
+**Follow-up completed:** the app now separates supported drink notes, calculates a missing total from explicit categories, and accepts equivalent setup capitalization. A [separately recorded offline replay](APP-REPLAY.md) produced five ready drafts and $1,300 from each saved answer. The original results above remain unchanged and the lesson's original main test remains a failure.
 
 **Confidence: high** in the observed failures. **Unknown** for the lesson’s general effectiveness. A single fixed-order pair cannot establish a dependable effect; the main failure occurred in both conditions. This follows the limited-comparison approach described in [OpenAI’s evaluation guidance](https://developers.openai.com/api/docs/guides/evaluation-best-practices).

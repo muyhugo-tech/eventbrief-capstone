@@ -6,6 +6,8 @@ The hosted app is live at `https://eventbrief-capstone.vercel.app`. Public sampl
 
 ## Run and check
 
+The beverage app fix has a [saved-answer replay](evaluation/lesson-comparison-v1/APP-REPLAY.md): both original failed answers now yield five ready drafts and $1,300 with no new AI calls. `lib/package-normalization.mjs` runs only after extraction/corrections and preserves originals. Keep its matching conservative. Drink notes live on the prepared/corrected beverage field, outside the unchanged model schema. The historical scorer uses `as-extracted-v1`; do not retroactively inflate the original scores. Current scorecard: [evaluation](docs/EVALUATION-SCORECARD.md).
+
 ```sh
 npm install
 npm start
