@@ -39,11 +39,12 @@ function memoryBlob() {
   };
 }
 
-function setup({ duringTransport, quotePdfRenderer } = {}) {
+function setup({ duringTransport, quotePdfRenderer, inspectRequest } = {}) {
   const sdk = memoryBlob(); let calls = 0;
   const config = {...env};
   const packageTransport = async ({ request, key }) => {
     calls++;
+    if (inspectRequest) inspectRequest(request);
     if (duringTransport) await duringTransport();
     assert.equal(key, env.EVENTBRIEF_OPENAI_API_KEY);
     const { messages } = JSON.parse(request.input[0].content);
@@ -81,6 +82,46 @@ function setup({ duringTransport, quotePdfRenderer } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
+
+test('confirmed correction unblocks, saves an auditable lesson, feeds the next request and can be disabled',async()=>{
+  const requests=[];
+  const system=setup({inspectRequest:request=>requests.push(request)}),owner=system.visitor(),other=system.visitor(),publicVisitor=system.visitor();
+  for(const client of [owner,other])await client.request('/api/hosted/unlock',{code:env.EVENTBRIEF_ACCESS_CODE});
+  await owner.request('/api/package/messages',{text:demoText});
+  const before=(await owner.request('/api/package/prepare',{scenario_id:demoInput.id,corrections:{}})).data;
+  assert.equal(readyIds(before).length,2);
+  const identity={scenario_id:demoInput.id,run_id:null};
+  const lesson='A promise to check allergies is unresolved until the host or coordinator supplies the answer.';
+  const changed=await owner.request('/api/package/edit',{...identity,sequence:0,changes:{dietary:'No allergies or dietary restrictions'},reason:'Coordinator called the host and confirmed.',resolve:true,accept_custom:false,lesson});
+  assert.equal(changed.status,200,changed.data.error);
+  assert.equal(readyIds(changed.data.data).length,5);
+  assert.deepEqual(changed.data.data.original_record,before.original_record);
+  assert.equal(changed.data.saved.feedback[0].changes[0].before.value,null);
+  assert.equal(changed.data.saved.feedback[0].changes[0].after.value,'No allergies or dietary restrictions');
+  const loaded=(await other.request('/api/package/review/load',identity)).data;
+  assert.deepEqual(loaded.saved.feedback,changed.data.saved.feedback);
+  await other.request('/api/package/review',{...identity,sequence:1,corrections:loaded.saved.corrections,reviews:marksFor(loaded.data)});
+  assert.equal((await owner.request('/api/package/review/load',identity)).data.saved.feedback.length,1);
+  assert.equal(system.calls(),0);
+  const publicSample=await publicVisitor.request('/api/package/demo',{});
+  assert.equal((await publicVisitor.request('/api/package/review/load',identity)).data.saved,null);
+  // A lesson from the public sample must not enter private requests.
+  await publicVisitor.request('/api/package/edit',{scenario_id:publicSample.data.input.id,run_id:null,sequence:0,changes:{dietary:'No allergies or dietary restrictions'},reason:'Public sample only.',resolve:true,lesson:'Public-only lesson.'});
+  const learned=await owner.request('/api/package/analyze',{scenario_id:demoInput.id});
+  assert.equal(learned.status,200,learned.data.error);
+  const context=JSON.parse(requests[0].input[0].content);
+  assert.deepEqual(context.coordinator_lessons.examples,[{fields:['dietary'],lesson}]);
+  assert.deepEqual(context.messages,demoInput.messages);
+  assert.equal(JSON.stringify(context).includes('Coordinator called the host'),false);
+  assert.equal((await owner.request('/api/package/scenarios')).data.live.remaining,19);
+  const toggled=await other.request('/api/package/feedback',{...identity,sequence:2,feedback_id:'change-1',enabled:false});
+  assert.equal(toggled.status,200,toggled.data.error);
+  assert.equal(toggled.data.saved.feedback[0].lesson_enabled,false);
+  assert.equal(Object.keys(toggled.data.saved.reviews).length,5);
+  assert.equal((await owner.request('/api/package/feedback',{...identity,sequence:2,feedback_id:'change-1',enabled:true})).status,409);
+  await owner.request('/api/package/analyze',{scenario_id:demoInput.id});
+  assert.equal(JSON.parse(requests[1].input[0].content).coordinator_lessons,undefined);
+});
 for(const kind of ['quote','kitchen','staff','guest'])test(`hosted ${kind} download returns PDF bytes within the selected workspace without an AI call`,async()=>{
   let renders=0;
   const system=setup({quotePdfRenderer:async()=>{renders++;return Buffer.from('%PDF-1.7\nsynthetic test');}});

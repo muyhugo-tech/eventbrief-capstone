@@ -16,6 +16,7 @@ The implementation uses native Node.js HTTP/fetch and browser JavaScript. Pure w
 
 - A requested change does not become an accepted fact merely because it appears later in the conversation.
 - Source quotations must occur in the supplied message. Matching a quote is not proof that it supports the AI's interpretation.
+- A coordinator can explicitly confirm a corrected detail with a reason, resolving its old pending requests or questions in the working draft. The original extraction remains unchanged. A custom operational arrangement requires a separate confirmation; prices, capacity and valid dates are still checked.
 - Restaurant policy, arithmetic, source facts, and reviewer corrections retain distinct provenance.
 - Review approval belongs to a particular draft revision. A changed dependent fact requires another review.
 - A blocked draft cannot be reviewed or exported as a complete current draft.
@@ -36,3 +37,5 @@ The LLM extracts facts; code calculates the quote and checks output requirements
 The repository contains frozen fictional development cases, automated checks, scorer self-checks, and summaries of recorded model development runs. Automated test passes, fake-provider results, actual model results, and human review are different evidence types and must remain labeled separately.
 
 No independent accuracy, comparative benefit, time savings, or production suitability is established. Formatting can be refined after the complete workflow works. The capstone video should demonstrate one bounded task, explain the evaluation method and observed failures, and stay under four minutes.
+
+Coordinator feedback keeps before/after values and a reason in the saved review history. Optional general lessons can be enabled or disabled by the coordinator. Up to five newest enabled lessons are passed as bounded reference context on future extractions within that workspace; original event facts are not automatically copied into lessons. This is application memory, not model training. Corrected drafts do not improve the original AI evaluation score. The effect of lessons on new AI outputs remains unmeasured.

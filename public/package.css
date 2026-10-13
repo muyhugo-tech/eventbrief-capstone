@@ -286,6 +286,13 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .event-edit-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 16px; }
 .event-edit-total { grid-column: 1 / -1; color: var(--muted); }
 .event-edit-form .error { color: #8c2525; }
+.event-edit-form .check-label { display: flex; align-items: flex-start; gap: 9px; line-height: 1.5; }
+.event-edit-form input[type="checkbox"] { flex: 0 0 17px; width: 17px; height: 17px; margin: 1px 0 0; padding: 0; accent-color: var(--green, #275a48); }
+.event-edit-form label span.live-note { display: block; line-height: 1.5; }
+.feedback-entry { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: .83rem; overflow-wrap: anywhere; }
+.feedback-entry p { margin: 0 0 8px; }
+.feedback-entry ul { padding-left: 20px; }
+#feedback-history { max-height: 480px; overflow-y: auto; }
 @media (max-width: 800px) {
   .package-result-heading { flex-wrap: wrap; }
   .event-heading-actions { justify-content: flex-start; }

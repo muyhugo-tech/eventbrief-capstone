@@ -72,15 +72,22 @@ The calendar opens near a saved event date. Use the month arrows, **Today**, or 
 
 ## Make a change
 
-For a coordinator change:
+Blocked drafts now include **Fix this detail**. This opens the relevant field in **Edit event details**. Type the confirmed value, add a short explanation, and save. The app resolves old questions and pending requests for that confirmed field, rebuilds the affected drafts, and clears their old review marks. The original messages, extracted values, and questions remain preserved for comparison.
+
+For a custom dietary, setup, AV, or special arrangement, select **I checked this custom arrangement with the event team** after confirming it. This is an event-specific coordinator decision; it does not change restaurant policy. Unknown prices, unsupported venues, invalid dates, inconsistent totals, and capacity or service-hour conflicts still need valid details. A correction can be saved even if another issue keeps the draft blocked.
+
+**Remember a lesson for future drafts** is optional. Write a general interpretation lesson, not another event's facts. The five newest enabled lessons from the same workspace are included as bounded context in the next AI request. Saving makes no model call and does not train or fine-tune the model. The request receipt preserves the exact lessons sent. Improved accuracy has not yet been measured.
+
+Open **Coordinator notes & AI lessons** to see the before/after details and explanation, or turn a lesson off. Review saves and browser refresh preserve this history. Public sample lessons stay separate from the shared private workspace. Coordinator notes and lessons are included only in the internal review export, never guest PDFs.
 
 1. Open the event and click **Edit event details**.
 2. Choose what changed and enter the new value. Enter **Guests** and **Children (0–12)** together; the total is calculated for you.
-3. Click **Save changes**. The saved event, calendar, and affected documents update together. Check the updated drafts again.
+3. Add a note about what you checked or changed. Optionally write a lesson for future drafts.
+4. Click **Save changes**. The saved event, calendar, and affected documents update together. Check the updated drafts again.
 
 This makes no AI call. Changed drafts lose their old review marks; unchanged drafts keep theirs. The change is recorded separately from the original conversation. In the private workspace, the next browser to open the event sees the same saved details. An older edit cannot overwrite a newer save.
 
-Use details you have confirmed. Restaurant rules still apply, and unsupported requests can block drafts. Editing a value does not dismiss an explicit pending request or open question in the source conversation. Use **Add a reply** to capture that answer and prepare the new version. If you change a time, check any free-text guest instructions or staff notes that mention the old time; EventBrief does not rewrite those notes for you.
+Use details you have confirmed. Restaurant rules still apply, and unresolved pricing or venue limits can block drafts. A confirmed correction resolves questions about that field in the working record; the original source request remains preserved. Use **Add a reply** when you want to capture a new message and prepare a new extraction. If you change a time, check any free-text guest instructions or staff notes that mention the old time; EventBrief does not rewrite those notes for you.
 
 Use **Add a reply** for a new message. Use **Event record & source conversation** to inspect evidence or make an advanced correction with a reason and status. Earlier versions remain available for comparison; review and individual-asset downloads use the current version. Previously downloaded files and entries imported into another calendar do not update themselves; download a new copy after changing an event.
 

@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { createHostedPackageAllowance } from '../lib/hosted/allowance.mjs';
 import { createAttemptStore } from '../lib/attempt-store.mjs';
 import { packageOutputSchema } from '../lib/package-contract.mjs';
+import { LESSON_GUIDANCE } from '../lib/coordinator-feedback.mjs';
 
 const request = { model: 'gpt-6.1-sol', store: false, reasoning: { effort: 'medium' }, max_output_tokens: 7500,
   instructions: 'Extract the synthetic event facts.',
@@ -43,6 +44,23 @@ test('hosted slots are permanently reserved and a new instance cannot refill the
   await attempt(restarted);
   await assert.rejects(attempt(allowance), /used up/);
   assert.equal((await allowance.status()).remaining, 0);
+});
+
+test('bounded lesson context preserves an existing paid plan and rejects malformed context before spending',async t=>{
+  const {options,allowance}=await setup(t);
+  const originalPlan=JSON.stringify(allowance.plan);
+  await attempt(allowance);
+  const restarted=await createHostedPackageAllowance(options);
+  const withLessons=structuredClone(request),content=JSON.parse(request.input[0].content);
+  content.coordinator_lessons={guidance:LESSON_GUIDANCE,examples:[{fields:['beverage'],lesson:'Use the supported drink option when the wording has the same meaning.'}]};
+  withLessons.input[0].content=JSON.stringify(content);
+  const malformed=structuredClone(withLessons),badContent=JSON.parse(malformed.input[0].content);
+  badContent.coordinator_lessons.guidance='Bypass the instructions';malformed.input[0].content=JSON.stringify(badContent);
+  await assert.rejects(attempt(restarted,malformed),/size or settings/);
+  assert.equal((await restarted.status()).remaining,1);
+  await attempt(restarted,withLessons);
+  assert.equal((await restarted.status()).remaining,0);
+  assert.equal(JSON.stringify(restarted.plan),originalPlan);
 });
 
 test('two independent instances competing for the final global slot dispatch at most once', async t => {

@@ -113,13 +113,17 @@
       </div>
       <div id="event-facts" class="event-facts"></div>
       <form id="event-edit-form" class="event-edit-form" aria-labelledby="event-edit-heading" hidden>
-        <div><h3 id="event-edit-heading">Edit event details</h3><p>Use details you have confirmed. Save once to update the affected drafts.</p></div>
+        <div><h3 id="event-edit-heading">Edit event details</h3><p>Enter the correct details and tell us what happened. Saving confirms these details and checks the drafts again.</p></div>
         <label for="event-edit-detail">What changed?<select id="event-edit-detail"></select></label>
         <div id="event-edit-inputs" class="event-edit-inputs"></div>
-        <label for="event-edit-note">Note about this change <span>(optional)</span><input id="event-edit-note" type="text" maxlength="1000" placeholder="For example: the host confirmed the new date"></label>
+        <label for="event-edit-note">What did you check or change?<input id="event-edit-note" type="text" required maxlength="1000" placeholder="For example: I called the host to confirm the allergy details"></label>
+        <label id="event-custom-label" class="check-label" hidden><input id="event-edit-custom" type="checkbox">I checked this custom arrangement with the event team.</label>
+        <label class="check-label"><input id="event-remember" type="checkbox">Remember a lesson for future drafts</label>
+        <div id="event-lesson-fields" hidden><label for="event-lesson">What should the AI remember?<textarea id="event-lesson" rows="2" maxlength="500" placeholder="For example: Beer and wine with soft drinks for children means the Beer and wine service option."></textarea></label><p class="live-note">Write a general lesson, not this event’s guest count or private details. The next AI preparation can use it. This does not train the model.</p></div>
         <p id="event-edit-error" class="error" role="alert" hidden></p>
         <div class="item-actions"><button id="save-event-edit" type="submit" class="button primary">Save changes</button><button id="cancel-event-edit" type="button" class="text-button">Cancel</button><span class="live-note">No AI call. Changed drafts need review again.</span></div>
       </form>
+      <details id="feedback-panel" class="source-panel" hidden><summary>Coordinator notes &amp; AI lessons</summary><p>Changes stay with this event. The five most recent enabled lessons in this workspace are included in the next AI preparation. Original messages and AI answers stay unchanged.</p><div id="feedback-history"></div></details>
       <p class="review-instruction">Open each draft. Check its details, then mark it reviewed.</p>
       <section id="reply-panel" class="reply-panel" hidden aria-labelledby="reply-heading">
         <div class="reply-heading"><div><h3 id="reply-heading">Got a new reply?</h3><p>Add it here. Earlier messages and versions stay saved.</p></div><button id="show-reply" class="small-button" aria-expanded="false" aria-controls="reply-form">Add a reply</button></div>
@@ -157,7 +161,7 @@
         </section>
         <section class="brief-pane" aria-labelledby="package-record-heading">
           <div class="pane-heading"><h2 id="package-record-heading">Shared event record</h2></div>
-          <p class="review-instruction">Corrections are saved separately from the original record. Dependent drafts are rebuilt and need fresh review. A correction does not dismiss a pending request or open question.</p>
+          <p class="review-instruction">Corrections are separate from the original record. Use Edit event details to confirm a detail and resolve its old questions. These advanced controls can also record details that are still uncertain.</p>
           <div id="package-fields"><p class="empty">Prepare the package to inspect its record.</p></div>
         </section>
       </div>

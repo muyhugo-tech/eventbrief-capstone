@@ -47,3 +47,38 @@ test('unsupported requests and unanswered source questions keep their readiness 
   assert.deepEqual(pending.record.open_questions,awaiting.original.open_questions);
   assert.equal(pending.documents.find(doc => doc.id === 'guest').state,'blocked');
 });
+
+test('confirmed correction resolves source questions without rewriting the original', () => {
+  const awaiting=structuredClone(packageFixtures.get('patio-awaiting-dietary'));
+  const original=structuredClone(awaiting.original);
+  const corrections=eventEditCorrections(original,{}, {dietary:'No allergies or dietary restrictions'},'Called the host and confirmed.',{resolve:true});
+  const prepared=prepareEventPackage({...awaiting,corrections});
+  assert.equal(prepared.documents.every(doc=>doc.state==='ready_for_review'),true);
+  assert.equal(prepared.unresolved.some(item=>item.field==='dietary'),false);
+  assert.deepEqual(prepared.original_record,original);
+  assert.equal(prepared.record.fields.dietary.resolved,true);
+  assert.deepEqual(prepared.record.fields.dietary.evidence,[]);
+});
+
+test('coordinator can confirm the same requested value and keep the pending source request intact', () => {
+  const original=structuredClone(bundle.original);
+  original.fields.event_date.status='requested';
+  original.pending_changes.push({field:'event_date',value:original.fields.event_date.value,status:'requested',evidence:original.fields.event_date.evidence});
+  const corrections=eventEditCorrections(original,{}, {event_date:original.fields.event_date.value},'Host confirmed this date by phone.',{resolve:true});
+  const prepared=prepareEventPackage({...bundle,original,corrections});
+  assert.equal(prepared.record.fields.event_date.status,'agreed');
+  assert.equal(prepared.unresolved.length,0);
+  assert.equal(prepared.original_record.pending_changes.length,1);
+});
+
+test('custom arrangements require an explicit confirmation and cannot override prices or capacity', () => {
+  const value='Nut allergy: kitchen lead confirmed a separate meal and preparation instructions.';
+  const confirmed=eventEditCorrections(bundle.original,{}, {dietary:value},'Checked with the host and kitchen lead.',{resolve:true,acceptCustom:true});
+  assert.equal(prepareEventPackage({...bundle,corrections:confirmed}).documents.every(doc=>doc.state==='ready_for_review'),true);
+  const unconfirmed=eventEditCorrections(bundle.original,{}, {dietary:value},'Request received.',{resolve:true});
+  assert.equal(prepareEventPackage({...bundle,corrections:unconfirmed}).documents.find(doc=>doc.id==='kitchen').state,'blocked');
+  assert.throws(()=>eventEditCorrections(bundle.original,{}, {menu:'Unpriced menu'},'Approved',{resolve:true,acceptCustom:true}));
+  assert.throws(()=>eventEditCorrections(bundle.original,{}, {dietary:value},'',{resolve:true,acceptCustom:true}));
+  const tooMany=eventEditCorrections(bundle.original,{}, {guest_13_plus_count:50,child_count:2},'Confirmed count.',{resolve:true});
+  assert.equal(prepareEventPackage({...bundle,corrections:tooMany}).documents.find(doc=>doc.id==='staff').state,'blocked');
+});

@@ -32,7 +32,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
     <span class="draft-label">${esc(prepared.mode === 'authored_reference' ? 'Authored example · no AI call' : prepared.label)}</span>`;
   if (document.state !== 'ready_for_review') {
     return `<article class="event-draft">${header}<div class="blocked-draft"><h3>This draft is blocked</h3>
-      <p>Resolve the following before preparing this document:</p><ul>${(document.blockers ?? []).map(blocker => `<li>${esc(blocker.reason)}${interactive ? sourceButton(blocker.field) : ''}</li>`).join('')}</ul>
+      <p>Correct the detail below, add a note, and save. The drafts will be checked again.</p><ul>${(document.blockers ?? []).map(blocker => `<li>${esc(blocker.reason)}${interactive ? `${sourceButton(blocker.field)} <button class="fact-source" data-fix="${esc(blocker.field)}">Fix this detail</button>` : ''}</li>`).join('')}</ul>
       <p>No completed draft or quote total has been produced.</p></div></article>`;
   }
   if(document.id==='quote')return renderGuestQuote(document,prepared,{reviewed,interactive});

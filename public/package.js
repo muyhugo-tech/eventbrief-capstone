@@ -54,7 +54,7 @@ function rememberSelection() {
 const session = () => sessions.get(`${currentMode}:${currentId}`);
 function openSession() {
   const key = `${currentMode}:${currentId}`;
-  if (!sessions.has(key)) sessions.set(key, { data: null, corrections: {}, reviews: {}, attempt: null, sequence: 0 });
+  if (!sessions.has(key)) sessions.set(key, { data: null, corrections: {}, reviews: {}, feedback: [], attempt: null, sequence: 0 });
 }
 const currentInput = () => scenarios.find(input => input.id === currentId);
 const versionFor = (id = currentId) => sourceVersions[id] ?? (id === currentId ? session()?.data?.version : null);
@@ -368,6 +368,13 @@ function renderSelected() {
   $('#edit-event').disabled = busy || isEarlier() || !workspace;
   $('#event-facts').innerHTML = [['Date', fields.event_date?.value], ['Guests', fields.guest_13_plus_count?.value], ['Children (0–12)', fields.child_count?.value], ['Venue', fields.venue?.value]].filter(([, value]) => value !== null && value !== undefined).map(([label, value]) => `<span>${esc(label)} <strong>${esc(value)}</strong></span>`).join('');
   renderEvents();
+  renderFeedback();
+}
+
+function renderFeedback() {
+  const entries=session()?.feedback??[];
+  $('#feedback-panel').hidden=!entries.length;
+  $('#feedback-history').innerHTML=[...entries].reverse().map(entry=>`<article class="feedback-entry"><p><strong>Coordinator change</strong> · ${esc(new Date(entry.saved_at).toLocaleString())}</p><p>${esc(entry.reason||'Event details updated.')}</p><ul>${entry.changes.map(change=>`<li><strong>${esc(FIELD_DEFINITIONS[change.field].label)}:</strong> ${esc(change.before.value??'Missing')} → ${esc(change.after.value??'Missing')}${change.after.resolved?' · Confirmed by coordinator':''}${change.after.accept_custom?' · Custom arrangement checked':''}</li>`).join('')}</ul>${entry.lesson?`<p><strong>${entry.lesson_enabled?'Remember for future drafts':'Lesson turned off'}:</strong> ${esc(entry.lesson)}</p><button type="button" class="text-button" data-lesson-id="${esc(entry.id)}" data-enabled="${!entry.lesson_enabled}" ${busy||isEarlier()?'disabled':''}>${entry.lesson_enabled?'Stop using this lesson':'Use this lesson again'}</button>`:''}</article>`).join('');
 }
 
 function renderPackage() {
@@ -407,7 +414,7 @@ function renderPackage() {
   if (data) {
     $('#package-heading').textContent = `${data.record.fields.host_name.value ?? 'Host not supplied'}${isEarlier() ? ' · earlier version' : '’s event'}`;
     renderSelected(); renderFields(); renderPolicy();
-    $('#package-issues').innerHTML = data.unresolved?.length ? `<h3>Details to settle</h3><p>Add a reply that answers these questions. Then prepare the updated drafts.</p><ul>${data.unresolved.map(item => `<li><strong>${item.kind === 'pending_change' ? 'Pending request' : 'Open question'}</strong> · ${esc(item.reason)}${evidenceHtml(item)}</li>`).join('')}</ul>` : '';
+    $('#package-issues').innerHTML = data.unresolved?.length ? `<h3>Details to settle</h3><p>Add a reply, or confirm the correct details in Edit event details.</p><ul>${data.unresolved.map(item => `<li><strong>${item.kind === 'pending_change' ? 'Pending request' : 'Open question'}</strong> · ${esc(item.reason)}${evidenceHtml(item)}</li>`).join('')}</ul>` : '';
   } else $('#package-fields').innerHTML = '<p class="empty">Prepare the package to inspect its record.</p>';
   renderMessages();
 }
@@ -463,18 +470,18 @@ async function saveProgress() {
   $('#save-status').textContent='Saving your progress…';
   try {
     const result=await post('/api/package/review',{scenario_id:currentId,run_id:s.data.extraction?.run_id??null,corrections:s.corrections,reviews:s.reviews,sequence:s.sequence});
-    s.sequence=result.saved.sequence;$('#save-status').textContent=storageMessage();
+    s.sequence=result.saved.sequence;s.feedback=result.saved.feedback??[];$('#save-status').textContent=storageMessage();
   } catch(error) {$('#save-status').textContent='Progress was not saved. Keep this page open and download the review package.';throw error;}
 }
 async function openSaved(runId=null) {
   const saved=workspace?await post('/api/package/review/load',{scenario_id:currentId,run_id:runId}):{saved:null};
   const s=session();
   if(saved.saved) {
-    s.data=saved.data;s.corrections=saved.saved.corrections;s.reviews=saved.saved.reviews;s.sequence=saved.saved.sequence;
+    s.data=saved.data;s.corrections=saved.saved.corrections;s.reviews=saved.saved.reviews;s.sequence=saved.saved.sequence;s.feedback=saved.saved.feedback??[];
     $('#save-status').textContent='Your saved corrections and review marks are back.';
   } else {
     s.data=await post('/api/package/prepare',{scenario_id:currentId,corrections:{},...(runId?{run_id:runId}:{})});
-    s.corrections={};s.reviews={};s.sequence=0;$('#save-status').textContent='';
+    s.corrections={};s.reviews={};s.feedback=[];s.sequence=0;$('#save-status').textContent='';
   }
   s.attempt=runId?{run_id:runId,summary:'Saved AI result. Opening it makes no new AI call.'}:null;
   rememberSelection();
@@ -730,27 +737,34 @@ function renderEventEditInputs() {
     let control;
     if (options[field]) {
       const choices = [...new Set([...options[field], ...(value ? [value] : [])])];
-      control = `<select id="${id}" name="${field}"><option value="">Not yet known</option>${choices.map(option => `<option value="${esc(option)}"${value === option ? ' selected' : ''}>${esc(option)}</option>`).join('')}</select>`;
+      control = `<input id="${id}" name="${field}" list="${id}-choices" value="${esc(value)}" maxlength="1000"><datalist id="${id}-choices">${choices.map(option => `<option value="${esc(option)}"></option>`).join('')}</datalist><span class="live-note">Choose a suggested option or type the correct detail.${['menu','beverage'].includes(field)?' A quote needs an option with a saved price.':''}</span>`;
     } else if (['dietary', 'special', 'guest_notes', 'staff_notes', 'av'].includes(field)) {
       control = `<textarea id="${id}" name="${field}" rows="3" maxlength="1000">${esc(value)}</textarea>`;
     } else control = `<input id="${id}" name="${field}" type="${type}" value="${esc(value)}" ${type === 'number' ? 'min="0" max="10000" step="1" required' : type === 'text' ? 'maxlength="1000"' : ''}>`;
     return `<label for="${id}">${esc(definition.label)}${control}</label>`;
   }).join('') + (fields.includes('child_count') ? '<p id="event-edit-total" class="event-edit-total" aria-live="polite"></p>' : fields.includes('start_time') ? '<p class="event-edit-total">The schedule updates in each draft. Check any arrival or staff notes that mention the old time, too.</p>' : '');
   $('#event-edit-error').hidden = true;
+  const custom=fields.every(field=>['dietary','setup','av','special'].includes(field));
+  $('#event-custom-label').hidden=!custom;
+  $('#event-edit-custom').checked=custom&&fields.every(field=>eventEdit.fields[field].accept_custom);
   editAttendanceTotal();
 }
-$('#edit-event').addEventListener('click', async () => {
+async function openEventEdit(field=null) {
   if (eventEdit) { $('#event-edit-detail').focus(); return; }
   if (!workspace || !await checkLatest()) return;
   const s = session();
   eventEdit = {scenario_id:currentId, run_id:s.data.extraction?.run_id??null, sequence:s.sequence, fields:structuredClone(s.data.record.fields)};
   $('#event-edit-note').value = '';
+  $('#event-remember').checked=false;$('#event-lesson').value='';$('#event-lesson').required=false;$('#event-lesson-fields').hidden=true;
   $('#event-edit-detail').innerHTML = editGroups.map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('');
+  if(field)$('#event-edit-detail').value=editGroups.find(([, , fields])=>fields.includes(field)||field==='guest_count'&&fields.includes('child_count'))?.[0]??'attendance';
   renderEventEditInputs();
   $('#event-edit-form').hidden = false;
   $('#edit-event').setAttribute('aria-expanded', 'true');
   $('#event-edit-detail').focus();
-});
+}
+$('#edit-event').addEventListener('click',()=>openEventEdit());
+$('#event-remember').addEventListener('change',()=>{const on=$('#event-remember').checked;$('#event-lesson-fields').hidden=!on;$('#event-lesson').required=on;if(on)$('#event-lesson').focus();});
 $('#event-edit-detail').addEventListener('change', renderEventEditInputs);
 $('#event-edit-inputs').addEventListener('input', editAttendanceTotal);
 $('#cancel-event-edit').addEventListener('click', () => { closeEventEdit(); $('#edit-event').focus(); });
@@ -765,9 +779,9 @@ $('#event-edit-form').addEventListener('submit', async event => {
   const {scenario_id,run_id,sequence} = eventEdit;
   setBusy(true); $('#event-edit-error').hidden = true; announce(''); announce('', true);
   try {
-    const result = await post('/api/package/edit', {scenario_id,run_id,sequence,changes,reason:$('#event-edit-note').value.trim()});
+    const result = await post('/api/package/edit', {scenario_id,run_id,sequence,changes,reason:$('#event-edit-note').value.trim(),resolve:true,accept_custom:$('#event-edit-custom').checked,lesson:$('#event-remember').checked?$('#event-lesson').value.trim():''});
     const s = session();
-    s.data = result.data; s.corrections = result.saved.corrections; s.reviews = result.saved.reviews; s.sequence = result.saved.sequence;
+    s.data = result.data; s.corrections = result.saved.corrections; s.reviews = result.saved.reviews; s.sequence = result.saved.sequence; s.feedback=result.saved.feedback??[];
     closeEventEdit(); rememberSelection(); renderPackage();
     $('#save-status').textContent = storageMessage();
     const changed = result.changed_documents;
@@ -778,6 +792,13 @@ $('#event-edit-form').addEventListener('submit', async event => {
     $('#event-edit-error').textContent = `${error.message} Your entries are still here.`;
     $('#event-edit-error').hidden = false;
   } finally { setBusy(false); if (!eventEdit) $('#edit-event').focus(); }
+});
+
+$('#feedback-history').addEventListener('click',async event=>{
+  const button=event.target.closest('[data-lesson-id]');if(!button||busy||isEarlier()||!await checkLatest())return;
+  setBusy(true);
+  try {const s=session();const result=await post('/api/package/feedback',{scenario_id:currentId,run_id:s.data.extraction?.run_id??null,sequence:s.sequence,feedback_id:button.dataset.lessonId,enabled:button.dataset.enabled==='true'});s.sequence=result.saved.sequence;s.feedback=result.saved.feedback??[];announce('Lesson preference saved. No AI call was made.');}
+  catch(error){announce(error.message,true);}finally{setBusy(false);renderFeedback();}
 });
 
 $('#prepare').addEventListener('click', () => prepare(undefined, null, true));
@@ -853,6 +874,7 @@ $('#document-list').addEventListener('click', event => {
   $(`[data-document="${selectedDocument}"]`).focus();
 });
 $('#document-preview').addEventListener('click', event => {
+  const fix=event.target.closest('[data-fix]');if(fix&&!busy&&!isEarlier()){openEventEdit(fix.dataset.fix);return;}
   const source = event.target.closest('[data-field]');
   if (source) focusField(source.dataset.field);
   if (event.target.closest('[data-policy]')) {
@@ -950,7 +972,7 @@ $('#download-package').addEventListener('click', async () => {
   setBusy(true);
   try {
     await refreshListing();
-    const result = { ...session().data, version:{...session().data.version,...versionFor(),superseded:isEarlier()},document_reviews: session().reviews, exported_at: new Date().toISOString(), audience: 'Internal review package; includes original sources and staff-only details.' };
+    const result = { ...session().data, version:{...session().data.version,...versionFor(),superseded:isEarlier()},document_reviews: session().reviews,coordinator_feedback:session().feedback??[], exported_at: new Date().toISOString(), audience: 'Internal review package; includes original sources and staff-only details.' };
     download(JSON.stringify(result, null, 2) + '\n', `${currentId}-review-package.json`, 'application/json');
     announce('The internal review package was downloaded with original sources, separate corrections, and document review decisions.');
   } catch(error){announce('The current version could not be checked. Try downloading again.',true);}
