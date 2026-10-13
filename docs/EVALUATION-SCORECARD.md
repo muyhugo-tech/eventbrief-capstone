@@ -1,8 +1,10 @@
 # EventBrief evaluation scorecard
 
-Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, and two newly authored events tested at successive stages of the app.
+Evidence through October 12, 2026 (Pacific time). All events are fictional. Includes the beverage lesson comparison, saved-answer replays, two assistant-authored events and one user-authored rehearsal-dinner test.
 
-**After the combined-drink fix, Lena's and Noah's saved answers both pass all five draft checks: $1,420 and $1,776 respectively.** The original answers were replayed with no corrections and no new AI calls. Eight hosted PDFs and both calendar files were checked. Their original first-attempt failures remain recorded; this is an app-fix replay, not a new AI accuracy trial. [Latest replay](../evaluation/drink-matcher-v3/README.md)
+**The latest user-authored test passed extraction and protective checks, but produced 0/5 completed documents.** Alex's accepted 46 guests, Menu 3 and à la carte/cash-bar terms were retained. The demo's menu, beverage and capacity settings do not support that request, and necessary details are missing. Those expected blocks are not successful asset generation. [Latest test](../evaluation/new-event-v3/README.md)
+
+Lena's and Noah's saved answers still pass all five draft checks after the combined-drink fix, at $1,420 and $1,776. Those were replays without another AI call; their original failures remain recorded. [Replay evidence](../evaluation/drink-matcher-v3/README.md)
 
 ## What passed and what needs work
 
@@ -10,9 +12,10 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. Incl
 
 | Check | Result | What we observed |
 | --- | --- | --- |
-| Make five drafts from a complete conversation | **Passed** | The hosted Alex example produced a calendar entry, quote, kitchen sheet, staff plan and guest plan, all ready for human review. [Evidence](HOSTED-VALIDATION-2026-10-12.md) |
+| Make five drafts from a complete conversation | **Passed** | The earlier hosted Alex Morgan example produced a calendar entry, quote, kitchen sheet, staff plan and guest plan, all ready for human review. It is separate from the new Alex rehearsal-dinner test. [Evidence](HOSTED-VALIDATION-2026-10-12.md) |
 | Handle a new conversation with changed counts and times | **Passed after app fix on saved answer** | Noah's original run retained **26 guests, 4 children and 6–9 PM**, but blocked four drafts. Replaying the unchanged answer now yields **5/5 ready at $1,776**, with no coordinator corrections to the replay. [Original](../evaluation/new-event-v1/README.md) · [Replay](../evaluation/new-event-v1/APP-REPLAY.md) |
 | Use the latest confirmed guest count | **Passed** | The actual-AI rehearsal retained **22 guests and 2 children**, with the expected **$1,464** quote. [Evidence](VALIDATION-2026-10-12.md) |
+| Handle a user-authored custom event honestly | **Extraction/blocking passed; assets unsupported** | Alex's **46 guests**, Menu 3, à la carte drinks and cash bar were preserved. Missing fields stayed unknown. All five drafts correctly blocked under the narrow demo profile; no invented prices or completed documents. [Evidence](../evaluation/new-event-v3/README.md) |
 | Update assets after a coordinator changes attendance | **Passed** | Maya’s change to **24 guests and 2 children** updated four documents and reset their reviews. The unchanged calendar kept its review. [Attendance checks](../tests/package-edits.test.mjs) |
 | Block drafts when allergy details are outstanding | **Passed after a fix** | Kitchen, staff and guest plans blocked when the host raised unresolved dietary needs. A reply resolved the issue. Silence alone does not block the guest plan. [Rehearsal](VALIDATION-2026-10-12.md) · [Rule checks](../tests/guest-dietary.test.mjs) |
 | Fix a blocked detail and explain the correction | **Passed after a fix** | Confirmed corrections resolve old questions, save the reason and preserve the original AI answer. Verified without real AI. [Evidence](COORDINATOR-FEEDBACK.md) |
@@ -22,7 +25,26 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. Incl
 | Edit drink notes and keep assets consistent | **Passed** | Notes save separately, survive reload and appear in the quote, staff and guest outputs. Notes-only edits reset those three reviews and retain the calendar and kitchen reviews. [Checks](../tests/package-normalization.test.mjs) |
 | Remember a coordinator lesson | **Mechanism passed; main test failed** | Lesson inclusion, disabling and separation work. The first actual-AI pair failed the beverage/quote check in both conditions. This lesson did not solve the issue in that example. [Comparison](../evaluation/lesson-comparison-v1/README.md) |
 
-## Latest fix: Lena and Noah saved-answer replay
+## Latest new conversation: Alex's rehearsal dinner
+
+The user wrote this fictional inquiry. It was submitted unchanged once, with expectations saved before the request and no app/profile/prompt changes or corrections.
+
+| Check | Result |
+| --- | --- |
+| Accepted guest count | **Passed: 40 → 46** |
+| Event details and drink terms | **Passed:** October 16 at 5:30 PM, Garden Patio, Menu 3, à la carte and cash bar with guests paying for their own alcoholic drinks |
+| Missing fields | **Passed:** end time, timezone, pricing-group counts and other unspecified details stayed unknown |
+| Calendar | **Correctly blocked:** missing schedule details and configured capacity |
+| Quote | **Correctly blocked:** unsupported menu/drink pricing, capacity and unknown pricing groups |
+| Kitchen sheet | **Correctly blocked:** unsupported menu, capacity and required unknown details |
+| Staff event plan | **Correctly blocked:** unsupported arrangements, capacity and missing operational details |
+| Guest event plan | **Correctly blocked:** unsupported arrangements, capacity and missing schedule/arrival details; dietary silence did not block it |
+
+The fictional profile only defines Menu 2, two fixed drink packages and a patio limit of 40. Those are EventBrief settings, not Yanni's actual restaurant policies. All four PDF exports returned 409; the calendar export function also refused the blocked draft. **No completed document bodies or layouts were available to inspect.** Saved reopening preserved the original answer and left other events unchanged.
+
+**One AI call, no retry/correction, estimated cost $0.019585 (about two cents). 15 hosted preparations remain.** This shows faithful extraction and appropriate refusal to invent facts, while exposing incomplete restaurant configuration. [Conversation, method and result](../evaluation/new-event-v3/README.md)
+
+## Previous fix: Lena and Noah saved-answer replay
 
 | Draft | Lena | Noah |
 | --- | --- | --- |
@@ -34,7 +56,7 @@ Evidence through October 12, 2026 (Pacific time). All events are fictional. Incl
 
 All eight hosted PDFs passed content and visual checks; both tentative calendar files had the correct time conversion. Exact soda/juice/no-alcohol notes remain in the quote, staff and guest outputs. Both original answers replay with empty corrections. Noah's pre-existing private-workspace corrections were also preserved and separately checked. Existing events and review marks were retained; neither event was marked reviewed by this test.
 
-**Additional AI calls: 0. Added AI cost: $0. Preparations remaining: 16.** These are regression replays of known examples, not new AI trials. [Method, safeguards and reproducible evidence](../evaluation/drink-matcher-v3/README.md)
+**Additional AI calls: 0. Added AI cost: $0. Preparations remaining at that point: 16** (15 after Alex). These are regression replays of known examples, not new AI trials. [Method, safeguards and reproducible evidence](../evaluation/drink-matcher-v3/README.md)
 
 ## Original first attempt: Lena
 
@@ -130,11 +152,12 @@ The latest app-fix run reported **215 passed, 0 failed, 0 skipped** using `node 
 
 ## What still needs work
 
-1. **Broader drink requests:** the saved soda-and-juice cases now pass, including combined instructions. Custom drinks, price exceptions and unsupported wording still require coordinator resolution. This bounded matcher does not establish general drink understanding.
-2. **Independent conversations:** the fixes pass the examples used to develop them. A separate set of independently written examples is still needed to measure broader performance, including source support and follow-up questions.
-3. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
+1. **Restaurant configuration:** Alex's realistic request cannot produce assets because Menu 3, à la carte/cash-bar pricing and a suitable venue capacity are not configured. Add explicit coordinator-managed rules before claiming broader event coverage; do not invent or silently relax them to pass a test.
+2. **Broader drink requests:** the saved soda-and-juice cases pass. Alex's custom terms were faithfully extracted but cannot be priced by the current app. Matching and extraction are separate from supported billing behavior.
+3. **Independent conversations:** one user-authored case is now recorded. A broader independent set is still needed to measure performance, including source support and follow-up questions.
+4. **Time saved:** time the same event done manually and with EventBrief, including review and corrections.
 
-For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later new conversations exposed drink-matching failures. We preserved those failures, improved the app, and replayed Lena's and Noah's original answers without another AI call. Both then produced all five drafts with correct prices and preserved drink instructions. These replays demonstrate the fixes on known examples; broader accuracy still needs independent testing.”
+For the capstone: “In twelve development cases, the clarified run matched 215 of 216 detail-and-status checks and all twelve quote checks. Later examples exposed drink-matching failures, which we fixed and replayed without another AI call. A user-authored rehearsal-dinner test then preserved the changed count and cash-bar terms, left missing facts unknown and blocked unsupported outputs. The supported workflow works on the demonstrated cases; broader restaurant configuration and independent testing remain unfinished.”
 
 **Confidence: high** in these recorded outcomes. **Unknown** for accuracy on unseen events, time savings and improvement from saved lessons.
 

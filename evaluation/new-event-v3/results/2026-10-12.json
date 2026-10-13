@@ -1,0 +1,505 @@
+{
+  "id": "alex-rehearsal-new-event-v3",
+  "author": "User supplied this fictional conversation in response to a request for a fresh capstone test.",
+  "tested_at": "2026-10-13T05:01:01.391Z",
+  "predeclared_at": "2026-10-13T05:00:39.027Z",
+  "app_commit": "054f60cb043c9b276e93c44d0480d9d63bc80f71",
+  "protocol_sha256": "c2b36d859fea00e4c6f98ad11ef2e47a84e5478201487bc3be99d9c4a8123f56",
+  "request_sha256": "a97ca47b8ade7f141f3a1a6dbb99b10bdf573f78ca64dbb64b04e65832915503",
+  "receipt_sha256": "c787446208dca6905e1f163aaf31f5fd51a70bd03cf3f80942f29fb0ec7bb951",
+  "normalization_policy": "supported-details-v3",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "max_output_tokens": 7500,
+  "lesson_count": 0,
+  "ai_calls": 1,
+  "automatic_retries": 0,
+  "manual_corrections": 0,
+  "original_output": {
+    "schema_version": "eventbrief.package-record.v3",
+    "fields": {
+      "host_name": {
+        "value": "Alex",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Alex: Hi! We’d like to book our rehearsal dinner"
+          }
+        ]
+      },
+      "booking_status": {
+        "value": "Confirmed in the conversation",
+        "status": "stated",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "We’d like to book our rehearsal dinner at Yanni’s on October 16, 2026, at 5:30 p.m. for 40 guests. Could we have the Garden Patio and Menu 3?"
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Coordinator: Yes, we can arrange that."
+          }
+        ]
+      },
+      "event_date": {
+        "value": "2026-10-16",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "We’d like to book our rehearsal dinner at Yanni’s on October 16, 2026, at 5:30 p.m. for 40 guests."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Updated to 46 guests for October 16 at 5:30 p.m. on the Garden Patio, with the same menu and drink arrangements."
+          }
+        ]
+      },
+      "start_time": {
+        "value": "17:30",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated to 46 guests for October 16 at 5:30 p.m. on the Garden Patio, with the same menu and drink arrangements."
+          }
+        ]
+      },
+      "end_time": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "timezone": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "guest_count": {
+        "value": 46,
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "One update: our guest count has increased to 46. Everything else stays the same."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Updated to 46 guests for October 16 at 5:30 p.m. on the Garden Patio, with the same menu and drink arrangements."
+          }
+        ]
+      },
+      "guest_13_plus_count": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "child_count": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "venue": {
+        "value": "Garden Patio",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Updated to 46 guests for October 16 at 5:30 p.m. on the Garden Patio, with the same menu and drink arrangements."
+          }
+        ]
+      },
+      "menu": {
+        "value": "Menu 3",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Got it—40 guests, Menu 3, beverages à la carte, and a cash bar."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Updated to 46 guests for October 16 at 5:30 p.m. on the Garden Patio, with the same menu and drink arrangements."
+          }
+        ]
+      },
+      "beverage": {
+        "value": "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+        "status": "agreed",
+        "evidence": [
+          {
+            "message_id": "pasted",
+            "quote": "Beverages à la carte, please. Guests will pay for their own alcoholic drinks."
+          },
+          {
+            "message_id": "pasted",
+            "quote": "Got it—40 guests, Menu 3, beverages à la carte, and a cash bar."
+          }
+        ]
+      },
+      "dietary": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "setup": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "av": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "special": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "guest_notes": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      },
+      "staff_notes": {
+        "value": null,
+        "status": "unknown",
+        "evidence": []
+      }
+    },
+    "pending_changes": [],
+    "open_questions": []
+  },
+  "automated_checks": {
+    "checks": {
+      "latest_accepted_total": true,
+      "known_values": true,
+      "accepted_arrangements": true,
+      "missing_fields_unknown": true,
+      "a_la_carte_retained": true,
+      "cash_bar_retained": true,
+      "no_fixed_package_substitution": true,
+      "no_invented_questions_or_pending_changes": true,
+      "expected_policy_flags": true,
+      "no_guest_dietary_block": true,
+      "no_corrections": true,
+      "no_quote_total": true,
+      "no_kitchen_quantities": true
+    },
+    "draft_checks": {
+      "calendar": true,
+      "quote": true,
+      "kitchen": true,
+      "staff": true,
+      "guest": true
+    },
+    "unknown_fields": {
+      "end_time": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "timezone": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "guest_13_plus_count": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "child_count": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "dietary": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "setup": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "av": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "special": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "guest_notes": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      },
+      "staff_notes": {
+        "value": null,
+        "status": "unknown",
+        "passed": true
+      }
+    },
+    "all_automated_checks_pass": true,
+    "ready_documents": 0,
+    "expected_ready_documents": 0,
+    "beverage_value": "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+    "booking_status": {
+      "value": "Confirmed in the conversation",
+      "status": "stated",
+      "evidence": [
+        {
+          "message_id": "pasted",
+          "quote": "We’d like to book our rehearsal dinner at Yanni’s on October 16, 2026, at 5:30 p.m. for 40 guests. Could we have the Garden Patio and Menu 3?"
+        },
+        {
+          "message_id": "pasted",
+          "quote": "Coordinator: Yes, we can arrange that."
+        }
+      ]
+    },
+    "documents": [
+      {
+        "id": "calendar",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "end_time",
+            "reason": "End time: not supplied."
+          },
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "venue",
+            "reason": "Garden Patio has a fictional capacity of 40; 46 guests exceeds it.",
+            "rule": "venues.Garden Patio.capacity"
+          }
+        ]
+      },
+      {
+        "id": "quote",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "guest_13_plus_count",
+            "reason": "Guests: not supplied."
+          },
+          {
+            "field": "child_count",
+            "reason": "Children (0–12): not supplied."
+          },
+          {
+            "field": "guest_count",
+            "reason": "Garden Patio has a fictional capacity of 40; 46 guests exceeds it.",
+            "rule": "venues.Garden Patio.capacity"
+          },
+          {
+            "field": "menu",
+            "reason": "The selected menu is not in the fictional restaurant profile.",
+            "rule": "menus"
+          },
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          }
+        ]
+      },
+      {
+        "id": "kitchen",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "dietary",
+            "reason": "Dietary requirements: not supplied."
+          },
+          {
+            "field": "guest_count",
+            "reason": "Garden Patio has a fictional capacity of 40; 46 guests exceeds it.",
+            "rule": "venues.Garden Patio.capacity"
+          },
+          {
+            "field": "menu",
+            "reason": "The selected menu is not in the fictional restaurant profile.",
+            "rule": "menus"
+          }
+        ]
+      },
+      {
+        "id": "staff",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "end_time",
+            "reason": "End time: not supplied."
+          },
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "dietary",
+            "reason": "Dietary requirements: not supplied."
+          },
+          {
+            "field": "setup",
+            "reason": "Table setup: not supplied."
+          },
+          {
+            "field": "av",
+            "reason": "AV needs: not supplied."
+          },
+          {
+            "field": "special",
+            "reason": "Special requirements: not supplied."
+          },
+          {
+            "field": "staff_notes",
+            "reason": "Internal staff notes: not supplied."
+          },
+          {
+            "field": "venue",
+            "reason": "Garden Patio has a fictional capacity of 40; 46 guests exceeds it.",
+            "rule": "venues.Garden Patio.capacity"
+          },
+          {
+            "field": "menu",
+            "reason": "The selected menu is not in the fictional restaurant profile.",
+            "rule": "menus"
+          },
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          }
+        ]
+      },
+      {
+        "id": "guest",
+        "state": "blocked",
+        "blockers": [
+          {
+            "field": "end_time",
+            "reason": "End time: not supplied."
+          },
+          {
+            "field": "timezone",
+            "reason": "Timezone: not supplied."
+          },
+          {
+            "field": "guest_notes",
+            "reason": "Guest instructions: not supplied."
+          },
+          {
+            "field": "venue",
+            "reason": "Garden Patio has a fictional capacity of 40; 46 guests exceeds it.",
+            "rule": "venues.Garden Patio.capacity"
+          },
+          {
+            "field": "menu",
+            "reason": "The selected menu is not in the fictional restaurant profile.",
+            "rule": "menus"
+          },
+          {
+            "field": "beverage",
+            "reason": "The selected beverage is not in the fictional restaurant profile.",
+            "rule": "beverages"
+          }
+        ]
+      }
+    ],
+    "boundary": "Passing these checks means faithful extraction and appropriate blocking, not five completed documents."
+  },
+  "original_preserved": true,
+  "saved_reload": true,
+  "other_events_unchanged": true,
+  "review_marks": 0,
+  "pdf_exports": [
+    {
+      "id": "quote",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 65,
+      "sha256": "40f01901b30c98b3c9d4ebb30937ae51ab1bfc2072c5f2cae5190c8a206c6679"
+    },
+    {
+      "id": "kitchen",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 73,
+      "sha256": "e2117a2483e8090040ac9e73216f8f308a804e98b079dc22f17c698682ed4406"
+    },
+    {
+      "id": "staff",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 71,
+      "sha256": "ef50746a581fa8330ee9cf8a8d4e012ed81751cd2c17039c5d33f700b6a8a940"
+    },
+    {
+      "id": "guest",
+      "state": "blocked",
+      "http_status": 409,
+      "type": "application/json; charset=utf-8",
+      "bytes": 71,
+      "sha256": "74da2f2704a9e18b4e0c775ed0412e142175b66963dfca9418cb97d1c2f4d70a"
+    }
+  ],
+  "calendar_export_blocked": true,
+  "usage": {
+    "input_tokens": 2706,
+    "input_tokens_details": {
+      "cache_write_tokens": 2703,
+      "cached_tokens": 0
+    },
+    "output_tokens": 1282,
+    "output_tokens_details": {
+      "reasoning_tokens": 131
+    },
+    "total_tokens": 3988
+  },
+  "latency_ms": 28462,
+  "conservative_estimated_usd": 0.019585,
+  "budget": {
+    "existing_authorization_usd": 5,
+    "existing_combined_allocation_usd": 4.56384,
+    "existing_hosted_allocation_usd": 4.1,
+    "consume_existing_hosted_slots": 1,
+    "max_conservative_request_reservation_usd": 0.205,
+    "new_allocation_usd": 0,
+    "unallocated_usd": 0.43616,
+    "note": "Use one existing reserved slot. No retry or refill. Estimated token cost is separate from the conservative reservation.",
+    "hosted_calls_before": 16,
+    "hosted_calls_after": 15
+  },
+  "manual_review": {
+    "reviewer": "development assistant",
+    "source_support": "Reviewed all 18 fields and certainty labels. Accepted count 46 supersedes 40; date, start time, patio, Menu 3 and custom drink terms are supported. Ten unspecified fields remain unknown with no evidence. No unanswered explicit questions or pending changes remain.",
+    "booking_status": "Confirmed in the conversation is supported by the booking request plus the coordinator saying Yes, we can arrange that. This describes source acceptance, not an app booking or confirmation of profile compatibility.",
+    "beverage": "Preserves all three ideas: à la carte, cash bar, guests pay for their own alcoholic drinks. No fixed package or price substituted.",
+    "documents": "All five correctly blocked under the frozen demo profile. Four PDF endpoints returned 409; the browser calendar-file function refused a blocked calendar. No document bodies, PDF layouts or prep quantities exist to inspect.",
+    "limitation": "Correct blocking passes the protective checks but does not deliver the requested event assets. The narrow demo menu, beverage pricing and capacity configuration remain product limitations."
+  },
+  "limitations": [
+    "One user-authored fictional conversation and one model attempt; not a representative benchmark.",
+    "This conversation is outside the narrow configured menu, beverage and capacity options, so five finished drafts are not the expected outcome.",
+    "No app, profile, prompt or model change before scoring. Preserve all failures.",
+    "Does not measure time saved, broad drink-matching accuracy or lesson effectiveness."
+  ]
+}

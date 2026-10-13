@@ -1,0 +1,67 @@
+{
+  "id": "alex-rehearsal-new-event-v3",
+  "synthetic": true,
+  "author": "User supplied this fictional conversation in response to a request for a fresh capstone test.",
+  "purpose": "Test a user-authored inquiry unchanged after the drink matcher fix. Assess faithful extraction and appropriate blocking separately from successful document generation.",
+  "conversation": "Alex: Hi! We’d like to book our rehearsal dinner at Yanni’s on October 16, 2026, at 5:30 p.m. for 40 guests. Could we have the Garden Patio and Menu 3?\n\nCoordinator: Yes, we can arrange that. What would you like for drinks?\n\nAlex: Beverages à la carte, please. Guests will pay for their own alcoholic drinks.\n\nCoordinator: Got it—40 guests, Menu 3, beverages à la carte, and a cash bar.\n\nAlex: One update: our guest count has increased to 46. Everything else stays the same.\n\nCoordinator: Updated to 46 guests for October 16 at 5:30 p.m. on the Garden Patio, with the same menu and drink arrangements.",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "max_output_tokens": 7500,
+  "attempts": 1,
+  "automatic_retries": 0,
+  "manual_corrections_to_scored_output": false,
+  "lesson_policy": "Use the existing workspace settings and record actual lesson context; do not add a lesson for this test.",
+  "expected": {
+    "host_name": "Alex",
+    "event_date": "2026-10-16",
+    "start_time": "17:30",
+    "guest_count": 46,
+    "venue": "Garden Patio",
+    "menu": "Menu 3",
+    "agreed_fields": ["event_date", "start_time", "guest_count", "venue", "menu", "beverage"],
+    "unknown_fields": ["end_time", "timezone", "guest_13_plus_count", "child_count", "dietary", "setup", "av", "special", "guest_notes", "staff_notes"],
+    "beverage_meaning": "Preserve à la carte and cash bar / guests pay for their own alcoholic drinks. Do not substitute a fixed package or invent a price.",
+    "booking_status": "Review manually: the coordinator accepts the requested arrangements; an extracted confirmation must cite that acceptance rather than infer it from completeness. No app booking action is authorized.",
+    "pending_changes": [],
+    "open_questions": [],
+    "ready_documents": [],
+    "quote_total_cents": null,
+    "required_policy_rules": ["venues.Garden Patio.capacity", "menus", "beverages"],
+    "guest_dietary_gate": false,
+    "note": "Unqualified total attendance does not establish the two pricing age groups; zero children needs evidence. Missing end time and timezone must not be invented. Dietary silence does not create a guest-plan allergy block."
+  },
+  "profile_boundary": {
+    "name": "Linden & Fig",
+    "version": "fictional-v3",
+    "patio_capacity": 40,
+    "menus": ["Menu 2"],
+    "beverages": ["Beer and wine service", "Nonalcoholic service"],
+    "note": "These are fictional EventBrief settings, not facts about Yanni's restaurant. Preserve the user's source text without importing or modifying the live restaurant system."
+  },
+  "checks": {
+    "extraction": "Keep the accepted total of 46, not the superseded 40; preserve date, start time, patio and Menu 3; retain the custom drink arrangement.",
+    "unknowns": "Leave unspecified fields unknown; do not assume no allergies, no children, an end time, timezone or setup.",
+    "calendar": "Blocked by missing end time/timezone and the configured capacity; no calendar file or booking.",
+    "quote": "Blocked by capacity, unsupported menu/drink pricing and unknown price categories; no total or PDF.",
+    "kitchen": "Blocked by capacity, unsupported menu and unspecified required details; no invented prep quantities or PDF.",
+    "staff": "Blocked by capacity, unsupported arrangements and missing operational details; no PDF.",
+    "guest": "Blocked by capacity, missing schedule/arrival details and unsupported arrangements; dietary silence alone must not add a guest blocker; no PDF.",
+    "evidence": "Check source quotes and certainty labels manually. Record unsupported guesses as failures even if all drafts are blocked for another valid reason."
+  },
+  "budget": {
+    "existing_authorization_usd": 5,
+    "existing_combined_allocation_usd": 4.56384,
+    "existing_hosted_allocation_usd": 4.1,
+    "consume_existing_hosted_slots": 1,
+    "max_conservative_request_reservation_usd": 0.205,
+    "new_allocation_usd": 0,
+    "unallocated_usd": 0.43616,
+    "note": "Use one existing reserved slot. No retry or refill. Estimated token cost is separate from the conservative reservation."
+  },
+  "limitations": [
+    "One user-authored fictional conversation and one model attempt; not a representative benchmark.",
+    "This conversation is outside the narrow configured menu, beverage and capacity options, so five finished drafts are not the expected outcome.",
+    "No app, profile, prompt or model change before scoring. Preserve all failures.",
+    "Does not measure time saved, broad drink-matching accuracy or lesson effectiveness."
+  ]
+}
