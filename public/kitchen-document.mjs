@@ -1,4 +1,4 @@
-import { approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
+import { restaurantName, approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
 import { quoteFontCss } from './quote-document.mjs';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -60,15 +60,15 @@ export function renderKitchenSheet(document, prepared, {reviewed=false,interacti
   const fact=(label,value)=>value==null?'':`<div><dt>${esc(label)}:</dt><dd>${esc(value)}</dd></div>`;
   const tables=plan.sections.map(section=>`<section class="kitchen-section"><table class="kitchen-table" aria-label="${esc(section.title)} prep checklist"><thead><tr><th scope="col" class="kitchen-item">${esc(section.title)}</th><th scope="col" class="kitchen-qty">Qty</th><th scope="col" class="kitchen-check">Prepped</th><th scope="col" class="kitchen-check">Checked</th></tr></thead><tbody>${section.lines.map(line=>`<tr><td>${esc(line.name)}</td><td><span class="kitchen-qty-value">${line.quantity==null?'Confirm':`${esc(line.quantity)} ${esc(line.unit)}${line.quantity===1?'':'s'}`}</span>${line.covers==null?'':`<span class="kitchen-qty-note">For ${esc(line.covers)} people</span>`}</td><td aria-label="Prepped: leave blank until completed"></td><td aria-label="Checked: leave blank until completed"></td></tr>`).join('')}</tbody></table></section>`).join('');
   const mode=prepared.mode==='authored_reference'?'Authored example - no AI call':prepared.label;
-  return `<article class="kitchen-paper"><header class="kitchen-heading"><div class="kitchen-restaurant">${esc(prepared.profile.name)}</div><h2 class="kitchen-title">Kitchen prep sheet</h2></header>
+  return `<article class="kitchen-paper"><header class="kitchen-heading"><div class="kitchen-restaurant">${esc(restaurantName(prepared.profile))}</div><h2 class="kitchen-title">Kitchen prep sheet</h2></header>
     <dl class="kitchen-meta">${fact('Event',`${values.host_name} - event`)}${fact('Date',date(values.event_date))}${fact('Event time',`${[time(values.start_time),time(values.end_time)].filter(Boolean).join(' - ')} (${values.timezone})`)}${fact('Location',values.venue)}${fact('Guests',values.guest_13_plus_count)}${fact('Children (0–12)',values.child_count)}${fact('Total attendance',values.guest_count)}${fact('Service',plan.service)}${fact('Menu',values.menu)}</dl>
     <section class="kitchen-dietary"><h3>Allergies &amp; dietary needs</h3><p>${esc(values.dietary ?? 'Not supplied — confirm before food service.')}</p></section>
     ${tables}<p class="kitchen-basis">${esc(plan.basis)}</p>
     <section class="kitchen-notes"><strong>Kitchen notes / changes</strong><div class="kitchen-write-line"></div></section>
-    <div class="kitchen-closing">${draftReviewNotes(document)}<footer class="kitchen-footer"><strong>${reviewed?'Reviewed draft':'Draft - not reviewed'}</strong> · EventBrief · Fictional capstone example<br>${esc(mode)} · ${esc(plan.version)}<br>Event time is not a course serve time. Confirm service timing with the event team.</footer></div></article>
+    <div class="kitchen-closing">${draftReviewNotes(document)}<footer class="kitchen-footer"><strong>${reviewed?'Reviewed draft':'Draft - not reviewed'}</strong> · Events Made Easy · Fictional capstone example<br>${esc(mode)} · ${esc(plan.version)}<br>Event time is not a course serve time. Confirm service timing with the event team.</footer></div></article>
     ${interactive?`<details class="kitchen-source-checks"><summary>Check the source details</summary>${rows.map(row=>`<button class="fact-source" data-field="${esc(row.field)}">${esc(row.field==='guest_count'?'Total attendance':row.label)}</button>`).join('')}<p>Prep quantities use the fictional guide printed on the sheet. They do not come from the host's messages.</p></details>`:''}`;
 }
 
 export function standaloneKitchenSheet(document,prepared,reviewed,{fontCss=quoteFontCss}={}) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EventBrief - Kitchen prep sheet</title><style>@page{size:Letter;margin:14mm 16mm}html,body{margin:0;padding:0;background:#fff}${kitchenStyles.replace(quoteFontCss,fontCss)}</style></head><body>${renderKitchenSheet(document,prepared,{reviewed})}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Events Made Easy - Kitchen prep sheet</title><style>@page{size:Letter;margin:14mm 16mm}html,body{margin:0;padding:0;background:#fff}${kitchenStyles.replace(quoteFontCss,fontCss)}</style></head><body>${renderKitchenSheet(document,prepared,{reviewed})}</body></html>`;
 }

@@ -1,4 +1,4 @@
-import { approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
+import { restaurantName, approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money = cents => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(cents/100);
@@ -10,7 +10,7 @@ export const quoteFonts = [
 export const quoteFontCss = quoteFonts.map(font=>`@font-face{font-family:'${font.family}';font-style:normal;font-weight:${font.weight};font-display:swap;src:url('/quote-fonts/${font.file}') format('woff2')}`).join('\n');
 
 // Adapted from the owner's Yannis lib/quotes/document.ts: document hierarchy,
-// two-column facts, total band and itemized rows. EventBrief supplies every value.
+// two-column facts, total band and itemized rows. Events Made Easy supplies every value.
 export const quoteStyles = `${quoteFontCss}
 @page{size:Letter;margin:16mm 17mm}
 .quote-paper,.quote-paper *{box-sizing:border-box}
@@ -65,16 +65,16 @@ export function renderGuestQuote(document, prepared, {reviewed=false,interactive
   const fact=(label,value)=>`<div><dt>${label}</dt><dd>${esc(value??'To be confirmed')}</dd></div>`;
   const mode=prepared.mode==='authored_reference'?'Authored example - no AI call':prepared.mode==='simulated'?'Test provider - no AI call':'Prepared from AI-extracted event details';
   return `<article class="quote-paper" aria-label="Guest quote preview">
-    <header class="quote-header"><div><div class="quote-brand">EventBrief</div><div class="quote-kicker">${esc(prepared.profile.name)} · Event estimate</div></div><div class="quote-kicker quote-preparer">Private events<br>Prepared for your review</div></header>
-    <div class="quote-kicker">Your event estimate</div><h2 class="quote-title">A gathering at ${esc(prepared.profile.name)}</h2><p>Prepared for ${esc(values.host_name)}.</p>
+    <header class="quote-header"><div><div class="quote-brand">Events Made Easy</div><div class="quote-kicker">${esc(restaurantName(prepared.profile))} · Event estimate</div></div><div class="quote-kicker quote-preparer">Private events<br>Prepared for your review</div></header>
+    <div class="quote-kicker">Your event estimate</div><h2 class="quote-title">A gathering at ${esc(restaurantName(prepared.profile))}</h2><p>Prepared for ${esc(values.host_name)}.</p>
     <dl class="quote-details">${fact('Date',date)}${fact('Guests',`${values.guest_13_plus_count} guests · ${values.child_count == null ? 'Children (0–12): not specified' : `${values.child_count} children (0–12)`}`)}${fact('Time',[time(values.start_time),time(values.end_time)].join(' - ')+(values.timezone?`\n${values.timezone}`:''))}${fact('Location',values.venue)}${fact('Menu',values.menu)}${fact('Beverages',values.beverage)}</dl>
     <div class="quote-total"><div class="quote-kicker">${esc(document.quote.total_label ?? 'Estimated total')} · USD</div><div class="quote-amount">${money(document.quote.total_cents)}</div></div>
     <table class="quote-breakdown"><caption>Itemized estimate · fictional prices</caption><tbody>${document.quote.lines.map(line=>`<tr><td>${esc(line.description)} · ${line.quantity} × ${money(line.unit_cents)}</td><td>${money(line.amount_cents)}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row">${esc(document.quote.total_label ?? 'Estimated total')}</th><td>${money(document.quote.total_cents)}</td></tr></tfoot></table>
     <div class="quote-terms"><p>${esc(document.quote.note)}</p>${document.beverage_notes?`<p><strong>Drink notes:</strong> ${esc(document.beverage_notes)}</p>`:''}${document.beverage_note?`<p>${esc(document.beverage_note)}</p>`:''}<p>This estimate is for review. It does not reserve the venue or confirm a booking.</p></div>
-    <div class="quote-closing">${draftReviewNotes(document)}<footer class="quote-footer"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · Fictional capstone example<br>${mode}. Prepared with ${esc(prepared.profile.version)} restaurant rules.<br>EventBrief · ${esc(prepared.profile.name)}</footer></div>
+    <div class="quote-closing">${draftReviewNotes(document)}<footer class="quote-footer"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · Fictional capstone example<br>${mode}. Prepared with ${esc(prepared.profile.version)} restaurant rules.<br>Events Made Easy · ${esc(restaurantName(prepared.profile))}</footer></div>
   </article>${interactive?`<nav class="quote-source-tools" aria-label="Check quote sources"><span>Check source details:</span>${rows.map(row=>`<button class="fact-source" data-field="${esc(row.field)}">${esc(row.label)}</button>`).join('')}<button class="fact-source" data-policy="true">Pricing rules</button></nav>`:''}`;
 }
 
 export function standaloneGuestQuote(document,prepared,reviewed,{fontCss=quoteFontCss}={}) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EventBrief - Guest quote</title><style>${quoteStyles.replace(quoteFontCss,fontCss)}body{margin:0;background:white}</style></head><body>${renderGuestQuote(document,prepared,{reviewed})}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Events Made Easy - Guest quote</title><style>${quoteStyles.replace(quoteFontCss,fontCss)}body{margin:0;background:white}</style></head><body>${renderGuestQuote(document,prepared,{reviewed})}</body></html>`;
 }

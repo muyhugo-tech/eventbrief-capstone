@@ -1,4 +1,4 @@
-import { approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
+import { restaurantName, approvedDocumentRows, draftReviewNotes } from './package-export.mjs';
 import { quoteFontCss } from './quote-document.mjs';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -43,17 +43,17 @@ export function renderGuestSheet(document,prepared,{reviewed=false,interactive=f
   // Omit the fictional profile's accounting preface; retain its service policy.
   const beverageNote=(document.beverage_note??'').replace(/^One demo beverage-package price for Guests\.\s*/, '');
   const mode=prepared.mode==='authored_reference'?'Authored example · no AI call':prepared.label;
-  return `<article class="guest-paper" aria-label="Guest event sheet preview"><header><div class="guest-restaurant">${esc(prepared.profile.name)}</div><h2 class="guest-title">Your event details</h2></header>
-    <p class="guest-greeting">Dear ${esc(v.host_name)},</p><p>Thank you for choosing ${esc(prepared.profile.name)} for your event. Here are the event details we have on file for you.</p>
+  return `<article class="guest-paper" aria-label="Guest event sheet preview"><header><div class="guest-restaurant">${esc(restaurantName(prepared.profile))}</div><h2 class="guest-title">Your event details</h2></header>
+    <p class="guest-greeting">Dear ${esc(v.host_name)},</p><p>Thank you for choosing ${esc(restaurantName(prepared.profile))} for your event. Here are the event details we have on file for you.</p>
     <table class="guest-summary" aria-label="Your event at a glance"><tbody>${row('Host',v.host_name)}${row('Date',date(v.event_date))}${row('Time',`${time(v.start_time)} - ${v.end_time ? time(v.end_time) : 'End time to confirm'} (${zone(v.timezone)})`)}${row('Location',v.venue)}${row('Guests',attendance)}</tbody></table>
     <section class="guest-section"><h3>Your menu &amp; drinks</h3><p class="guest-menu-name">${esc(v.menu)}</p><ul>${(document.menu_courses??[]).map(course=>`<li>${esc(course)}</li>`).join('')}</ul><p><strong>Drinks:</strong> ${esc(v.beverage)}</p>${document.beverage_notes?`<p><strong>Drink notes:</strong> ${esc(document.beverage_notes)}</p>`:''}${beverageNote?`<p class="guest-small">${esc(beverageNote)}</p>`:''}</section>
     <section class="guest-section"><h3>Your arrival &amp; event notes</h3><p>${esc(v.guest_notes ?? 'No additional arrival instructions supplied.')}</p></section>
     <section class="guest-section"><h3>Need to make a change?</h3><p>Please let us know as soon as possible if your guest count, timing, or plans change - including any last-minute updates. We will review your request and confirm what we can accommodate.</p></section>
-    <div class="guest-closing"><p>We look forward to welcoming you and your guests.</p><p>Warmly,<br>The ${esc(prepared.profile.name)} team</p></div>
-    ${draftReviewNotes(document)}<footer class="guest-footer"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · Guest copy · EventBrief<br>Fictional capstone example · ${esc(mode)}</footer></article>
+    <div class="guest-closing"><p>We look forward to welcoming you and your guests.</p><p>Warmly,<br>The ${esc(restaurantName(prepared.profile))} team</p></div>
+    ${draftReviewNotes(document)}<footer class="guest-footer"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · Guest copy · Events Made Easy<br>Fictional capstone example · ${esc(mode)}</footer></article>
     ${interactive?`<details class="guest-source-checks"><summary>Check the source details</summary>${rows.map(row=>`<button class="fact-source" data-field="${esc(row.field)}">${esc(row.field==='guest_count'?'Total attendance':row.label)}</button>`).join('')}<button class="fact-source" data-policy="true">Menu &amp; beverage details</button><p>Use Edit event details → Guest instructions to change the arrival and event notes. Download a new copy after saving changes.</p></details>`:''}`;
 }
 
 export function standaloneGuestSheet(document,prepared,reviewed,{fontCss=quoteFontCss}={}) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EventBrief - Guest event details</title><style>@page{size:Letter;margin:14mm 16mm}html,body{margin:0;padding:0;background:#fff}${guestStyles.replace(quoteFontCss,fontCss)}</style></head><body>${renderGuestSheet(document,prepared,{reviewed})}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Events Made Easy - Guest event details</title><style>@page{size:Letter;margin:14mm 16mm}html,body{margin:0;padding:0;background:#fff}${guestStyles.replace(quoteFontCss,fontCss)}</style></head><body>${renderGuestSheet(document,prepared,{reviewed})}</body></html>`;
 }

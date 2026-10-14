@@ -3,6 +3,11 @@ import { buildDocumentHtml } from '../lib/reused-yannis/templates/event.mjs';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+// Keep saved extraction profiles and their fingerprints intact when renaming
+// the fictional restaurant. Current previews and exports share its display name.
+export const restaurantName = profile => profile.id === 'linden-fig-demo'
+  ? "Sergio's Restaurant Venue" : profile.name;
+
 export const draftReviewNotes = document => (document.notices ?? []).length
   ? `<section aria-label="Details to confirm"><h3>Details to confirm</h3>${document.notices.map(note => `<p>${esc(note)}</p>`).join('')}</section>` : '';
 
@@ -90,7 +95,8 @@ export function reusedInternalDocument(document, prepared, reviewed) {
     html=html.replaceAll('Event Order Details','Staff event plan');
   }
   const label=prepared.mode==='authored_reference'?'Authored example · no AI call':prepared.label;
-  const banner=`<aside class="demo-review"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · ${esc(document.audience)}<br>${esc(label)}<br>All details fictional. ${esc(prepared.profile.name)} · ${esc(values.timezone)}. Prepared from the selected conversation and the ${esc(prepared.profile.version)} restaurant profile. Review does not create a booking or send a message.</aside>`;
+  html=html.replaceAll('Linden &amp; Fig',esc(restaurantName(prepared.profile)));
+  const banner=`<aside class="demo-review"><strong>${reviewed?'Reviewed draft':'Draft · not reviewed'}</strong> · ${esc(document.audience)}<br>${esc(label)}<br>All details fictional. ${esc(restaurantName(prepared.profile))} · ${esc(values.timezone)}. Prepared from the selected conversation and the ${esc(prepared.profile.version)} restaurant profile. Review does not create a booking or send a message.</aside>`;
   const css='<style>@page{size:Letter;margin:14mm}.demo-review{font:12px/1.5 Arial,sans-serif;border:1px solid #ccc;margin:20px auto;padding:12px;max-width:720px;overflow-wrap:anywhere}.asset-attendance{white-space:pre-wrap}.service-check{font:12px/1.5 Arial,sans-serif;margin-top:18px;color:#555}main{max-width:820px;margin:auto}.prose,.fv,.lines td{overflow-wrap:anywhere}.lines .q:empty,.lines .ve:empty,.lines .pr:empty{display:none}.lines td.it{width:auto}@media(max-width:540px){main{padding:20px!important}.grid{grid-template-columns:1fr}table.lines td{font-size:17px!important;padding:7px 4px}.demo-review{margin:12px}}@media print{main{padding:12px 0!important}.brandbar{padding:15px 20px}.demo-review{break-inside:avoid;margin:0 auto 15px}.prodnotes,.course,tr,.f{break-inside:avoid}h1,h2{break-after:avoid}.docfoot{padding:12px 0}.prose{orphans:3;widows:3}}</style>';
   return html.replace('</head>','<meta name="viewport" content="width=device-width,initial-scale=1">'+css+'</head>').replace(/(<body[^>]*>)/,match=>match+banner);
 }

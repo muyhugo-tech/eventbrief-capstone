@@ -1,8 +1,10 @@
-# EventBrief
+# Events Made Easy
 
 Turn a restaurant event conversation into five drafts that a person can check: a calendar entry, guest quote, kitchen sheet, staff event plan, and guest event plan.
 
 This is a **capstone prototype with fictional messages and prices**, with local and hosted entry points that share the same application core. Its Inbox holds pasted conversations and replies. It does not connect to an email account, book events, send messages, or change a live restaurant system.
+
+The sample restaurant is **Sergio’s Restaurant Venue**. The repository and hosting address retain the original EventBrief name. Earlier evaluation records retain their original restaurant names and evidence.
 
 ## Try it
 

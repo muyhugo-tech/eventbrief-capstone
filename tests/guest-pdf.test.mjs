@@ -32,7 +32,7 @@ test('guest PDF is welcoming, factual and audience-filtered even with extra inte
   doc.rows.push({field:'staff_notes',value:'PRIVATE_STAFF_SENTINEL'},{field:'dietary',value:'PRIVATE_DIETARY_SENTINEL'},{field:'source_messages',value:'PRIVATE_SOURCE_SENTINEL'});
   doc.staff_pricing=prepared.documents.find(doc=>doc.id==='quote').quote;
   const html=await guestPdfHtml(doc,prepared,false);
-  for(const text of ['Dear Alex Morgan,','Thank you for choosing Linden &amp; Fig','Your event details','6:00 PM - 9:00 PM (Pacific Time)','Garden Patio','Garden salad','Arrive at the garden entrance','last-minute updates','confirm what we can accommodate','The Linden &amp; Fig team','Draft · not reviewed'])assert.ok(html.includes(text),text);
+  for(const text of ['Dear Alex Morgan,','Thank you for choosing Sergio&#39;s Restaurant Venue','Your event details','6:00 PM - 9:00 PM (Pacific Time)','Garden Patio','Garden salad','Arrive at the garden entrance','last-minute updates','confirm what we can accommodate','The Sergio&#39;s Restaurant Venue team','Draft · not reviewed'])assert.ok(html.includes(text),text);
   assert.doesNotMatch(html,/PRIVATE_|Riley will lead|No allergies or dietary restrictions|\$2,280|One demo beverage-package price|confirmed booking|confirmed event details|data-field=/i);
   assert.match(html,/data:font\/woff2;base64/);
   assert.doesNotMatch(html,/url\('\/quote-fonts/);

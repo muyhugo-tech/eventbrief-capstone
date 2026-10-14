@@ -1,6 +1,6 @@
 import { FIELD_DEFINITIONS, PACKAGE_STATUSES } from '/package-contract.mjs';
 import { escapeHtml as esc, renderDocument, standaloneDocument } from '/package-render.mjs';
-import { assetFilename } from '/package-export.mjs';
+import { assetFilename, restaurantName } from '/package-export.mjs';
 import { renderBoard, renderAssetLibrary } from '/workspace-board.mjs';
 import { renderCalendar, calendarMonth, shiftMonth, calendarFile } from '/workspace-calendar.mjs';
 import { inboxThreads, renderInboxThreads, renderInboxDetail } from '/workspace-inbox.mjs';
@@ -342,7 +342,7 @@ function renderFields() {
 function renderPolicy() {
   const profile = session().data.profile;
   $('#policy-panel').hidden = false;
-  $('#policy-content').innerHTML = `<h2>${esc(profile.name)} · ${esc(profile.version)}</h2><p>These are deliberately small fictional rules for this example. Explicit dietary, AV, or special requests still need confirmation. Missing optional notes do not stop draft preparation.</p>
+  $('#policy-content').innerHTML = `<h2>${esc(restaurantName(profile))} · ${esc(profile.version)}</h2><p>These are deliberately small fictional rules for this example. Explicit dietary, AV, or special requests still need confirmation. Missing optional notes do not stop draft preparation.</p>
     <p>Service: ${esc(profile.opening_time)}–${esc(profile.closing_time)}, ${esc(profile.timezone)}. Same-day events only. These rules do not establish availability.</p>
     <ul>${Object.entries(profile.venues).map(([name, venue]) => `<li>${esc(name)}: capacity ${venue.capacity}; setups: ${venue.setups.map(esc).join(', ')}.</li>`).join('')}</ul>
     <h3>Fictional prices per guest · USD</h3><ul>${[...Object.entries(profile.menus), ...Object.entries(profile.beverages)].map(([name, option]) => `<li>${esc(name)}: ${option.billing === 'pay_separately' ? 'Drinks paid separately; excluded from the food estimate' : Object.entries(option.prices_cents).map(([field, cents]) => `${esc(profile.categories[field].label)} $${(cents / 100).toFixed(2)}`).join('; ')}.</li>`).join('')}</ul>
@@ -402,9 +402,10 @@ function renderPackage() {
   $('#try-demo').hidden = Boolean(hosted) || !demo?.available;
   $('#demo-help').hidden = Boolean(hosted) || !demo?.available;
   $('#page-title').textContent = overview ? viewNames[workspaceView] : currentId === 'new' ? 'New event' : 'Event workspace';
-  $('#workbench-help').textContent = currentId === 'new' ? 'Paste a conversation. Get five drafts. Check the details.' : `One event. One shared record. Five drafts.${version?.revision ? ` Version ${version.revision}.` : ''}`;
+  $('#workbench-help').textContent = currentId === 'new' ? 'Turn event messages into five drafts for your review.' : `Your saved event${version?.revision ? ` · Version ${version.revision}` : ''}`;
+  $('#preparation-controls').open = !data;
   renderHistory();
-  $('#package-mode-label').textContent = data?.label ?? (currentMode === 'reference' ? 'Authored demo · no AI call' : live.mode === 'simulated' ? 'Simulated provider · no AI call' : 'AI extraction · not yet run');
+  $('#package-mode-label').textContent = data ? (data.mode === 'authored_reference' ? 'Written example · no AI call' : data.mode === 'simulated' ? 'Test example · no AI call' : 'AI-prepared · check before use') : (currentMode === 'reference' ? 'Written example · no AI call' : live.mode === 'simulated' ? 'Test example · no AI call' : 'Ready for AI preparation');
   $('#package-live-status').textContent = currentMode === 'reference' ? 'Written example · no AI call. Your review progress is saved.' : hosted && !hosted.ai_configured ? 'Real AI is not connected yet. Click Try a sample above.'
     : hosted && !hosted.unlocked ? 'Enter your access code above to prepare drafts with AI. Or click Try a sample.'
     : !live.ready ? hosted ? 'AI is unavailable. You can still try the sample above.' : 'AI is not connected. Try the free guided example below.'

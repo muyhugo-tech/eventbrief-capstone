@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Prepare and review five event drafts from one fictional conversation.">
-  <title>EventBrief — Event package</title>
+  <title>Events Made Easy — Event workspace</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/package.css">
   <link rel="stylesheet" href="/quote-document.css">
@@ -20,8 +20,8 @@
 <body class="package-page">
   <a class="skip-link" href="#workspace">Skip to event package</a>
   <aside class="rail" aria-label="Event workspace">
-    <a class="wordmark" href="/package"><span class="brand-mark" aria-hidden="true">e</span>EventBrief</a>
-    <p class="rail-intro">Linden &amp; Fig <span>Demo workspace</span></p>
+    <a class="wordmark" href="/package" aria-label="Events Made Easy home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M7.5 3v4m9-4v4M4 10h16m-12 5 3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="brand-name">Events<span>Made Easy</span></span></a>
+    <p class="rail-intro">Sergio&#39;s Restaurant Venue <span>Demo workspace</span></p>
     <nav class="workspace-nav" aria-label="Workspaces">
       <button data-workspace="inbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 5 3-2h12l3 2v15H3V5Z M3 13h5l2 3h4l2-3h5M7 7h10m-10 3h10"/></svg>Inbox <span id="rail-inbox-count"></span></button>
       <!-- Icon geometry adapted from Yanni's components/AppSidebar.tsx. -->
@@ -35,7 +35,7 @@
       <button data-workspace="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor"/><circle cx="15" cy="12" r="2" fill="currentColor"/><circle cx="9" cy="18" r="2" fill="currentColor"/></svg>Restaurant settings</button>
     </nav>
     <div class="recent-events"><h2>Recent events</h2><nav id="recent-events" aria-label="Recent events"></nav></div>
-    <div class="rail-note"><span class="sample-label">Synthetic data only</span><p>Prepare, check, then share.<br>Nothing is sent or booked.</p><a href="/">Extraction examples</a></div>
+    <div class="rail-note"><span class="sample-label">Fictional event workspace</span><p>Review your drafts before sharing.<br>Nothing is sent or booked.</p><a href="/">View extraction examples</a></div>
   </aside>
   <main id="workspace">
     <header class="page-header">
@@ -43,7 +43,7 @@
       <button id="header-new-event" class="button secondary">New event</button>
     </header>
     <details id="workspace-access-settings" class="workspace-access-settings" hidden><summary>Public sample &amp; private workspace</summary>
-    <section id="hosted-access" class="hosted-access" hidden aria-label="Try EventBrief">
+    <section id="hosted-access" class="hosted-access" hidden aria-label="Try Events Made Easy">
       <div class="hosted-sample">
         <h2>Public sample</h2>
         <p>Start with a sample event. Open the drafts, add a reply, and save your review.</p>
@@ -64,7 +64,7 @@
     </section>
     </details>
     <section id="inbox-overview" class="tool-overview" hidden aria-labelledby="inbox-heading">
-      <div class="overview-heading inbox-heading"><div><h2 id="inbox-heading">Incoming messages</h2><p>See the source. Check the event details. Open the drafts.</p><p class="inbox-intake-note">Pasted conversations and replies · no email account connected</p></div><div class="inbox-toolbar"><button id="inbox-add" class="button primary">Add conversation</button><button id="inbox-refresh" class="button secondary">Refresh inbox</button></div></div>
+      <div class="overview-heading inbox-heading"><div><h2 id="inbox-heading">Incoming messages</h2><p>Keep conversations, event details and drafts together.</p><p class="inbox-intake-note">Pasted conversations and replies · no email account connected</p></div><div class="inbox-toolbar"><button id="inbox-add" class="button primary">Add conversation</button><button id="inbox-refresh" class="button secondary">Refresh inbox</button></div></div>
       <form id="inbox-compose" class="inbox-compose" hidden aria-labelledby="inbox-compose-heading">
         <h3 id="inbox-compose-heading">Add a conversation</h3><p id="inbox-compose-help" class="inbox-muted">Paste fictional event messages, oldest first. Saving them does not call AI.</p>
         <label id="inbox-reply-role-label" for="inbox-reply-role" hidden>Who sent this reply?<select id="inbox-reply-role"><option value="host">Event host</option><option value="coordinator">Restaurant</option></select></label>
@@ -76,7 +76,7 @@
       <div class="inbox-layout"><aside class="inbox-sidebar" aria-label="Saved conversations"><label class="inbox-search" for="inbox-search">Find a conversation<input id="inbox-search" type="search" placeholder="Search names or messages" autocomplete="off"></label><label class="inbox-filter" for="inbox-filter">Show<select id="inbox-filter"><option value="all">All conversations</option><option value="pending">Needs preparation</option><option value="blocked">Needs details</option><option value="prepared">Prepared drafts</option></select></label><div id="inbox-threads"></div></aside><div id="inbox-detail" class="inbox-detail"></div></div>
     </section>
     <section id="events-overview" class="events-overview" hidden aria-labelledby="events-heading">
-      <div class="overview-heading"><div><h2 id="events-heading">Your events</h2><p>Messages become five drafts. Each event moves forward as you review.</p></div><span id="events-count"></span></div>
+      <div class="overview-heading"><div><h2 id="events-heading">Your events, ready for the next step</h2><p>See what needs an answer and which drafts are ready to review.</p></div><span id="events-count"></span></div>
       <div class="overview-tools"><label class="event-search" for="event-search">Find an event<input id="event-search" type="search" placeholder="Search by event name" autocomplete="off"></label><div class="view-switch" aria-label="Event view"><button data-event-layout="board" aria-pressed="true">Board</button><button data-event-layout="list" aria-pressed="false">List</button></div></div>
       <div id="event-board"></div>
       <div id="events-table-wrap" class="events-table-wrap" hidden><table class="events-table"><thead><tr><th>Event</th><th>Progress</th><th>Version</th><th>Source</th></tr></thead><tbody id="event-rows"></tbody></table></div>
@@ -88,8 +88,9 @@
     <section id="restaurant-settings" class="restaurant-settings" hidden aria-label="Restaurant settings"></section>
     <div id="event-workbench">
     <button class="text-button back-to-events" data-workspace="events">← Back to events</button>
-    <div class="workbench-heading"><p id="workbench-help">Paste a conversation. Get five drafts. Check the details.</p><span id="package-mode-label" class="mode-label">Authored demo · no AI call</span></div>
+    <div class="workbench-heading"><p id="workbench-help">Turn event messages into five drafts for your review.</p><span id="package-mode-label" class="mode-label">Written example · no AI call</span></div>
     <button id="event-inbox-source" class="text-button" hidden>View messages in Inbox</button>
+    <details id="preparation-controls" class="preparation-controls" open><summary>Messages &amp; draft preparation</summary>
     <div class="package-controls">
       <label for="package-scenario">Choose a conversation<select id="package-scenario" disabled><option>Loading…</option></select></label>
       <label for="package-mode">Make drafts with<select id="package-mode" disabled><option value="reference">Saved example</option><option value="live" disabled>Real AI</option></select></label>
@@ -100,9 +101,10 @@
       <textarea id="event-messages" rows="7" maxlength="8000" aria-describedby="paste-help paste-count" placeholder="Host: We would like to hold a dinner…&#10;Restaurant: Here is what we can offer…"></textarea>
       <div class="item-actions"><button id="paste-example" class="text-button">Fill with an example</button><span id="paste-count" class="live-note">0 / 8,000 characters</span></div>
       <p class="live-note">AI reads the messages. Missing details stay marked for review.</p>
-      <p class="live-note">This demo uses Linden &amp; Fig’s sample menu and prices. Other menu or venue requests need checking.</p>
+      <p class="live-note">This demo uses sample menus and prices for Sergio&#39;s Restaurant Venue. Other menu or venue requests need checking.</p>
     </section>
     <div class="prepare-row"><button id="prepare" class="button primary" disabled>Prepare five drafts</button><p id="package-live-status" class="live-note"></p></div>
+    </details>
     <p id="save-status" class="save-status" role="status" aria-live="polite"></p>
     <div id="update-controls" class="item-actions" hidden><button id="add-update" class="small-button">Add demo update</button><span class="live-note">Try an agreed change to the date and guest count.</span></div>
     <p id="version-note" class="notice" role="status" hidden></p>
@@ -127,9 +129,9 @@
         <div class="item-actions"><button id="save-event-edit" type="submit" class="button primary">Save changes</button><button id="cancel-event-edit" type="button" class="text-button">Cancel</button><span class="live-note">No AI call. Changed drafts need review again.</span></div>
       </form>
       <details id="feedback-panel" class="source-panel" hidden><summary>Coordinator notes &amp; AI lessons</summary><p>Changes stay with this event. The five most recent enabled lessons in this workspace are included in the next AI preparation. Original messages and AI answers stay unchanged.</p><div id="feedback-history"></div></details>
-      <p class="review-instruction">Open each draft. Check its details, then mark it reviewed.</p>
+      <p class="review-instruction">Check each draft below, then mark it reviewed.</p>
       <section id="reply-panel" class="reply-panel" hidden aria-labelledby="reply-heading">
-        <div class="reply-heading"><div><h3 id="reply-heading">Got a new reply?</h3><p>Add it here. Earlier messages and versions stay saved.</p></div><button id="show-reply" class="small-button" aria-expanded="false" aria-controls="reply-form">Add a reply</button></div>
+        <div class="reply-heading"><div><h3 id="reply-heading">New details from the host?</h3><p>Add their reply to update this event. Earlier versions stay saved.</p></div><button id="show-reply" class="small-button" aria-expanded="false" aria-controls="reply-form">Add a reply</button></div>
         <form id="reply-form" hidden>
           <label for="reply-role">Who sent it?<select id="reply-role"><option value="host">Event host</option><option value="coordinator">Restaurant</option></select></label>
           <label for="reply-text">Paste their reply<textarea id="reply-text" rows="4" maxlength="2000" placeholder="I checked with everyone. No allergies or dietary restrictions." required></textarea></label>
@@ -176,7 +178,7 @@
     <details id="export-panel" class="source-panel" hidden><summary>Keep a copy of this review</summary><p class="live-note">This file contains the conversation, staff notes, and review marks. It is for your own records. To share a draft, use its Download button above.</p><button id="download-package" class="button secondary">Download review package</button></details>
     <p class="storage-note">Drafts, saved corrections, and review marks stay on this computer. Reopening them is free. Nothing is sent or booked.</p>
     </div>
-    <footer>EventBrief <span>Local capstone prototype · all data fictional</span></footer>
+    <footer>Events Made Easy <span>Capstone prototype · all data fictional</span></footer>
   </main>
 </body>
 </html>

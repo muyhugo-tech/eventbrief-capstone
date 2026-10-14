@@ -1,4 +1,4 @@
-import { approvedDocumentRows, reusedInternalDocument, draftReviewNotes } from './package-export.mjs';
+import { restaurantName, approvedDocumentRows, reusedInternalDocument, draftReviewNotes } from './package-export.mjs';
 import { renderGuestQuote, standaloneGuestQuote } from './quote-document.mjs';
 import { renderKitchenSheet, standaloneKitchenSheet } from './kitchen-document.mjs';
 import { renderStaffSheet, standaloneStaffSheet } from './staff-document.mjs';
@@ -25,7 +25,7 @@ export function renderDocument(document, prepared, { interactive = true, reviewe
   const esc = escapeHtml;
   const rows = approvedDocumentRows(document);
   reviewed = reviewed && document.state === 'ready_for_review';
-  const header = `<div class="restaurant-name">${esc(prepared.profile.name)}</div>
+  const header = `<div class="restaurant-name">${esc(restaurantName(prepared.profile))}</div>
     <h2 class="draft-title">${esc(document.title)}</h2>
     <p class="draft-meta">${esc(document.audience)} · all details fictional</p>
     <span class="draft-label${reviewed ? ' draft-reviewed' : ''}">${reviewed ? 'Reviewed draft' : 'Draft · not reviewed'}</span>
@@ -59,7 +59,7 @@ export function standaloneDocument(document, prepared, reviewed) {
   if (reused) return reused;
   // Each export receives only its audience-approved rows, never the full thread.
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>${escapeHtml(prepared.profile.name)} — ${escapeHtml(document.title)} — fictional draft</title>
+    <title>${escapeHtml(restaurantName(prepared.profile))} — ${escapeHtml(document.title)} — fictional draft</title>
     <style>@page{size:Letter;margin:16mm}*{box-sizing:border-box}body{font:14px/1.5 Arial,Helvetica,sans-serif;color:#26372e;margin:36px auto;padding:0 28px;max-width:800px;background:#fff}.restaurant-name{font:28px Georgia,serif;border-bottom:2px solid #395844;padding-bottom:15px}.draft-title{font:30px/1.2 Georgia,serif;margin:25px 0 8px}.draft-meta,.draft-note{font-size:12px;line-height:1.55;color:#58655d}.draft-meta{margin:0 0 16px}.draft-label{display:inline-block;padding:4px 7px;margin:0 7px 8px 0;border:1px solid #d7ddd9;border-radius:3px;font-size:11px}.draft-reviewed{background:#edf5ed}.draft-section-title{font-size:15px;margin:23px 0 8px;break-after:avoid}.draft-facts{margin:0}.draft-fact{display:grid;grid-template-columns:minmax(120px,1fr) minmax(0,2fr);gap:16px;border-bottom:1px solid #e0e5e1;padding:7px 0}dt{color:#58655d}dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}.asset-total{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:23px 0 5px;padding:17px;background:#edf3ee;border:1px solid #cdd9cf;border-radius:4px}.asset-total strong{font-size:28px;font-weight:600}.asset-total span{font-size:12px}.draft-list{padding-left:22px;margin:10px 0}.draft-list li{padding:3px 0;overflow-wrap:anywhere}.quote-table{width:100%;border-collapse:collapse;font-size:12px}.quote-table th,.quote-table td{padding:9px 5px;text-align:left;border-bottom:1px solid #dcdedb}.quote-table td:first-child{overflow-wrap:anywhere}.quote-table .numeric{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.quote-table caption{text-align:left;font-weight:bold;margin:14px 0 4px}.quote-table tfoot{font-weight:bold}.asset-review-footer{border-top:1px solid #dcdedb;margin-top:24px;padding-top:8px}.blocked-draft{border:1px solid #dcdedb;padding:18px;margin-top:20px}@media(max-width:500px){body{margin:20px auto;padding:0 16px}.draft-fact{grid-template-columns:1fr;gap:3px}.asset-total strong{font-size:24px}.quote-table{font-size:11px}.quote-table th,.quote-table td{padding:8px 3px}}@media print{body{margin:0;padding:0;max-width:none;font-size:11pt}.draft-note,.draft-meta{font-size:9pt}.quote-table{font-size:9pt}.draft-title{font-size:23pt}h2,h3{break-after:avoid}tr,.draft-fact,.asset-total,.asset-review-footer{break-inside:avoid}thead{display:table-header-group}tfoot{display:table-row-group}p,li{orphans:3;widows:3}.draft-label,.asset-total{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
     </head><body>${renderDocument(document, prepared, { interactive: false, reviewed })}</body></html>`;
 }
