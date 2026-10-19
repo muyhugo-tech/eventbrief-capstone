@@ -42,6 +42,8 @@ The workspace keeps these states separate:
 
 ## How it works
 
+The [five public demo checks](evaluation/public-demo-v1/README.md) record the live first attempts, one app matching failure, and replay after its repair. They do not claim independent held-out accuracy.
+
 The LLM reads the messages once and produces a shared event record with source excerpts. Ordinary code checks the record, calculates the fictional quote, and builds the five drafts. This keeps the drafts consistent and makes the calculations inspectable.
 
 Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download guest quotes, kitchen sheets, staff plans, and guest plans as PDF. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Local runs save under ignored `out/`. Hosted runs save in a separate private Blob store behind the server, but the synthetic demo workspace is publicly accessible. Anyone with the link can view and edit the same fictional events. Progress survives refresh and redeployment. There are no individual accounts or roles; never enter real customer information. See [storage limits](docs/HOSTING.md#saved-progress).

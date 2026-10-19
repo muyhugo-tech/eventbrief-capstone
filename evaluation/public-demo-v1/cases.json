@@ -1,0 +1,2218 @@
+{
+  "synthetic": true,
+  "date": "2026-10-19",
+  "purpose": "Five public demonstration cases; not independent held-out evaluation data.",
+  "cases": [
+    {
+      "id": "birthday",
+      "title": "1. Birthday dinner — complete details",
+      "input": {
+        "id": "pasted-76fa9281a6d34a3d45d6122a2aca042940d2f2c70f96a83bff9e02b3c5159f77",
+        "title": "Pasted event: Host — Elena Brooks: Hi! I'd like a birthday dinner at Sergio's Restau",
+        "synthetic": true,
+        "source_kind": "pasted",
+        "messages": [
+          {
+            "id": "pasted",
+            "role": "conversation",
+            "body": "Host — Elena Brooks: Hi! I'd like a birthday dinner at Sergio's Restaurant Venue on November 6, 2026, from 6 PM to 9 PM. We will have 18 guests and 2 children. Could we use the Garden Patio and Menu 2?\n\nRestaurant: Yes, we can arrange the Garden Patio and Menu 2. What would you like for drinks?\n\nHost — Elena Brooks: Nonalcoholic service, please. There are no allergies or dietary restrictions. One long table would be great. No AV or other special requirements.\n\nRestaurant: Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table. We have noted no allergies or dietary restrictions.\n\nHost — Elena Brooks: That is all correct. Thank you!"
+          }
+        ]
+      },
+      "profile": {
+        "schema_version": "eventbrief.restaurant.v2",
+        "id": "linden-fig-demo",
+        "version": "fictional-v3",
+        "synthetic": true,
+        "name": "Linden & Fig",
+        "description": "A fictional restaurant for the EventBrief capstone",
+        "timezone": "America/Los_Angeles",
+        "opening_time": "17:00",
+        "closing_time": "22:00",
+        "currency": "USD",
+        "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+        "categories": {
+          "guest_13_plus_count": {
+            "label": "Guests",
+            "age_min": 13,
+            "age_max": null
+          },
+          "child_count": {
+            "label": "Children (0–12)",
+            "age_min": 0,
+            "age_max": 12
+          }
+        },
+        "venues": {
+          "Garden Patio": {
+            "capacity": 60,
+            "setups": [
+              "One long table",
+              "Three tables of ten"
+            ]
+          }
+        },
+        "menus": {
+          "Menu 2": {
+            "description": "Family-style seasonal dinner",
+            "courses": [
+              "Garden salad",
+              "Roast squash and herb chicken, served family-style",
+              "Apple crumble"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 5800,
+              "child_count": 2200
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service"
+            ]
+          },
+          "Menu 3": {
+            "description": "Fictional rehearsal dinner menu",
+            "courses": [
+              "Mediterranean salad",
+              "Lemon herb chicken with roasted vegetables",
+              "Chocolate dessert"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 6400,
+              "child_count": 2400
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service",
+              "À la carte + cash bar"
+            ]
+          }
+        },
+        "beverages": {
+          "Beer and wine service": {
+            "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 1800,
+              "child_count": 600
+            }
+          },
+          "Nonalcoholic service": {
+            "description": "Nonalcoholic drinks for all guests",
+            "prices_cents": {
+              "guest_13_plus_count": 600,
+              "child_count": 600
+            }
+          },
+          "À la carte + cash bar": {
+            "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 0,
+              "child_count": 0
+            },
+            "billing": "pay_separately",
+            "aliases": [
+              "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+              "Beverages à la carte, cash bar"
+            ]
+          }
+        },
+        "supported_dietary": [
+          "No allergies or dietary restrictions"
+        ],
+        "supported_av": [
+          "No AV required"
+        ],
+        "supported_special": [
+          "No special requirements"
+        ],
+        "readiness": {
+          "calendar": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ]
+          },
+          "quote": {
+            "required": [
+              "host_name",
+              "guest_count",
+              "guest_13_plus_count",
+              "child_count",
+              "menu",
+              "beverage"
+            ],
+            "agreed": []
+          },
+          "kitchen": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "timezone",
+              "guest_count",
+              "menu",
+              "dietary"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "guest_count",
+              "menu"
+            ]
+          },
+          "staff": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "dietary",
+              "setup",
+              "av",
+              "special",
+              "staff_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "setup"
+            ]
+          },
+          "guest": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "guest_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage"
+            ]
+          }
+        }
+      },
+      "original": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Elena Brooks",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Host — Elena Brooks:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2026-11-06",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "That is all correct. Thank you!"
+              }
+            ]
+          },
+          "start_time": {
+            "value": "18:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "That is all correct. Thank you!"
+              }
+            ]
+          },
+          "end_time": {
+            "value": "21:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "That is all correct. Thank you!"
+              }
+            ]
+          },
+          "timezone": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_count": {
+            "value": 20,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "That is all correct. Thank you!"
+              }
+            ]
+          },
+          "guest_13_plus_count": {
+            "value": 18,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "That is all correct. Thank you!"
+              }
+            ]
+          },
+          "child_count": {
+            "value": 2,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "That is all correct. Thank you!"
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Could we use the Garden Patio and Menu 2?"
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can arrange the Garden Patio and Menu 2."
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Could we use the Garden Patio and Menu 2?"
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Yes, we can arrange the Garden Patio and Menu 2."
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Nonalcoholic service",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Nonalcoholic service, please."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              }
+            ]
+          },
+          "dietary": {
+            "value": "No allergies or dietary restrictions",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "There are no allergies or dietary restrictions."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "We have noted no allergies or dietary restrictions."
+              }
+            ]
+          },
+          "setup": {
+            "value": "One long table",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "One long table would be great."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed: November 6, 2026, 6–9 PM on the Garden Patio, 18 guests and 2 children, Menu 2, nonalcoholic service and one long table."
+              }
+            ]
+          },
+          "av": {
+            "value": "No AV required",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No AV or other special requirements."
+              }
+            ]
+          },
+          "special": {
+            "value": "No special requirements",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "No AV or other special requirements."
+              }
+            ]
+          },
+          "guest_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "staff_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          }
+        },
+        "pending_changes": [],
+        "open_questions": []
+      },
+      "expected": {
+        "guests": 18,
+        "children": 2,
+        "date": "2026-11-06",
+        "start": "18:00",
+        "end": "21:00",
+        "ready": [
+          "calendar",
+          "quote",
+          "kitchen",
+          "staff",
+          "guest"
+        ]
+      },
+      "first_live_pass": true,
+      "usage": {
+        "input_tokens": 2867,
+        "input_tokens_details": {
+          "cache_write_tokens": 450,
+          "cached_tokens": 2414
+        },
+        "output_tokens": 1823,
+        "output_tokens_details": {
+          "reasoning_tokens": 211
+        },
+        "total_tokens": 4690
+      }
+    },
+    {
+      "id": "count-change",
+      "title": "2. Rehearsal dinner — changed count, no end time",
+      "input": {
+        "id": "pasted-beef24619a621edb850cf27fd373110cdfd8678c714e509556aafd867c4e4656",
+        "title": "Pasted event: Host — Owen Parker: Hello! We are planning our rehearsal dinner at Ser",
+        "synthetic": true,
+        "source_kind": "pasted",
+        "messages": [
+          {
+            "id": "pasted",
+            "role": "conversation",
+            "body": "Host — Owen Parker: Hello! We are planning our rehearsal dinner at Sergio's Restaurant Venue on November 12, 2026, starting at 5:30 PM. We expect 24 guests and 2 children. We'd like the Garden Patio, Menu 2 and nonalcoholic service.\n\nRestaurant: We can arrange that. We have November 12 at 5:30 PM, the Garden Patio, Menu 2 and nonalcoholic service for 24 guests and 2 children.\n\nHost — Owen Parker: One update: four more guests can come. The final count is 28 guests and 2 children. Everything else stays the same.\n\nRestaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service.\n\nHost — Owen Parker: Yes, that is correct. Thank you!"
+          }
+        ]
+      },
+      "profile": {
+        "schema_version": "eventbrief.restaurant.v2",
+        "id": "linden-fig-demo",
+        "version": "fictional-v3",
+        "synthetic": true,
+        "name": "Linden & Fig",
+        "description": "A fictional restaurant for the EventBrief capstone",
+        "timezone": "America/Los_Angeles",
+        "opening_time": "17:00",
+        "closing_time": "22:00",
+        "currency": "USD",
+        "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+        "categories": {
+          "guest_13_plus_count": {
+            "label": "Guests",
+            "age_min": 13,
+            "age_max": null
+          },
+          "child_count": {
+            "label": "Children (0–12)",
+            "age_min": 0,
+            "age_max": 12
+          }
+        },
+        "venues": {
+          "Garden Patio": {
+            "capacity": 60,
+            "setups": [
+              "One long table",
+              "Three tables of ten"
+            ]
+          }
+        },
+        "menus": {
+          "Menu 2": {
+            "description": "Family-style seasonal dinner",
+            "courses": [
+              "Garden salad",
+              "Roast squash and herb chicken, served family-style",
+              "Apple crumble"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 5800,
+              "child_count": 2200
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service"
+            ]
+          },
+          "Menu 3": {
+            "description": "Fictional rehearsal dinner menu",
+            "courses": [
+              "Mediterranean salad",
+              "Lemon herb chicken with roasted vegetables",
+              "Chocolate dessert"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 6400,
+              "child_count": 2400
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service",
+              "À la carte + cash bar"
+            ]
+          }
+        },
+        "beverages": {
+          "Beer and wine service": {
+            "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 1800,
+              "child_count": 600
+            }
+          },
+          "Nonalcoholic service": {
+            "description": "Nonalcoholic drinks for all guests",
+            "prices_cents": {
+              "guest_13_plus_count": 600,
+              "child_count": 600
+            }
+          },
+          "À la carte + cash bar": {
+            "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 0,
+              "child_count": 0
+            },
+            "billing": "pay_separately",
+            "aliases": [
+              "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+              "Beverages à la carte, cash bar"
+            ]
+          }
+        },
+        "supported_dietary": [
+          "No allergies or dietary restrictions"
+        ],
+        "supported_av": [
+          "No AV required"
+        ],
+        "supported_special": [
+          "No special requirements"
+        ],
+        "readiness": {
+          "calendar": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ]
+          },
+          "quote": {
+            "required": [
+              "host_name",
+              "guest_count",
+              "guest_13_plus_count",
+              "child_count",
+              "menu",
+              "beverage"
+            ],
+            "agreed": []
+          },
+          "kitchen": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "timezone",
+              "guest_count",
+              "menu",
+              "dietary"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "guest_count",
+              "menu"
+            ]
+          },
+          "staff": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "dietary",
+              "setup",
+              "av",
+              "special",
+              "staff_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "setup"
+            ]
+          },
+          "guest": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "guest_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage"
+            ]
+          }
+        }
+      },
+      "original": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Owen Parker",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2026-11-12",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "start_time": {
+            "value": "17:30",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "end_time": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "timezone": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_count": {
+            "value": 30,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "guest_13_plus_count": {
+            "value": 28,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "child_count": {
+            "value": 2,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Nonalcoholic service",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Restaurant: Updated and confirmed: November 12, 2026, at 5:30 PM on the Garden Patio, 28 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Owen Parker: Yes, that is correct. Thank you!"
+              }
+            ]
+          },
+          "dietary": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "setup": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "av": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "special": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "staff_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          }
+        },
+        "pending_changes": [],
+        "open_questions": []
+      },
+      "expected": {
+        "guests": 28,
+        "children": 2,
+        "date": "2026-11-12",
+        "start": "17:30",
+        "end": "21:30",
+        "ready": [
+          "calendar",
+          "quote",
+          "kitchen",
+          "staff",
+          "guest"
+        ]
+      },
+      "first_live_pass": true,
+      "usage": {
+        "input_tokens": 2877,
+        "input_tokens_details": {
+          "cache_write_tokens": 2874,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1673,
+        "output_tokens_details": {
+          "reasoning_tokens": 258
+        },
+        "total_tokens": 4550
+      }
+    },
+    {
+      "id": "drinks",
+      "title": "3. Team dinner — keep juice and soda",
+      "input": {
+        "id": "pasted-8738fbd29fca96d9868cf0ad94c5c551701ff1ff6fb657f8b8f8c31837f8d075",
+        "title": "Pasted event: Host — Priya Shah: I'd like to book our team dinner at Sergio's Restau",
+        "synthetic": true,
+        "source_kind": "pasted",
+        "messages": [
+          {
+            "id": "pasted",
+            "role": "conversation",
+            "body": "Host — Priya Shah: I'd like to book our team dinner at Sergio's Restaurant Venue on November 18, 2026, from 6 PM to 9 PM. There will be 22 guests and no children. Can we have the Garden Patio and Menu 2?\n\nRestaurant: Yes. What drinks would you like?\n\nHost — Priya Shah: Nonalcoholic service with juice and soda, please. No beer or wine. There are no allergies or dietary restrictions. One long table and no AV are fine.\n\nRestaurant: Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda. We will use one long table and have noted no allergies or dietary restrictions.\n\nHost — Priya Shah: Perfect. Please keep the juice and soda in the event plan."
+          }
+        ]
+      },
+      "profile": {
+        "schema_version": "eventbrief.restaurant.v2",
+        "id": "linden-fig-demo",
+        "version": "fictional-v3",
+        "synthetic": true,
+        "name": "Linden & Fig",
+        "description": "A fictional restaurant for the EventBrief capstone",
+        "timezone": "America/Los_Angeles",
+        "opening_time": "17:00",
+        "closing_time": "22:00",
+        "currency": "USD",
+        "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+        "categories": {
+          "guest_13_plus_count": {
+            "label": "Guests",
+            "age_min": 13,
+            "age_max": null
+          },
+          "child_count": {
+            "label": "Children (0–12)",
+            "age_min": 0,
+            "age_max": 12
+          }
+        },
+        "venues": {
+          "Garden Patio": {
+            "capacity": 60,
+            "setups": [
+              "One long table",
+              "Three tables of ten"
+            ]
+          }
+        },
+        "menus": {
+          "Menu 2": {
+            "description": "Family-style seasonal dinner",
+            "courses": [
+              "Garden salad",
+              "Roast squash and herb chicken, served family-style",
+              "Apple crumble"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 5800,
+              "child_count": 2200
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service"
+            ]
+          },
+          "Menu 3": {
+            "description": "Fictional rehearsal dinner menu",
+            "courses": [
+              "Mediterranean salad",
+              "Lemon herb chicken with roasted vegetables",
+              "Chocolate dessert"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 6400,
+              "child_count": 2400
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service",
+              "À la carte + cash bar"
+            ]
+          }
+        },
+        "beverages": {
+          "Beer and wine service": {
+            "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 1800,
+              "child_count": 600
+            }
+          },
+          "Nonalcoholic service": {
+            "description": "Nonalcoholic drinks for all guests",
+            "prices_cents": {
+              "guest_13_plus_count": 600,
+              "child_count": 600
+            }
+          },
+          "À la carte + cash bar": {
+            "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 0,
+              "child_count": 0
+            },
+            "billing": "pay_separately",
+            "aliases": [
+              "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+              "Beverages à la carte, cash bar"
+            ]
+          }
+        },
+        "supported_dietary": [
+          "No allergies or dietary restrictions"
+        ],
+        "supported_av": [
+          "No AV required"
+        ],
+        "supported_special": [
+          "No special requirements"
+        ],
+        "readiness": {
+          "calendar": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ]
+          },
+          "quote": {
+            "required": [
+              "host_name",
+              "guest_count",
+              "guest_13_plus_count",
+              "child_count",
+              "menu",
+              "beverage"
+            ],
+            "agreed": []
+          },
+          "kitchen": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "timezone",
+              "guest_count",
+              "menu",
+              "dietary"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "guest_count",
+              "menu"
+            ]
+          },
+          "staff": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "dietary",
+              "setup",
+              "av",
+              "special",
+              "staff_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "setup"
+            ]
+          },
+          "guest": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "guest_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage"
+            ]
+          }
+        }
+      },
+      "original": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Priya Shah",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Host — Priya Shah:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2026-11-18",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "I'd like to book our team dinner at Sergio's Restaurant Venue on November 18, 2026, from 6 PM to 9 PM."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "start_time": {
+            "value": "18:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "I'd like to book our team dinner at Sergio's Restaurant Venue on November 18, 2026, from 6 PM to 9 PM."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "end_time": {
+            "value": "21:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "I'd like to book our team dinner at Sergio's Restaurant Venue on November 18, 2026, from 6 PM to 9 PM."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "timezone": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_count": {
+            "value": 22,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "There will be 22 guests and no children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "guest_13_plus_count": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "child_count": {
+            "value": 0,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "There will be 22 guests and no children."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Can we have the Garden Patio and Menu 2?"
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Can we have the Garden Patio and Menu 2?"
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Nonalcoholic service with juice and soda; no beer or wine.",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Nonalcoholic service with juice and soda, please. No beer or wine."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Confirmed for November 18, 2026, 6–9 PM, Garden Patio, 22 guests and no children, Menu 2, and nonalcoholic service with juice and soda."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Perfect. Please keep the juice and soda in the event plan."
+              }
+            ]
+          },
+          "dietary": {
+            "value": "No allergies or dietary restrictions",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "There are no allergies or dietary restrictions."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "We will use one long table and have noted no allergies or dietary restrictions."
+              }
+            ]
+          },
+          "setup": {
+            "value": "One long table",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "One long table and no AV are fine."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "We will use one long table and have noted no allergies or dietary restrictions."
+              }
+            ]
+          },
+          "av": {
+            "value": "No AV required",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "One long table and no AV are fine."
+              }
+            ]
+          },
+          "special": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "staff_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          }
+        },
+        "pending_changes": [],
+        "open_questions": []
+      },
+      "expected": {
+        "guests": 22,
+        "children": 0,
+        "date": "2026-11-18",
+        "start": "18:00",
+        "end": "21:00",
+        "ready": [
+          "calendar",
+          "quote",
+          "kitchen",
+          "staff",
+          "guest"
+        ]
+      },
+      "first_live_pass": false,
+      "usage": {
+        "input_tokens": 2871,
+        "input_tokens_details": {
+          "cache_write_tokens": 454,
+          "cached_tokens": 2414
+        },
+        "output_tokens": 1984,
+        "output_tokens_details": {
+          "reasoning_tokens": 341
+        },
+        "total_tokens": 4855
+      }
+    },
+    {
+      "id": "allergy",
+      "title": "4. Family dinner — an allergy needs checking",
+      "input": {
+        "id": "pasted-16a61bf0c4b65285d4e032f71260e0d407d0eb5b2b074fb6bd2f97e6e1c59c28",
+        "title": "Pasted event: Host — Marcus Reed: We would like a family dinner at Sergio's Restaura",
+        "synthetic": true,
+        "source_kind": "pasted",
+        "messages": [
+          {
+            "id": "pasted",
+            "role": "conversation",
+            "body": "Host — Marcus Reed: We would like a family dinner at Sergio's Restaurant Venue on November 22, 2026, from 5 PM to 9 PM. We have 26 guests and 2 children and would like the Garden Patio, Menu 2 and nonalcoholic service.\n\nRestaurant: We can arrange those details. Are there any allergies or dietary requirements?\n\nHost — Marcus Reed: One guest has a food allergy, but I still need to find out which food. I will check with them and send you the details. Please do not assume there are no allergies.\n\nRestaurant: Understood. The allergy details are still pending. The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service.\n\nHost — Marcus Reed: Correct. I will get back to you about the allergy."
+          }
+        ]
+      },
+      "profile": {
+        "schema_version": "eventbrief.restaurant.v2",
+        "id": "linden-fig-demo",
+        "version": "fictional-v3",
+        "synthetic": true,
+        "name": "Linden & Fig",
+        "description": "A fictional restaurant for the EventBrief capstone",
+        "timezone": "America/Los_Angeles",
+        "opening_time": "17:00",
+        "closing_time": "22:00",
+        "currency": "USD",
+        "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+        "categories": {
+          "guest_13_plus_count": {
+            "label": "Guests",
+            "age_min": 13,
+            "age_max": null
+          },
+          "child_count": {
+            "label": "Children (0–12)",
+            "age_min": 0,
+            "age_max": 12
+          }
+        },
+        "venues": {
+          "Garden Patio": {
+            "capacity": 60,
+            "setups": [
+              "One long table",
+              "Three tables of ten"
+            ]
+          }
+        },
+        "menus": {
+          "Menu 2": {
+            "description": "Family-style seasonal dinner",
+            "courses": [
+              "Garden salad",
+              "Roast squash and herb chicken, served family-style",
+              "Apple crumble"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 5800,
+              "child_count": 2200
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service"
+            ]
+          },
+          "Menu 3": {
+            "description": "Fictional rehearsal dinner menu",
+            "courses": [
+              "Mediterranean salad",
+              "Lemon herb chicken with roasted vegetables",
+              "Chocolate dessert"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 6400,
+              "child_count": 2400
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service",
+              "À la carte + cash bar"
+            ]
+          }
+        },
+        "beverages": {
+          "Beer and wine service": {
+            "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 1800,
+              "child_count": 600
+            }
+          },
+          "Nonalcoholic service": {
+            "description": "Nonalcoholic drinks for all guests",
+            "prices_cents": {
+              "guest_13_plus_count": 600,
+              "child_count": 600
+            }
+          },
+          "À la carte + cash bar": {
+            "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 0,
+              "child_count": 0
+            },
+            "billing": "pay_separately",
+            "aliases": [
+              "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+              "Beverages à la carte, cash bar"
+            ]
+          }
+        },
+        "supported_dietary": [
+          "No allergies or dietary restrictions"
+        ],
+        "supported_av": [
+          "No AV required"
+        ],
+        "supported_special": [
+          "No special requirements"
+        ],
+        "readiness": {
+          "calendar": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ]
+          },
+          "quote": {
+            "required": [
+              "host_name",
+              "guest_count",
+              "guest_13_plus_count",
+              "child_count",
+              "menu",
+              "beverage"
+            ],
+            "agreed": []
+          },
+          "kitchen": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "timezone",
+              "guest_count",
+              "menu",
+              "dietary"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "guest_count",
+              "menu"
+            ]
+          },
+          "staff": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "dietary",
+              "setup",
+              "av",
+              "special",
+              "staff_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "setup"
+            ]
+          },
+          "guest": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "guest_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage"
+            ]
+          }
+        }
+      },
+      "original": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Marcus Reed",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct. I will get back to you about the allergy."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2026-11-22",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "start_time": {
+            "value": "17:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "end_time": {
+            "value": "21:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "timezone": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_count": {
+            "value": 28,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "guest_13_plus_count": {
+            "value": 26,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "child_count": {
+            "value": 2,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Nonalcoholic service",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The other details are confirmed: November 22, 2026, 5–9 PM, Garden Patio, 26 guests and 2 children, Menu 2 and nonalcoholic service."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Host — Marcus Reed: Correct."
+              }
+            ]
+          },
+          "dietary": {
+            "value": "One guest has a food allergy; the specific food is still unknown.",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "One guest has a food allergy, but I still need to find out which food."
+              },
+              {
+                "message_id": "pasted",
+                "quote": "The allergy details are still pending."
+              }
+            ]
+          },
+          "setup": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "av": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "special": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "staff_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          }
+        },
+        "pending_changes": [],
+        "open_questions": [
+          {
+            "field": "dietary",
+            "question": "Which food is the guest allergic to?",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "One guest has a food allergy, but I still need to find out which food. I will check with them and send you the details."
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "guests": 26,
+        "children": 2,
+        "date": "2026-11-22",
+        "start": "17:00",
+        "end": "21:00",
+        "ready": [
+          "calendar",
+          "quote"
+        ]
+      },
+      "first_live_pass": true,
+      "usage": {
+        "input_tokens": 2874,
+        "input_tokens_details": {
+          "cache_write_tokens": 457,
+          "cached_tokens": 2414
+        },
+        "output_tokens": 1767,
+        "output_tokens_details": {
+          "reasoning_tokens": 145
+        },
+        "total_tokens": 4641
+      }
+    },
+    {
+      "id": "date-change",
+      "title": "5. Anniversary dinner — use the new date",
+      "input": {
+        "id": "pasted-d3971ade8434cdc678e3fcac072546d927764b1f998f483addc74ace87f7e58f",
+        "title": "Pasted event: Host — Sofia Bennett: Hello! We are planning an anniversary dinner at ",
+        "synthetic": true,
+        "source_kind": "pasted",
+        "messages": [
+          {
+            "id": "pasted",
+            "role": "conversation",
+            "body": "Host — Sofia Bennett: Hello! We are planning an anniversary dinner at Sergio's Restaurant Venue for December 4, 2026, from 6 PM to 10 PM. We have 30 guests and no children. We'd like the Garden Patio, Menu 2, beer and wine service, and three tables of ten. There are no allergies or dietary restrictions.\n\nRestaurant: We can arrange those details for December 4.\n\nHost — Sofia Bennett: Could we move it to December 5, 2026, instead? The time, count, menu, drinks and setup are all unchanged.\n\nRestaurant: Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children, Menu 2, beer and wine service, three tables of ten, and no allergies or dietary restrictions.\n\nHost — Sofia Bennett: Thank you. December 5 is the date we want. Please disregard December 4."
+          }
+        ]
+      },
+      "profile": {
+        "schema_version": "eventbrief.restaurant.v2",
+        "id": "linden-fig-demo",
+        "version": "fictional-v3",
+        "synthetic": true,
+        "name": "Linden & Fig",
+        "description": "A fictional restaurant for the EventBrief capstone",
+        "timezone": "America/Los_Angeles",
+        "opening_time": "17:00",
+        "closing_time": "22:00",
+        "currency": "USD",
+        "quote_note": "Fictional training prices, inclusive of all demo charges. No additional tax or service fee is calculated. This draft is not a binding quote.",
+        "categories": {
+          "guest_13_plus_count": {
+            "label": "Guests",
+            "age_min": 13,
+            "age_max": null
+          },
+          "child_count": {
+            "label": "Children (0–12)",
+            "age_min": 0,
+            "age_max": 12
+          }
+        },
+        "venues": {
+          "Garden Patio": {
+            "capacity": 60,
+            "setups": [
+              "One long table",
+              "Three tables of ten"
+            ]
+          }
+        },
+        "menus": {
+          "Menu 2": {
+            "description": "Family-style seasonal dinner",
+            "courses": [
+              "Garden salad",
+              "Roast squash and herb chicken, served family-style",
+              "Apple crumble"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 5800,
+              "child_count": 2200
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service"
+            ]
+          },
+          "Menu 3": {
+            "description": "Fictional rehearsal dinner menu",
+            "courses": [
+              "Mediterranean salad",
+              "Lemon herb chicken with roasted vegetables",
+              "Chocolate dessert"
+            ],
+            "prices_cents": {
+              "guest_13_plus_count": 6400,
+              "child_count": 2400
+            },
+            "beverages": [
+              "Beer and wine service",
+              "Nonalcoholic service",
+              "À la carte + cash bar"
+            ]
+          }
+        },
+        "beverages": {
+          "Beer and wine service": {
+            "description": "One demo beverage-package price for Guests. Beer and wine are only for guests confirmed to be 21 or older. Younger guests receive nonalcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 1800,
+              "child_count": 600
+            }
+          },
+          "Nonalcoholic service": {
+            "description": "Nonalcoholic drinks for all guests",
+            "prices_cents": {
+              "guest_13_plus_count": 600,
+              "child_count": 600
+            }
+          },
+          "À la carte + cash bar": {
+            "description": "Drinks ordered à la carte are charged separately. Guests pay for their own alcoholic drinks.",
+            "prices_cents": {
+              "guest_13_plus_count": 0,
+              "child_count": 0
+            },
+            "billing": "pay_separately",
+            "aliases": [
+              "Beverages à la carte; cash bar. Guests will pay for their own alcoholic drinks.",
+              "Beverages à la carte, cash bar"
+            ]
+          }
+        },
+        "supported_dietary": [
+          "No allergies or dietary restrictions"
+        ],
+        "supported_av": [
+          "No AV required"
+        ],
+        "supported_special": [
+          "No special requirements"
+        ],
+        "readiness": {
+          "calendar": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue"
+            ]
+          },
+          "quote": {
+            "required": [
+              "host_name",
+              "guest_count",
+              "guest_13_plus_count",
+              "child_count",
+              "menu",
+              "beverage"
+            ],
+            "agreed": []
+          },
+          "kitchen": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "timezone",
+              "guest_count",
+              "menu",
+              "dietary"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "guest_count",
+              "menu"
+            ]
+          },
+          "staff": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "dietary",
+              "setup",
+              "av",
+              "special",
+              "staff_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "setup"
+            ]
+          },
+          "guest": {
+            "required": [
+              "host_name",
+              "event_date",
+              "start_time",
+              "end_time",
+              "timezone",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage",
+              "guest_notes"
+            ],
+            "agreed": [
+              "event_date",
+              "start_time",
+              "end_time",
+              "venue",
+              "guest_count",
+              "menu",
+              "beverage"
+            ]
+          }
+        }
+      },
+      "original": {
+        "schema_version": "eventbrief.package-record.v3",
+        "fields": {
+          "host_name": {
+            "value": "Sofia Bennett",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Host — Sofia Bennett:"
+              }
+            ]
+          },
+          "booking_status": {
+            "value": "Confirmed in the conversation",
+            "status": "stated",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children, Menu 2, beer and wine service, three tables of ten, and no allergies or dietary restrictions."
+              }
+            ]
+          },
+          "event_date": {
+            "value": "2026-12-05",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The new date is confirmed: December 5, 2026"
+              },
+              {
+                "message_id": "pasted",
+                "quote": "Thank you. December 5 is the date we want. Please disregard December 4."
+              }
+            ]
+          },
+          "start_time": {
+            "value": "18:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The new date is confirmed: December 5, 2026, 6–10 PM"
+              }
+            ]
+          },
+          "end_time": {
+            "value": "22:00",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The new date is confirmed: December 5, 2026, 6–10 PM"
+              }
+            ]
+          },
+          "timezone": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_count": {
+            "value": 30,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children"
+              }
+            ]
+          },
+          "guest_13_plus_count": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "child_count": {
+            "value": 0,
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children"
+              }
+            ]
+          },
+          "venue": {
+            "value": "Garden Patio",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio"
+              }
+            ]
+          },
+          "menu": {
+            "value": "Menu 2",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children, Menu 2"
+              }
+            ]
+          },
+          "beverage": {
+            "value": "Beer and wine service",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children, Menu 2, beer and wine service"
+              }
+            ]
+          },
+          "dietary": {
+            "value": "No allergies or dietary restrictions",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children, Menu 2, beer and wine service, three tables of ten, and no allergies or dietary restrictions."
+              }
+            ]
+          },
+          "setup": {
+            "value": "three tables of ten",
+            "status": "agreed",
+            "evidence": [
+              {
+                "message_id": "pasted",
+                "quote": "Yes. The new date is confirmed: December 5, 2026, 6–10 PM, Garden Patio, 30 guests and no children, Menu 2, beer and wine service, three tables of ten"
+              }
+            ]
+          },
+          "av": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "special": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "guest_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          },
+          "staff_notes": {
+            "value": null,
+            "status": "unknown",
+            "evidence": []
+          }
+        },
+        "pending_changes": [],
+        "open_questions": []
+      },
+      "expected": {
+        "guests": 30,
+        "children": 0,
+        "date": "2026-12-05",
+        "start": "18:00",
+        "end": "22:00",
+        "ready": [
+          "calendar",
+          "quote",
+          "kitchen",
+          "staff",
+          "guest"
+        ]
+      },
+      "first_live_pass": true,
+      "usage": {
+        "input_tokens": 2884,
+        "input_tokens_details": {
+          "cache_write_tokens": 467,
+          "cached_tokens": 2414
+        },
+        "output_tokens": 1338,
+        "output_tokens_details": {
+          "reasoning_tokens": 110
+        },
+        "total_tokens": 4222
+      }
+    }
+  ]
+}

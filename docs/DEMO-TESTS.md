@@ -2,6 +2,8 @@
 
 All people, conversations and arrangements below are fictional. These are demonstration cases, not independent held-out evaluation data.
 
+[Recorded results and saved-answer replay](../evaluation/public-demo-v1/README.md).
+
 1. Open the public demo. No code is needed.
 2. Choose a test and click **Use this conversation**, then **Prepare five drafts**. Or copy the conversation below and paste it into **New event**.
 3. Check all five drafts against the listed expectations.

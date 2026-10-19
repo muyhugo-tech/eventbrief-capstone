@@ -443,6 +443,7 @@ async function prepare(corrections = session().corrections, notice = null, newAn
   if (busy || (isEarlier() && currentMode === 'live')) return;
   if(currentId==='new' && !$('#event-messages').value.trim()) { announce('');announce('Paste the event messages first.',true);$('#event-messages').focus();return; }
   let sentForAnalysis=false;
+  $('#demo-test-status').textContent = '';
   setBusy(true); announce(currentMode === 'live' && newAnalysis ? 'AI is reading the messages. This usually takes about 30 seconds.' : currentMode === 'live' ? 'Updating the saved drafts…' : ''); announce('', true);
   try {
     if(currentId==='new') {
