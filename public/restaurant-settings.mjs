@@ -23,7 +23,7 @@ export function restaurantSettingsPanel(root, {request, changed, lock}) {
   function render() {
     const editable = saved.editable;
     root.innerHTML = `<div class="overview-heading"><div><h2>Restaurant settings</h2><p>Set up your spaces, menus and drinks. Saved drafts use these settings.</p></div><button type="button" class="button secondary" data-reload>Reload settings</button></div>
-      <p class="settings-context">${editable ? 'Shared across your private workspace. Changes cost no AI calls. Changed drafts need a fresh review.' : 'Public sample settings. Open your private workspace to make changes.'}</p>
+      <p class="settings-context">${editable ? 'Shared across this demo workspace. Changes cost no AI calls. Changed drafts need a fresh review.' : 'Public sample settings. Open your private workspace to make changes.'}</p>
       <p class="settings-muted">Use fictional prices and limits for this capstone.</p>
       <form id="restaurant-form" novalidate><fieldset ${editable ? '' : 'disabled'}><legend class="sr-only">Restaurant setup</legend>
       <div class="settings-tabs" role="group" aria-label="Restaurant sections">${kinds.map(kind => `<button type="button" class="button secondary" data-section="${kind}" aria-pressed="${kind === section}">${title[kind]} <span>${rows[kind].length}</span></button>`).join('')}</div>

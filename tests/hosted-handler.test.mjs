@@ -8,6 +8,7 @@ import { rehearsalExample } from '../public/restaurant-example.mjs';
 const origin = 'https://eventbrief-test.example';
 const env = {
   EVENTBRIEF_PUBLIC_ORIGIN: origin,
+  EVENTBRIEF_REQUIRE_ACCESS_CODE: 'true',
   EVENTBRIEF_ACCESS_CODE: 'fictional-access-code-for-local-tests',
   EVENTBRIEF_SESSION_SECRET: 'fictional-session-secret-for-local-tests-only',
   EVENTBRIEF_LIVE_ENABLED: 'true',
@@ -83,6 +84,71 @@ function setup({ duringTransport, quotePdfRenderer, inspectRequest } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
+
+test('public demo opens existing synthetic events and real AI with no code, cookies or budget reset', async () => {
+  const system = setup(), earlier = system.visitor();
+  await earlier.request('/api/hosted/unlock', {code: env.EVENTBRIEF_ACCESS_CODE});
+  await earlier.request('/api/package/messages', {text: demoText});
+  const before = await earlier.request('/api/package/analyze', {scenario_id: demoInput.id});
+  assert.equal(before.status, 200);
+  assert.equal(before.data.remaining, 19);
+  // Public is the default. Previously configured credentials are unnecessary.
+  delete system.config.EVENTBRIEF_REQUIRE_ACCESS_CODE;
+  delete system.config.EVENTBRIEF_ACCESS_CODE;
+  delete system.config.EVENTBRIEF_SESSION_SECRET;
+  const evaluator = system.visitor();
+  const session = await evaluator.request('/api/hosted/session');
+  assert.equal(session.status, 200);
+  assert.equal(session.data.workspace, 'demo');
+  assert.equal(session.data.unlocked, true);
+  assert.equal(session.data.access_required, false);
+  assert.deepEqual(session.headers.getSetCookie(), []);
+  assert.equal((await evaluator.request('/api/hosted/unlock', {code:'anything'})).status, 404);
+  assert.equal((await evaluator.request('/api/hosted/lock', {})).status, 404);
+  const listing = await evaluator.request('/api/package/scenarios');
+  assert.equal(listing.data.events.length, 1);
+  assert.equal(listing.data.live.remaining, 19);
+  assert.equal(listing.data.live.ready, true);
+  assert.equal((await evaluator.request(`/api/package/attempts/${before.data.extraction.run_id}`)).status, 200);
+  assert.equal((await evaluator.request('/api/package/demo', {})).status, 200);
+  const next = await evaluator.request('/api/package/analyze', {scenario_id: demoInput.id});
+  assert.equal(next.status, 200, next.data.error);
+  assert.equal(next.data.remaining, 18);
+  assert.equal(system.calls(), 2);
+  const secondBrowser = system.visitor();
+  await secondBrowser.request('/api/hosted/session');
+  assert.equal((await secondBrowser.request('/api/package/scenarios')).data.live.remaining, 18);
+  assert.equal((await secondBrowser.request('/api/package/settings')).data.editable, true);
+  assert.equal((await secondBrowser.request('/api/package/messages', {text:'Host: stale page'}, {headers:{'X-EventBrief-Workspace':'private'}})).status, 409);
+  assert.equal((await secondBrowser.request('/api/package/analyze', {scenario_id: demoInput.id}, {headers:{Origin:'https://untrusted.example'}})).status, 403);
+  assert.equal(system.calls(), 2);
+});
+
+test('anonymous visitors share a hard twenty-call limit; exhausted demos still reopen saved results', async () => {
+  const system = setup();
+  delete system.config.EVENTBRIEF_REQUIRE_ACCESS_CODE;
+  const browsers = [system.visitor(), system.visitor()];
+  for (const browser of browsers) await browser.request('/api/hosted/session');
+  await browsers[0].request('/api/package/messages', {text:demoText});
+  let last;
+  for (let index = 0; index < 20; index++) {
+    last = await browsers[index % 2].request('/api/package/analyze', {scenario_id: demoInput.id});
+    assert.equal(last.status, 200, last.data.error);
+    assert.equal(last.data.remaining, 19-index);
+  }
+  const fresh = system.visitor();
+  await fresh.request('/api/hosted/session');
+  const blocked = await fresh.request('/api/package/analyze', {scenario_id: demoInput.id});
+  assert.equal(blocked.status, 429);
+  assert.equal(blocked.data.remaining, 0);
+  assert.equal(system.calls(), 20);
+  const saved = await fresh.request('/api/package/review/load', {scenario_id:demoInput.id,run_id:last.data.extraction.run_id});
+  assert.equal(saved.status, 200);
+  const reopened = await fresh.request('/api/package/prepare', {scenario_id:demoInput.id,run_id:last.data.extraction.run_id,corrections:{}});
+  assert.equal(reopened.status, 200);
+  assert.equal(reopened.data.documents.length, 5);
+  assert.equal(system.calls(), 20);
+});
 
 test('private settings are shared, isolate the public sample, preserve receipts and budget, and invalidate only affected reviews', async () => {
   const requests=[];

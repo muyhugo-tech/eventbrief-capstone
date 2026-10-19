@@ -48,6 +48,7 @@ assets.set('/kitchen-document.mjs', ['public/kitchen-document.mjs', 'text/javasc
 assets.set('/staff-document.mjs', ['public/staff-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/guest-document.mjs', ['public/guest-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/restaurant-example.mjs', ['public/restaurant-example.mjs', 'text/javascript; charset=utf-8']);
+assets.set('/demo-examples.mjs', ['public/demo-examples.mjs', 'text/javascript; charset=utf-8']);
 for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox', 'restaurant-settings']) {
   assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
   assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);

@@ -5,6 +5,7 @@ import { renderBoard, renderAssetLibrary } from '/workspace-board.mjs';
 import { renderCalendar, calendarMonth, shiftMonth, calendarFile } from '/workspace-calendar.mjs';
 import { inboxThreads, renderInboxThreads, renderInboxDetail } from '/workspace-inbox.mjs';
 import { restaurantSettingsPanel } from '/restaurant-settings.mjs';
+import { demoExamples } from '/demo-examples.mjs';
 
 const $ = selector => document.querySelector(selector);
 const sessions = new Map();
@@ -46,8 +47,8 @@ const viewNames = {inbox:'Inbox',events:'Events',calendar:'Calendar',quote:'Gues
 const settingsPanel = restaurantSettingsPanel($('#restaurant-settings'), {request, lock:setBusy, changed:async()=>{sessions.clear(); openSession(); inboxData=null; await refreshListing();}});
 // Retain existing public/local browser drafts; private selections and unsent
 // text have separate keys and are never restored into the public sample.
-const browserKey = suffix => `eventbrief.package.${hosted?.workspace === 'private' ? 'private.' : ''}${suffix}`;
-const storageMessage = () => hosted?.workspace === 'private' ? 'Saved in your private workspace. Open Events to see changes from another browser.' : hosted ? 'Saved in this browser’s public sample area. Private events are separate.' : 'Progress saved on this computer.';
+const browserKey = suffix => `eventbrief.package.${['private','demo'].includes(hosted?.workspace) ? 'private.' : ''}${suffix}`;
+const storageMessage = () => hosted?.workspace === 'demo' ? 'Saved in the shared synthetic demo. Open Events to see the latest changes.' : hosted?.workspace === 'private' ? 'Saved in your private workspace. Open Events to see changes from another browser.' : hosted ? 'Saved in this browser’s public sample area. Private events are separate.' : 'Progress saved on this computer.';
 const isPasted = () => currentId === 'new' || currentId?.startsWith('pasted-');
 const post = (path, body) => request(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 function rememberSelection() {
@@ -84,9 +85,21 @@ function applyListing(data) {
 }
 async function refreshListing() { applyListing(await request('/api/package/scenarios')); }
 function renderAccess() {
+  const publicDemo = hosted?.access_required === false;
+  $('#live-demo-tests').hidden = Boolean(hosted && !publicDemo);
   $('#hosted-access').hidden = !hosted;
-  $('#workspace-access-settings').hidden = !hosted;
+  $('#workspace-access-settings').hidden = !hosted || publicDemo;
+  $('#demo-budget-status').textContent = !live.ready ? 'AI is currently unavailable. Saved results are still available.' : live.paused ? 'AI is paused. Saved results are still available.' : `${live.remaining} AI ${live.remaining === 1 ? 'preparation' : 'preparations'} left for all visitors. The demo stops new AI calls at zero.`;
+  for (const id of ['use-demo-test','copy-demo-test','demo-test-choice','open-written-sample']) $('#'+id).disabled = busy;
   if (!hosted) return;
+  if (publicDemo) {
+    $('.demo-badge').textContent = 'Live demo';
+    $('.rail-intro span').textContent = 'Shared synthetic events';
+    $('.storage-note').textContent = `${storageMessage()} Nothing is sent or booked.`;
+    $('footer span').textContent = 'Capstone prototype · all data fictional';
+    $('#package-mode option[value="live"]').disabled = !live.ready;
+    return;
+  }
   if(!accessInitialized) {$('#workspace-access-settings').open=!hosted.unlocked;accessInitialized=true;}
   $('.demo-badge').textContent = hosted.unlocked ? 'Private workspace' : 'Public sample';
   $('.rail-intro span').textContent = hosted.unlocked ? 'Shared private workspace' : 'This browser’s samples';
@@ -677,7 +690,7 @@ async function tryDemo() {
   closeInboxCompose();
   setBusy(true); announce('Opening the guided example…'); announce('', true);
   try {
-    if (hosted?.unlocked) {
+    if (hosted?.unlocked && hosted.access_required !== false) {
       await post('/api/hosted/lock', {});
       window.location.assign('/?sample=1');
       return;
@@ -694,6 +707,38 @@ async function tryDemo() {
 }
 $('#try-demo').addEventListener('click', tryDemo);
 $('#hosted-try-demo').addEventListener('click', tryDemo);
+$('#open-written-sample').addEventListener('click', tryDemo);
+$('#demo-test-choice').innerHTML = demoExamples.map(example => `<option value="${example.id}">${esc(example.title)}</option>`).join('');
+function selectedExample() { return demoExamples.find(example => example.id === $('#demo-test-choice').value) ?? demoExamples[0]; }
+function showExample() {
+  const example = selectedExample();
+  $('#demo-test-text').value = example.text;
+  $('#demo-test-checks').innerHTML = example.checks.map(check => `<li>${esc(check)}</li>`).join('');
+  $('#demo-test-status').textContent = '';
+}
+$('#demo-test-choice').addEventListener('change', showExample);
+$('#use-demo-test').addEventListener('click', async () => {
+  if (busy) return;
+  const example = selectedExample();
+  const existing = scenarios.find(input => input.messages.length === 1 && input.messages[0].body === example.text);
+  if (existing && history.some(entry => entry.scenario_id === existing.id && entry.status === 'succeeded')) {
+    await chooseScenario(existing.id);
+    $('#demo-test-status').textContent = 'Saved real-AI result opened. No new AI call was used. Paste a changed conversation to run a new test.';
+    return;
+  }
+  await chooseScenario('new');
+  $('#event-messages').value = example.text;
+  saveMessageDraft();
+  $('#preparation-controls').open = true;
+  $('#event-messages').focus();
+  $('#prepare').scrollIntoView({block:'center',behavior:'smooth'});
+  $('#demo-test-status').textContent = 'Conversation added. Click Prepare five drafts below.';
+});
+$('#copy-demo-test').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(selectedExample().text); $('#demo-test-status').textContent = 'Copied. Paste it into the event messages box.'; }
+  catch { $('#demo-test-text').closest('details').open = true; $('#demo-test-text').select(); $('#demo-test-status').textContent = 'Select and copy the conversation, or click Use this conversation.'; }
+});
+showExample();
 $('#event-messages').addEventListener('input',saveMessageDraft);
 $('#paste-example').addEventListener('click',()=>{
   const input=scenarios.find(input=>input.id==='patio-complete');

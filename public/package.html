@@ -42,6 +42,23 @@
       <div class="header-title"><h1 id="page-title">Event workspace</h1><span class="demo-badge">Local demo</span></div>
       <button id="header-new-event" class="button secondary">New event</button>
     </header>
+    <section id="live-demo-tests" class="hosted-access" aria-label="Test the live AI" hidden>
+      <div class="hosted-sample">
+        <h2>Test the live AI</h2>
+        <p>Choose a conversation, then prepare the five drafts. No sign-in needed. You can also paste your own fictional conversation.</p>
+        <label for="demo-test-choice">Choose a test</label>
+        <select id="demo-test-choice"></select>
+        <div class="item-actions"><button id="use-demo-test" class="button primary">Use this conversation</button><button id="copy-demo-test" class="text-button">Copy conversation</button></div>
+        <details><summary>Read the conversation</summary><textarea id="demo-test-text" rows="6" readonly aria-label="Example conversation"></textarea></details>
+      </div>
+      <div class="hosted-sample">
+        <h2>What to check</h2><ul id="demo-test-checks"></ul>
+        <p id="demo-budget-status" class="live-note" role="status" aria-live="polite"></p>
+        <p class="live-note">AI calls are limited across this demo. Reopening saved drafts, editing details and downloading files use no AI calls.</p>
+        <button id="open-written-sample" class="text-button">Open a written sample (no AI)</button>
+        <p id="demo-test-status" class="live-note" role="status"></p>
+      </div>
+    </section>
     <details id="workspace-access-settings" class="workspace-access-settings" hidden><summary>Public sample &amp; private workspace</summary>
     <section id="hosted-access" class="hosted-access" hidden aria-label="Try Events Made Easy">
       <div class="hosted-sample">

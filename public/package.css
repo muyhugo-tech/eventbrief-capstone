@@ -396,3 +396,8 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   .draft-label { background: transparent; border: 1px solid #999; color: #333; }
   .asset-intro, .draft-note, .draft-meta, .asset-review-footer { color: #444; }
 }
+/* Example picker uses the existing form and workspace styles. */
+#live-demo-tests select,#live-demo-tests textarea{width:100%;border:1px solid var(--line);border-radius:6px;padding:10px;background:var(--paper);color:var(--ink);font:inherit;margin:8px 0 12px}
+#live-demo-tests textarea{resize:vertical;font-size:.85rem;line-height:1.6}
+#live-demo-tests ul{padding-left:20px;margin:12px 0;line-height:1.7}
+#live-demo-tests details{margin-top:12px}

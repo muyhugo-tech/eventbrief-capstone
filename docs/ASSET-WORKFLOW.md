@@ -4,13 +4,13 @@ Open [EventBrief](https://eventbrief-capstone.vercel.app/). One saved event supp
 
 ## Start here
 
-1. Open **Public sample & private workspace**.
-2. Choose **Try a sample**, or enter your access code to open the private workspace.
+1. Open the demo. No sign-in or access code is needed.
+2. Choose a test and click **Use this conversation**, or copy and paste your own fictional messages.
 3. Open an event. For a new event, choose **New event**, paste fictional event messages, and click **Prepare five drafts**.
 4. Open each draft. Check the details, then click **Mark this draft reviewed**.
 5. Download or print the draft when you want a copy.
 
-The public sample uses written example results and makes no AI call. Real AI is available in the private workspace when it is configured and allowance remains. Opening saved results does not require another AI call.
+The public sample uses written example results and makes no AI call. Real AI is publicly available while the shared allowance remains. Opening saved results does not require another AI call.
 
 ## See where the details came from
 
@@ -19,7 +19,7 @@ The public sample uses written example results and makes no AI call. Real AI is 
 3. Open a detail and click **See source** to highlight its exact quotation. A coordinator change shows its reason and original value separately.
 4. Open any of the five assets at the top. Each field also links to the drafts that use or check it.
 
-**Add conversation** saves pasted fictional messages without calling AI. **Add a reply** appends a message to the selected event. When a new source still needs preparation, the inbox shows **Needs preparation** and does not present older details or assets as current. **Prepare five drafts** uses the existing AI allowance in the private workspace. Authored sample results are labeled as written examples.
+**Add conversation** saves pasted fictional messages without calling AI. **Add a reply** appends a message to the selected event. When a new source still needs preparation, the inbox shows **Needs preparation** and does not present older details or assets as current. **Prepare five drafts** uses the existing shared AI allowance. Authored sample results are labeled as written examples.
 
 Use **Refresh inbox** to load changes saved from another browser. Search covers names and source message text; the filter separates messages awaiting preparation, missing details, and prepared drafts. The inbox is an intake and evidence view for pasted conversations and replies. It is not connected to Gmail, Outlook, or a live email account, and it does not invent received dates or unread counts.
 

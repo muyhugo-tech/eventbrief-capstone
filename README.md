@@ -8,7 +8,7 @@ The sample restaurant is **Sergio’s Restaurant Venue**. The repository and hos
 
 ## Try it
 
-Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Its **Try a sample** button needs no API key or access code. **Open private workspace** accepts the access code for shared private events and real model requests. The same code opens the same private events and saved reviews in any browser; public samples stay separate. The sample is a written demonstration, not an AI result. The hosted workflow and one real AI request were verified on October 12, 2026; see [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
+Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). **No sign-in or access code is needed.** Choose one of five tests, click **Use this conversation**, then **Prepare five drafts**. **Copy conversation** lets you paste or modify a test yourself. Each test includes what to check. New conversations use real AI; exact conversations with saved real-AI results reopen those results without another call. A separate written sample is labeled **no AI**. [Five test conversations](docs/DEMO-TESTS.md).
 
 To run on your computer, use **Node.js 24**:
 
@@ -38,13 +38,13 @@ The workspace keeps these states separate:
 
 [Simple setup](docs/SETUP.md) · [Restaurant settings](docs/RESTAURANT-SETTINGS.md) · [Using the calendar and assets](docs/ASSET-WORKFLOW.md) · [Hosting and maintenance](docs/HOSTING.md) · [Demo walkthrough](docs/DEMO.md) · [Product decisions](PRODUCT.md) · [Reuse and attribution](docs/ATTRIBUTION.md)
 
-**Restaurant settings** lets coordinators save fictional spaces, capacity, menu dishes/prices, allowed drink combinations and separate drink billing. Settings are shared privately and rebuild saved drafts without another AI call. Only affected documents lose review marks. The public sample keeps the original settings; saved extraction receipts and spending records remain unchanged. [Alex's settings replay](evaluation/restaurant-settings-v1/README.md) removes configuration issues while retaining missing event details.
+**Restaurant settings** lets coordinators save fictional spaces, capacity, menu dishes/prices, allowed drink combinations and separate drink billing. Settings and fictional events are shared across the public demo. Changes rebuild saved drafts without another AI call; only affected documents lose review marks. Saved extraction receipts and spending records remain unchanged. [Alex's settings replay](evaluation/restaurant-settings-v1/README.md) removes configuration issues while retaining missing event details.
 
 ## How it works
 
 The LLM reads the messages once and produces a shared event record with source excerpts. Ordinary code checks the record, calculates the fictional quote, and builds the five drafts. This keeps the drafts consistent and makes the calculations inspectable.
 
-Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download guest quotes, kitchen sheets, staff plans, and guest plans as PDF. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Local runs save under ignored `out/`. Hosted runs save in a separate private Blob store: unlocked browsers share one private workspace, while public samples use isolated browser workspaces. Both preserve progress across refresh and redeployment. There are no individual accounts or roles. See [storage limits](docs/HOSTING.md#saved-progress).
+Reviewers can inspect source quotes, correct facts, mark ready drafts reviewed, and download guest quotes, kitchen sheets, staff plans, and guest plans as PDF. Corrections remain separate from the original model response. Changed facts invalidate affected review marks. Local runs save under ignored `out/`. Hosted runs save in a separate private Blob store behind the server, but the synthetic demo workspace is publicly accessible. Anyone with the link can view and edit the same fictional events. Progress survives refresh and redeployment. There are no individual accounts or roles; never enter real customer information. See [storage limits](docs/HOSTING.md#saved-progress).
 
 **Fix this detail** opens the coordinator editor from a blocked draft. A confirmed correction with a reason resolves that field's old questions and rebuilds the affected assets. Custom operational arrangements require explicit coordinator confirmation; arithmetic, pricing and venue limits still apply. An optional **Remember a lesson** note becomes context for the next AI preparation in the same workspace. This is editable application memory, not model training. The original AI response stays intact. The [first paired lesson test](evaluation/lesson-comparison-v1/README.md) did not resolve the beverage option mismatch; general effectiveness remains unknown. [Correction and feedback workflow](docs/ASSET-WORKFLOW.md).
 

@@ -1,31 +1,35 @@
 # Hosting EventBrief
 
-The public app is live at [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). The deployed sample, saved reviews, visitor isolation, access gate, and one real AI preparation passed verification on October 12, 2026. See [the evidence](HOSTED-VALIDATION-2026-10-12.md). The separate Vercel project is linked only to `muyhugo-tech/eventbrief-capstone`, with `codex/capstone-submission` as its production branch.
+The public app is live at [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). The capstone opens directly with real AI available within its existing allowance; no access code is required. It contains shared fictional events only. The separate Vercel project is linked only to `muyhugo-tech/eventbrief-capstone`, with `codex/capstone-submission` as its production branch. Earlier protected-workspace validation is retained as historical evidence.
 
 Pushing to that branch automatically deploys EventBrief. A Git-triggered deployment was verified successfully, including saved review progress and the remaining AI allowance after redeployment.
 
 ## What visitors can do
 
-- **Try a sample:** a public written example, including the missing-detail and reply workflow. No access code or model request.
-- **Open private workspace:** enter the access code to see the same private events, saved AI results, and review progress in any browser. Everyone with the code shares this synthetic workspace. The browser receives a signed, HttpOnly cookie, never the API key.
-- **Review and download:** inspect source evidence, correct details, mark drafts reviewed, and download them. Reopening saved drafts makes no model request.
-- **Lock private workspace:** hide the shared events and return to this browser's separate public sample area. **Open public sample** also locks the private workspace before opening the example.
+The page permits embedding by `https://capstone.productfaculty.com`, the submission host shown in the capstone instructions. Other external frame origins stay blocked. Public demo operations do not depend on third-party cookies.
+
+- Choose one of five fictional conversations and click **Use this conversation**, then **Prepare five drafts**. Each test lists its expected checks.
+- Copy a conversation, change it, or paste a new fictional conversation to test the real agent.
+- Reopen a saved real-AI result without a new call. The interface labels saved results.
+- Review source evidence, edit details, save review marks, and download PDFs or the calendar. Those actions do not call AI.
+- Open the separate written sample when AI is unavailable. It is labeled and never substitutes for a failed AI request.
 
 ## Set up the separate project
 
 1. Use a new Vercel project named `eventbrief-capstone` linked to this public repository. Do not reuse the Yannis project, secrets, database, or storage.
 2. Create a **private** Vercel Blob store for EventBrief and connect it to this project. Keep the resulting `BLOB_READ_WRITE_TOKEN` server-side.
 3. Add the environment settings below to the intended deployment environment.
-4. Install packages with `npm install`. The only direct dependency is `@vercel/blob`. Vercel uses Node.js 24, `npm run build`, and the `dist` output directory from `vercel.json`.
-5. Deploy, then run the checks below before giving out the link and private access code.
+4. Install packages with `npm install`. Dependencies are pinned in `package-lock.json`. Vercel uses Node.js 24, `npm run build`, and the `dist` output directory from `vercel.json`.
+5. Deploy, then run the checks below before giving out the link.
 
 | Setting | Purpose |
 | --- | --- |
 | `EVENTBRIEF_PUBLIC_ORIGIN` | The exact HTTPS site origin, for example `https://eventbrief-capstone.vercel.app`, with no trailing slash |
-| `EVENTBRIEF_ACCESS_CODE` | A private random code of at least 24 characters; share only with authorized AI testers |
-| `EVENTBRIEF_SESSION_SECRET` | A separate random signing secret of at least 32 characters; keep stable across deployments |
+| `EVENTBRIEF_REQUIRE_ACCESS_CODE` | Leave unset or `false` for the public capstone. `true` is an optional legacy mode for a separate private installation. |
+| `EVENTBRIEF_ACCESS_CODE` | Unused by the public capstone; required only by the optional legacy mode |
+| `EVENTBRIEF_SESSION_SECRET` | Unused by the public capstone; required only by the optional legacy mode |
 | `EVENTBRIEF_OPENAI_API_KEY` | The separate capstone API key; never use the living restaurant system's key |
-| `EVENTBRIEF_LIVE_ENABLED` | `true` to allow unlocked AI requests; `false` leaves the public sample available |
+| `EVENTBRIEF_LIVE_ENABLED` | `true` to allow public AI requests; `false` leaves the public sample available |
 | `BLOB_READ_WRITE_TOKEN` | The token for this project's private Blob store |
 
 Keep any local access-code handoff file under ignored `out/` or an ignored environment file. Never commit access codes, keys, session secrets, or Blob tokens. Hosting and storage usage follow the existing Vercel plan; they are not included in the AI allowance.
@@ -40,15 +44,11 @@ Build future features in the shared core or extend these adapters. A new dashboa
 
 ## Saved progress
 
-Each browser receives a signed visitor cookie lasting **30 days**. A private-workspace unlock cookie lasts **12 hours** and is tied to that visitor. Both are secure and HttpOnly. The access code itself is not saved in browser storage. Records survive redeployment.
+The public demo reuses the existing synthetic workspace at `eventbrief/v1/visitors/shared-private-workspace-v1/`. The historical namespace name stays unchanged to preserve saved work. Everyone with the link can view and edit these fictional events and restaurant settings; no code, account or authentication cookie is needed. The Blob store itself stays private and is accessed only by the server.
 
-Unlocked requests use the fixed private Blob namespace `eventbrief/v1/visitors/shared-private-workspace-v1/`. Entering the code in another browser reopens that same workspace. Locking, cookie expiry, code rotation, and session-secret rotation do not delete private records: unlock again with the current code. There are no individual accounts or roles; everyone with the code can read and edit all private demo events. Click **Events** to fetch the latest list from another browser; opening an event loads its latest saved review. This is refresh-based sharing, not live collaborative editing. Concurrent stale saves are rejected.
+Earlier separate browser samples are not copied or deleted. Browser selections and unfinished text remain local. Open **Events** to refresh changes from another browser. Concurrent stale saves are rejected. Old pages declaring the previous workspace are asked to reload before writing. Source messages and original model receipts remain unchanged by coordinator corrections.
 
-Locked requests continue to use the browser's original visitor-specific namespace. Existing browser events remain there; opening the private workspace does not copy or delete them. Public samples and their review marks are separate from the shared private events. Losing the visitor cookie loses access to that browser's samples, but not to the private workspace once unlocked again. There is no automatic transfer between these workspaces or between local and hosted runs.
-
-The server chooses the namespace only after validating the cookie. Package mutations also declare the workspace the page displayed; a mismatch after locking, unlocking, or expiration rejects the request before writing. The interface reloads when switching workspaces and uses separate browser-storage keys for their selections and unfinished text.
-
-Cookie expiry does **not** automatically delete saved Blob data. An administrator must manage retention separately. Keep the demo synthetic. Local and hosted workspaces are separate, and download/import recovery is not implemented.
+This is a synthetic public capstone, not a private customer-data service. The live restaurant system is separate and untouched.
 
 ## AI allowance
 
@@ -74,11 +74,11 @@ Run `npm test`, `npm run build`, and `npm run check:public`. Automated tests use
 
 On the deployed site:
 
-1. Open a fresh browser session. Confirm **Try a sample** works while AI is locked.
-2. Open a blocked draft, add the exact sample reply, and confirm all five drafts become ready.
-3. Mark a draft reviewed and refresh. Confirm the review is still saved.
-4. Confirm a different locked browser cannot see the first browser's samples or any private events. Unlock both browsers with the code and confirm their private events and reviews match.
-5. Try a wrong access code, then the correct one. Lock the private workspace and confirm only this browser's samples remain visible. Unlock again and confirm private drafts return.
-6. Confirm a redeployment preserves the same browser's progress and the spent AI slots. Any real model test consumes a slot from the existing budget.
+1. Open a fresh browser. The live demo and five example choices must appear without a code.
+2. Use a new example and prepare its drafts. Compare all five with the listed checks. The allergy example intentionally blocks three drafts.
+3. Change a count in **Edit event details** and confirm the affected drafts update without an AI call.
+4. Mark a draft reviewed and refresh; confirm it stays saved.
+5. Open another browser without a code and confirm the shared synthetic events and remaining allowance match.
+6. Verify the existing allowance survives deployment. Offline tests also prove exhaustion blocks new AI while saved results remain usable.
 
 The repository intentionally has no license at the owner's request.
