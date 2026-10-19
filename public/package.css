@@ -197,12 +197,14 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .package-empty h2 { font-size: 1.1rem; }
 .package-empty ol, .package-empty p { font-size: .87rem; }
 .package-page .storage-note { font-size: .75rem; }
-.hosted-access { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 23px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: #fafbfb; }
+.hosted-access { margin-top: 23px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: #fafbfb; }
 .hosted-access h2 { font-size: .96rem; margin-bottom: 7px; }
 .hosted-access p { max-width: 56ch; font-size: .8rem; color: var(--muted); }
 .hosted-access .live-note { margin-top: 10px; font-size: .75rem; }
+.hosted-sample { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.hosted-sample-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; flex-shrink: 0; }
 .hosted-sample > .button, #hosted-lock-button { margin-top: 13px; }
-.hosted-unlock { border-left: 1px solid var(--line); padding-left: 28px; }
+.hosted-unlock { padding: 16px 0; max-width: 680px; }
 #hosted-unlock-form { margin-top: 12px; }
 #hosted-unlock-form > label { display: block; font-size: .75rem; font-weight: 600; margin-bottom: 6px; }
 .hosted-code-row { display: flex; gap: 8px; }
@@ -231,6 +233,7 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 @media (max-width: 1100px) { .package-page .rail { width: 196px; } .package-page main { margin-left: 196px; padding-inline: 24px; } .package-grid { grid-template-columns: 165px minmax(0, 1fr); } .document-pane { padding-inline: 20px; } .workbench-heading { flex-wrap: wrap; gap: 10px; } }
 @media (max-width: 800px) {
   .hosted-access { grid-template-columns: minmax(0, 1fr); gap: 19px; padding: 16px; margin-top: 18px; }
+  .hosted-sample { flex-direction: column; align-items: flex-start; gap: 14px; }
   .hosted-unlock { border-left: 0; border-top: 1px solid var(--line); padding: 18px 0 0; }
   .package-page .rail { width: auto; padding: 15px 20px; display: flex; flex-direction: row; justify-content: space-between; gap: 15px; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); }
   .package-page .wordmark { padding: 0; font-size: 17px; }

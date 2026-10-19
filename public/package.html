@@ -42,17 +42,23 @@
       <div class="header-title"><h1 id="page-title">Event workspace</h1><span class="demo-badge">Local demo</span></div>
       <button id="header-new-event" class="button secondary">New event</button>
     </header>
-    <details id="workspace-access-settings" class="workspace-access-settings" hidden><summary>Public sample &amp; private workspace</summary>
     <section id="hosted-access" class="hosted-access" hidden aria-label="Try Events Made Easy">
       <div class="hosted-sample">
-        <h2>Public sample</h2>
-        <p>Start with a sample event. Open the drafts, add a reply, and save your review.</p>
-        <button id="hosted-try-demo" class="button primary" disabled>Try a sample</button>
-        <p class="live-note">Written sample results. No AI call or access code needed.</p>
+        <div>
+        <h2>Explore the capstone</h2>
+        <p>No sign-in needed. Review all five drafts, change event details, and download the PDFs or calendar file.</p>
+        <p class="live-note">Written samples · no AI call. Changes save in your separate demo workspace.</p>
+        </div>
+        <div class="hosted-sample-actions">
+        <button id="hosted-try-demo" class="button primary" disabled>Open sample event</button>
+        <button id="hosted-try-missing" class="text-button" disabled>Try a missing-detail example</button>
+        </div>
       </div>
+    </section>
+    <details id="workspace-access-settings" class="workspace-access-settings" hidden><summary>Owner access</summary>
       <div class="hosted-unlock">
         <h2>Private workspace</h2>
-        <p id="hosted-access-help">Enter your access code to open the same events in any browser and use real AI. Everyone with the code shares this workspace.</p>
+        <p id="hosted-access-help">For the owner: open shared private events and paid AI with your access code. Evaluators can use the public demo above without a code.</p>
         <form id="hosted-unlock-form">
           <label for="hosted-access-code">Access code</label>
           <div class="hosted-code-row"><input id="hosted-access-code" name="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="256" required aria-describedby="hosted-access-help hosted-access-error"><button id="hosted-unlock-button" type="submit" class="button secondary">Open private workspace</button></div>
@@ -61,7 +67,6 @@
         <p id="hosted-access-status" class="live-note" role="status" aria-live="polite"></p>
         <p id="hosted-access-error" class="error" role="alert" hidden></p>
       </div>
-    </section>
     </details>
     <section id="inbox-overview" class="tool-overview" hidden aria-labelledby="inbox-heading">
       <div class="overview-heading inbox-heading"><div><h2 id="inbox-heading">Incoming messages</h2><p>Keep conversations, event details and drafts together.</p><p class="inbox-intake-note">Pasted conversations and replies · no email account connected</p></div><div class="inbox-toolbar"><button id="inbox-add" class="button primary">Add conversation</button><button id="inbox-refresh" class="button secondary">Refresh inbox</button></div></div>

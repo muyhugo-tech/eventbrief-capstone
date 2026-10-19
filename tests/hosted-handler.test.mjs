@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHostedFetch } from '../lib/hosted/handler.mjs';
-import { demoInput, demoText, demoReply, demoRecord } from '../lib/package-demo.mjs';
+import { demoInput, demoText, demoReply, demoRecord, completeDemoInput } from '../lib/package-demo.mjs';
 import { replyInput } from '../lib/package-workspace.mjs';
 import { rehearsalExample } from '../public/restaurant-example.mjs';
 
@@ -83,6 +83,42 @@ function setup({ duringTransport, quotePdfRenderer, inspectRequest } = {}) {
 }
 
 const readyIds = data => data.documents.filter(doc => doc.state === 'ready_for_review').map(doc => doc.id);
+
+test('evaluators open five complete drafts, edit, review and export without unlocking or calling AI', async () => {
+  const system = setup({quotePdfRenderer: async () => Buffer.from('%PDF-1.7\nsynthetic evaluator test')});
+  const evaluator = system.visitor(), other = system.visitor(), owner = system.visitor();
+  const started = await evaluator.request('/api/package/demo', {example: 'complete'});
+  assert.equal(started.status, 200, started.data.error);
+  assert.equal(started.data.input.id, completeDemoInput.id);
+  const identity = {scenario_id: started.data.input.id, run_id: null};
+  const prepared = await evaluator.request('/api/package/prepare', {scenario_id: identity.scenario_id, corrections: {}});
+  assert.equal(prepared.status, 200, prepared.data.error);
+  assert.deepEqual(readyIds(prepared.data), ['calendar','quote','kitchen','staff','guest']);
+  const reviewed = await evaluator.request('/api/package/review', {...identity, sequence: 0, corrections: {}, reviews: marksFor(prepared.data)});
+  assert.equal(reviewed.status, 200, reviewed.data.error);
+  const changed = await evaluator.request('/api/package/edit', {...identity, sequence: 1, changes: {guest_13_plus_count: 32, child_count: 0}, reason: 'Evaluator changed attendance to 32 guests.', resolve: true});
+  assert.equal(changed.status, 200, changed.data.error);
+  assert.equal(changed.data.data.record.fields.guest_13_plus_count.value, 32);
+  assert.deepEqual(readyIds(changed.data.data), ['calendar','quote','kitchen','staff','guest']);
+  assert.equal(changed.data.saved.reviews.quote, undefined);
+  for (const kind of ['quote','kitchen','staff','guest']) {
+    const doc = changed.data.data.documents.find(item => item.id === kind);
+    const pdf = await evaluator.request(`/api/package/${kind}/pdf`, {...identity, sequence: changed.data.saved.sequence, revision: doc.revision});
+    assert.equal(pdf.status, 200, `${kind}: ${pdf.data.error}`);
+    assert.equal(pdf.headers.get('Content-Type'), 'application/pdf');
+  }
+  assert.equal((await evaluator.request('/api/package/demo', {example:'complete'})).data.input.id, identity.scenario_id);
+  const restored = await evaluator.request('/api/package/review/load', identity);
+  assert.equal(restored.data.saved.corrections.guest_13_plus_count.value, 32);
+  assert.equal((await evaluator.request('/api/package/scenarios')).data.events.length, 1);
+  assert.equal((await other.request('/api/package/scenarios')).data.events.length, 0);
+  await owner.request('/api/hosted/unlock', {code: env.EVENTBRIEF_ACCESS_CODE});
+  assert.equal((await owner.request('/api/package/scenarios')).data.events.length, 0);
+  assert.equal((await owner.request('/api/package/demo', {example:'complete'})).status, 409);
+  assert.equal((await evaluator.request('/api/package/analyze', {scenario_id:identity.scenario_id})).status, 401);
+  assert.equal((await evaluator.request('/api/package/demo', {example:'anything-else'})).status, 400);
+  assert.equal(system.calls(), 0);
+});
 
 test('private settings are shared, isolate the public sample, preserve receipts and budget, and invalidate only affected reviews', async () => {
   const requests=[];

@@ -20,14 +20,14 @@ There is one direct package dependency, `@vercel/blob`, for hosted storage. Loca
 
 Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). The public sample and access-code AI workflow are deployed.
 
-1. Click **Try a sample**. No code is needed.
-2. Open a blocked draft to see the missing detail.
-3. Click **Add a reply**, **Fill with the sample reply**, then **Update drafts**.
-4. Check the five drafts and mark them reviewed.
+1. The first visit automatically opens a complete sample event. No sign-in or code is needed.
+2. Check all five drafts. Try **Edit event details**, save a new guest count, and see the affected drafts update.
+3. Mark drafts reviewed and download the PDFs or calendar file. Your progress stays in this browser's public workspace.
+4. For the blocked-draft walkthrough, choose **Try a missing-detail example**. Open a blocked draft, then choose **Add a reply**, **Fill with the sample reply**, and **Update drafts**.
 
-Enter your **Access code**, then click **Open private workspace**. Use the same code in Chrome or another browser to see the same private events. Click **Events** to refresh the list, then open an event to see its saved reviews. Everyone with the code shares this workspace.
+For owner-only features, expand **Owner access**, enter your **Access code**, then click **Open private workspace**. Use the same code in Chrome or another browser to see the same private events. Click **Events** to refresh the list, then open an event to see its saved reviews. Everyone with the code shares this workspace.
 
-To make drafts, choose **New event**, paste fictional messages, and click **Prepare five drafts**. **Lock private workspace** hides those events and returns to this browser's samples. **Open public sample** does the same and opens the example. The unlock lasts 12 hours; enter the code again to return. Earlier browser events stay in the sample area and are not automatically copied into the private workspace.
+To make drafts with real AI, open the private workspace, choose **New event**, paste fictional messages, and click **Prepare five drafts**. **Lock private workspace** hides those events and returns to this browser's samples. **Open public demo** does the same and opens the example. The unlock lasts 12 hours; enter the code again to return. Earlier browser events stay in the sample area and are not automatically copied into the private workspace.
 
 The public sample uses written results. Real AI requires the access code and available allowance. If AI is off or the limit is reached, the sample and saved drafts remain usable. Hosting setup is in [HOSTING.md](HOSTING.md).
 

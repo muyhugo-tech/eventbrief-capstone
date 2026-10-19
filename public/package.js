@@ -87,9 +87,9 @@ function renderAccess() {
   $('#hosted-access').hidden = !hosted;
   $('#workspace-access-settings').hidden = !hosted;
   if (!hosted) return;
-  if(!accessInitialized) {$('#workspace-access-settings').open=!hosted.unlocked;accessInitialized=true;}
-  $('.demo-badge').textContent = hosted.unlocked ? 'Private workspace' : 'Public sample';
-  $('.rail-intro span').textContent = hosted.unlocked ? 'Shared private workspace' : 'This browser’s samples';
+  if(!accessInitialized) {$('#workspace-access-settings').open=false;accessInitialized=true;}
+  $('.demo-badge').textContent = hosted.unlocked ? 'Private workspace' : 'Public demo · no sign-in';
+  $('.rail-intro span').textContent = hosted.unlocked ? 'Shared private workspace' : 'Public demo workspace';
   $('.storage-note').textContent = `${storageMessage()} Nothing is sent or booked.`;
   $('footer span').textContent = 'Capstone prototype · all data fictional';
   $('#hosted-unlock-form').hidden = hosted.unlocked;
@@ -99,8 +99,9 @@ function renderAccess() {
   $('#hosted-unlock-button').disabled = busy || accessBusy;
   $('#hosted-unlock-button').textContent = accessBusy ? 'Checking…' : 'Open private workspace';
   $('#hosted-try-demo').disabled = busy || accessBusy || !demo?.available;
-  $('#hosted-try-demo').textContent = hosted.unlocked ? 'Open public sample' : 'Try a sample';
-  $('#hosted-access-status').textContent = accessBusy ? 'Please wait…' : hosted.unlocked ? `Your private workspace is open. Events and reviews are shared across browsers.${hosted.ai_configured ? '' : ' AI is currently unavailable.'}` : 'Private events are locked. The public sample is ready to try.';
+  $('#hosted-try-missing').disabled = busy || accessBusy || !demo?.available;
+  $('#hosted-try-demo').textContent = hosted.unlocked ? 'Open public demo' : 'Open sample event';
+  $('#hosted-access-status').textContent = accessBusy ? 'Please wait…' : hosted.unlocked ? `Your private workspace is open. Events and reviews are shared across browsers.${hosted.ai_configured ? '' : ' AI is currently unavailable.'}` : 'The public demo needs no code. Owner access is optional.';
   $('#package-mode option[value="live"]').disabled = !live.ready || !hosted.unlocked;
 }
 function accessError(message) {
@@ -406,8 +407,8 @@ function renderPackage() {
   $('#preparation-controls').open = !data;
   renderHistory();
   $('#package-mode-label').textContent = data ? (data.mode === 'authored_reference' ? 'Written example · no AI call' : data.mode === 'simulated' ? 'Test example · no AI call' : 'AI-prepared · check before use') : (currentMode === 'reference' ? 'Written example · no AI call' : live.mode === 'simulated' ? 'Test example · no AI call' : 'Ready for AI preparation');
-  $('#package-live-status').textContent = currentMode === 'reference' ? 'Written example · no AI call. Your review progress is saved.' : hosted && !hosted.ai_configured ? 'Real AI is not connected yet. Click Try a sample above.'
-    : hosted && !hosted.unlocked ? 'Enter your access code above to prepare drafts with AI. Or click Try a sample.'
+  $('#package-live-status').textContent = currentMode === 'reference' ? 'Written example · no AI call. Your review progress is saved.' : hosted && !hosted.ai_configured ? 'Real AI is unavailable. Open a sample event above.'
+    : hosted && !hosted.unlocked ? 'New AI requests require Owner access. Open a sample event to explore all five drafts without a code.'
     : !live.ready ? hosted ? 'AI is unavailable. You can still try the sample above.' : 'AI is not connected. Try the free guided example below.'
     : live.in_flight ? 'AI is preparing a package. Refresh this page after it finishes.'
     : live.paused ? 'AI is paused while the last request is checked. You can still review the saved drafts.'
@@ -671,29 +672,30 @@ document.addEventListener('change', event => {
   if(busy)return;
   if(event.target.matches('[data-calendar-month]') && /^\d{4}-\d{2}$/.test(event.target.value)) {calendarViewMonth=event.target.value;renderEvents();}
 });
-async function tryDemo() {
+async function tryDemo(example = 'complete') {
   if (busy) return;
   closeEventEdit();
   closeInboxCompose();
-  setBusy(true); announce('Opening the guided example…'); announce('', true);
+  setBusy(true); announce('Opening the sample event…'); announce('', true);
   try {
     if (hosted?.unlocked) {
       await post('/api/hosted/lock', {});
-      window.location.assign('/?sample=1');
+      window.location.assign(example === 'missing-details' ? '/?sample=missing-details' : '/?sample=1');
       return;
     }
-    const result = await post('/api/package/demo', {});
+    const result = await post('/api/package/demo', {example});
     currentId = result.input.id; currentMode = result.reference_available ? 'reference' : 'live'; openSession();
     await refreshListing(); $('#package-mode').value = currentMode;
     const existing = history.find(entry => entry.scenario_id === currentId && entry.status === 'succeeded');
     if (result.reference_available || existing) await openSaved(result.reference_available ? null : existing.run_id);
     restoreReplyDraft(); showOverview(false); renderPackage(); rememberSelection();
-    announce(!result.reference_available ? 'This example already has a custom reply. Its messages are saved. AI is needed to prepare a new result; no AI call was made.' : versionFor()?.revision === 1 ? 'Free guided example. The host has not supplied allergy details yet. Open a blocked draft, then add the host’s reply.' : 'Your completed guided example is open. Review the five drafts. No AI call was made.');
+    announce(!result.reference_available ? 'This example already has a custom reply. Its messages are saved. AI is needed to prepare a new result; no AI call was made.' : example === 'missing-details' && versionFor()?.revision === 1 ? 'The host has not supplied allergy details yet. Open a blocked draft, then add the host’s reply.' : 'Your sample event is open. Check the five drafts or try changing the guest count. No sign-in or AI call needed.');
   } catch (error) { announce(error.message, true); }
   finally { setBusy(false); }
 }
-$('#try-demo').addEventListener('click', tryDemo);
-$('#hosted-try-demo').addEventListener('click', tryDemo);
+$('#try-demo').addEventListener('click', () => tryDemo('missing-details'));
+$('#hosted-try-demo').addEventListener('click', () => tryDemo());
+$('#hosted-try-missing').addEventListener('click', () => tryDemo('missing-details'));
 $('#event-messages').addEventListener('input',saveMessageDraft);
 $('#paste-example').addEventListener('click',()=>{
   const input=scenarios.find(input=>input.id==='patio-complete');
@@ -1037,9 +1039,10 @@ async function init() {
     if (selection?.view && Object.hasOwn(viewNames,selection.view)) { showOverview(true,selection.view); if(selection.view==='inbox') { setBusy(true);try{await loadInbox(inboxId);}finally{setBusy(false);} } }
     else if ((hosted?.unlocked && currentId === 'new') || (!selection && eventRows().length)) showOverview(true);
     if (selection?.view === 'settings') { setBusy(true); try {await settingsPanel.load();} finally {setBusy(false);} }
-    if (hosted && !hosted.unlocked && new URLSearchParams(window.location.search).get('sample') === '1') {
+    const requestedSample = new URLSearchParams(window.location.search).get('sample');
+    if (hosted && !hosted.unlocked && (['1','missing-details'].includes(requestedSample) || !eventRows().length)) {
       window.history.replaceState(null, '', window.location.pathname);
-      await tryDemo();
+      await tryDemo(requestedSample === 'missing-details' ? 'missing-details' : 'complete');
     }
   } catch {
     setBusy(false);

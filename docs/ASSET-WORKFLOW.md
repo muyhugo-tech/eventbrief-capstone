@@ -4,8 +4,8 @@ Open [EventBrief](https://eventbrief-capstone.vercel.app/). One saved event supp
 
 ## Start here
 
-1. Open **Public sample & private workspace**.
-2. Choose **Try a sample**, or enter your access code to open the private workspace.
+1. Open the public site. A first-time visit opens a complete sample event automatically; no sign-in is needed.
+2. Choose **Open sample event** to return to that sample, or **Try a missing-detail example** to practise resolving a block. The optional **Owner access** panel opens the private workspace with its access code.
 3. Open an event. For a new event, choose **New event**, paste fictional event messages, and click **Prepare five drafts**.
 4. Open each draft. Check the details, then click **Mark this draft reviewed**.
 5. Download or print the draft when you want a copy.
