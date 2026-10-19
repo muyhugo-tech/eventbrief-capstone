@@ -15,7 +15,7 @@ import { combinePackageAllowances } from './lib/package-app-allowances.mjs';
 import { createPackageWorkspace, pastedPrompt, SourceConflictError } from './lib/package-workspace.mjs';
 import { createFlexiblePackageAllowance } from './lib/package-flexible-allowance.mjs';
 import { createExtensionPackageAllowance } from './lib/package-extension-allowance.mjs';
-import { demoText, demoReply, demoRecord, completeDemoText } from './lib/package-demo.mjs';
+import { demoText, demoReply, demoRecord } from './lib/package-demo.mjs';
 import { packageSummary } from './lib/package-summary.mjs';
 import { eventEditCorrections } from './lib/package-edits.mjs';
 import { feedbackEntry } from './lib/coordinator-feedback.mjs';
@@ -187,8 +187,8 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
           const data=JSON.parse(body);
           if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Invalid request.');
           if(pathname==='/api/package/demo') {
-            if(Object.keys(data).length && (Object.keys(data).join()!=='example' || !['complete','missing-details'].includes(data.example))) throw new Error('Choose one of the sample events.');
-            const saved=await packageWorkspace.save(data.example==='complete'?completeDemoText:demoText), state=await updateState();
+            if(Object.keys(data).length) throw new Error('This example needs no extra settings.');
+            const saved=await packageWorkspace.save(demoText), state=await updateState();
             const current=await getBundle(state.source_versions[saved.input.id].current_scenario_id);
             return send(200,{input:current.input,version:sourceVersion(current.input.id,state),example_reply:demoReply,reference_available:Boolean(current.original)});
           }

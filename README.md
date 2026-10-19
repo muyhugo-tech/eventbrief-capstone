@@ -8,7 +8,7 @@ The sample restaurant is **Sergio’s Restaurant Venue**. The repository and hos
 
 ## Try it
 
-Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). **No sign-in or access code is needed to evaluate the prototype.** First-time visitors automatically open a complete fictional event with five drafts. Edit event details, save reviews, and download the four PDFs and calendar file. **Try a missing-detail example** demonstrates a host reply resolving blocked drafts. Each browser has a separate public workspace; reopening a sample preserves its changes. These samples use written results, not a new AI call. **Owner access** is optional and keeps shared private events and real model requests behind the existing code. The same code opens the same private events and saved reviews in any browser; public samples stay separate. The hosted workflow and one real AI request were verified on October 12, 2026; see [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
+Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). Its **Try a sample** button needs no API key or access code. **Open private workspace** accepts the access code for shared private events and real model requests. The same code opens the same private events and saved reviews in any browser; public samples stay separate. The sample is a written demonstration, not an AI result. The hosted workflow and one real AI request were verified on October 12, 2026; see [deployment evidence](docs/HOSTED-VALIDATION-2026-10-12.md).
 
 To run on your computer, use **Node.js 24**:
 

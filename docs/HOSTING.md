@@ -6,10 +6,10 @@ Pushing to that branch automatically deploys EventBrief. A Git-triggered deploym
 
 ## What visitors can do
 
-- **Public evaluator demo:** first-time visitors automatically open a complete fictional event with five ready drafts. No sign-in, access code or model request. **Open sample event** returns to this browser's saved sample; **Try a missing-detail example** opens the separate allergy-and-reply walkthrough. Both use exact-match written results, never fabricated AI responses to arbitrary messages.
-- **Owner access → Open private workspace:** enter the access code to see the same private events, saved AI results, and review progress in any browser. Owner access starts collapsed and is optional for evaluators. Everyone with the code shares this synthetic workspace. The browser receives a signed, HttpOnly cookie, never the API key.
+- **Try a sample:** a public written example, including the missing-detail and reply workflow. No access code or model request.
+- **Open private workspace:** enter the access code to see the same private events, saved AI results, and review progress in any browser. Everyone with the code shares this synthetic workspace. The browser receives a signed, HttpOnly cookie, never the API key.
 - **Review and download:** inspect source evidence, correct details, mark drafts reviewed, and download them. Reopening saved drafts makes no model request.
-- **Lock private workspace:** hide the shared events and return to this browser's separate public sample area. **Open public demo** also locks the private workspace before opening the example.
+- **Lock private workspace:** hide the shared events and return to this browser's separate public sample area. **Open public sample** also locks the private workspace before opening the example.
 
 ## Set up the separate project
 
