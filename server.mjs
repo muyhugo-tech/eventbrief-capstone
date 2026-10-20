@@ -26,6 +26,7 @@ import { staffStyles } from './public/staff-document.mjs';
 import { guestStyles } from './public/guest-document.mjs';
 import { quoteFontPath, quotePdfHtml, kitchenPdfHtml, staffPdfHtml, guestPdfHtml, renderQuotePdf } from './lib/quote-pdf.mjs';
 import { assetFilename } from './public/package-export.mjs';
+import {createEvaluationStore, evaluationCatalog, evaluationVersion, runEvaluation} from './lib/demo-evaluation.mjs';
 
 const root = new URL('./', import.meta.url);
 const fixtures = new Map();
@@ -49,6 +50,9 @@ assets.set('/staff-document.mjs', ['public/staff-document.mjs', 'text/javascript
 assets.set('/guest-document.mjs', ['public/guest-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/restaurant-example.mjs', ['public/restaurant-example.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/demo-examples.mjs', ['public/demo-examples.mjs', 'text/javascript; charset=utf-8']);
+assets.set('/tests', ['public/evaluation.html', 'text/html; charset=utf-8']);
+assets.set('/evaluation.js', ['public/evaluation.js', 'text/javascript; charset=utf-8']);
+assets.set('/evaluation.css', ['public/evaluation.css', 'text/css; charset=utf-8']);
 for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox', 'restaurant-settings']) {
   assets.set(`/${name}.mjs`, [`public/${name}.mjs`, 'text/javascript; charset=utf-8']);
   assets.set(`/${name}.css`, [`public/${name}.css`, 'text/css; charset=utf-8']);
@@ -60,7 +64,8 @@ assets.set('/package-contract.mjs', ['lib/package-contract.mjs', 'text/javascrip
 export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol', maxCalls = 3, provider = analyze,
   packageTransport = responsesTransport, packageStore = createAttemptStore(fileURLToPath(new URL('out/model-attempts/package-v1/', root))),
   packageRunMode = 'live', packageAllowance = null, packageMaxOutputTokens = 10000, packageUpdates = null, packageWorkspace = null,
-  hostedOrigin = null, hosted = null, quotePdfRenderer = renderQuotePdf, restaurantSettingsStore = null } = {}) {
+  hostedOrigin = null, hosted = null, quotePdfRenderer = renderQuotePdf, restaurantSettingsStore = null,
+  evaluationStore = createEvaluationStore(fileURLToPath(new URL('out/evaluation-runs/', root))), buildRevision = 'local' } = {}) {
   if (!['live', 'simulated'].includes(packageRunMode)) throw new Error('Invalid package provider mode.');
   if (packageAllowance && packageStore !== packageAllowance.store) throw new Error('The spending allowance must use its own attempt store.');
   let calls = 0;
@@ -96,6 +101,19 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
     const allowance = packageAllowance ? await packageAllowance.status(scenarioId) : {};
     return { ready: configured, model, mode: packageRunMode, ...allowance,
       remaining: Math.max(0, Math.min(maxCalls - calls, allowance.remaining ?? maxCalls)) };
+  };
+  // Both the workspace and named tests use the same provider request, immutable
+  // receipt store and persistent spending gate. Expectations are not in this call.
+  const dispatchPackage = async ({input, profile, lessons = [], beforeDispatch}) => {
+    const extractionPrompt = input.source_kind === 'pasted' ? pastedPrompt(packagePrompt) : packagePrompt;
+    const execute = async () => {
+      await beforeDispatch?.();
+      return capturePackageAttempt({input, profile, prompt:extractionPrompt, model, key, store:packageStore,
+        transport:packageTransport, mode:packageRunMode, maxOutputTokens:packageMaxOutputTokens, lessons});
+    };
+    return packageAllowance ? packageAllowance.run({
+      request:buildPackageRequest(input, profile, extractionPrompt, model, {maxOutputTokens:packageMaxOutputTokens, lessons}), execute
+    }) : execute();
   };
   const packageListing = async () => {
     const state = await updateState();
@@ -161,6 +179,43 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
       if (req.method === 'GET' && assets.has(pathname)) {
         const [file, type] = assets.get(pathname);
         return send(200, await readFile(new URL(file, root)), type);
+      }
+      if (req.method === 'GET' && pathname === '/api/package/tests') {
+        return send(200, {version:evaluationVersion, cases:evaluationCatalog, history:await evaluationStore.history(),
+          live:await packageLive(), workspace:hosted?.workspace ?? null});
+      }
+      if (req.method === 'POST' && pathname === '/api/package/tests') {
+        if (!origins.includes(req.headers.origin) || req.headers['sec-fetch-site'] === 'cross-site') return send(403,{error:'Open the demo before running tests.'});
+        if (!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'JSON is required.'});
+        let body = '';
+        for await (const chunk of req) { body += chunk; if (Buffer.byteLength(body) > 2048) return send(413,{error:'Request too large.'}); }
+        let data;
+        try { data = JSON.parse(body); } catch { return send(400,{error:'Choose a named test.'}); }
+        if (!data || Object.keys(data).sort().join('|') !== 'case_id|mode' ||
+            !['replay','live'].includes(data.mode) || !evaluationCatalog.some(c => c.id === data.case_id) && data.case_id !== 'all' ||
+            data.mode === 'live' && data.case_id === 'all') return send(400,{error:'Choose one named AI test or replay the five saved answers.'});
+        const report = await runEvaluation({caseId:data.case_id, mode:data.mode, revision:buildRevision,
+          runLive:async entry => {
+            const fail = message => { const error = new Error(message); error.evaluationMessage = message; throw error; };
+            const live = await packageLive();
+            if (!live.ready) fail('Live AI is unavailable. Free replays still work.');
+            if (busy || live.in_flight || live.paused || live.remaining < 1) fail('No AI call was made: the demo is busy, paused or has reached its spending limit. Free replays still work.');
+            busy = true; calls++;
+            let result;
+            try {
+              // Match the app's frozen extraction vocabulary and sealed budget
+              // envelope. The test's fixed restaurant profile is applied afterward.
+              try { result = await dispatchPackage({input:entry.input,profile:packageFixtures.values().next().value.profile}); }
+              catch (error) { calls--; throw error; }
+              if (!result.dispatched) calls--;
+              if (!result.ok) fail('The AI request did not produce a usable answer. This test did not pass. No automatic retry was made.');
+              return {output:result.output, source:{kind:packageRunMode === 'live' ? 'fresh_ai' : 'simulated',
+                run_id:result.run_id, model, receipt_saved:result.receipt_saved}};
+            } finally { busy = false; }
+          }});
+        try { await evaluationStore.save(report); }
+        catch { return send(503,{error:'The test finished, but its result could not be saved. Download this report; do not rerun paid AI just to save it.',report,saved:false}); }
+        return send(200,{report,saved:true,live:await packageLive()});
       }
       if (req.method === 'GET' && pathname === '/api/package/scenarios') {
         return send(200, await packageListing());
@@ -324,15 +379,11 @@ export function createHandler({ key = '', enabled = false, model = 'gpt-6.1-sol'
         try {
           const input = bundle.input, profile = bundle.baselineProfile ?? bundle.profile;
           const lessons = packageWorkspace?.lessons ? await packageWorkspace.lessons({profileRevision:fingerprint(bundle.profile)}) : [];
-          const extractionPrompt=input.source_kind==='pasted'?pastedPrompt(packagePrompt):packagePrompt;
-          const execute = async () => {
-            if (isSuperseded(data.scenario_id, await updateState())) throw new PackageAllowanceError('New messages need a new preparation. Choose the latest messages.');
-            return capturePackageAttempt({ input, profile, prompt: extractionPrompt, model, key, store: packageStore,
-              transport: packageTransport, mode: packageRunMode, maxOutputTokens: packageMaxOutputTokens, lessons });
-          };
           let result;
           try {
-            result = packageAllowance ? await packageAllowance.run({ request: buildPackageRequest(input, profile, extractionPrompt, model, { maxOutputTokens: packageMaxOutputTokens, lessons }), execute }) : await execute();
+            result = await dispatchPackage({input,profile,lessons,beforeDispatch:async () => {
+              if (isSuperseded(data.scenario_id, await updateState())) throw new PackageAllowanceError('New messages need a new preparation. Choose the latest messages.');
+            }});
           } catch (error) {
             calls--;
             if (error instanceof PackageAllowanceError) return send(429, { error: error.message, ...(await packageLive(data.scenario_id)) });

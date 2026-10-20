@@ -1,5 +1,13 @@
 # EventBrief evaluation scorecard
 
+## Public runnable tests — October 19, 2026
+
+[Run the tests in the demo](https://eventbrief-capstone.vercel.app/tests). Five named cases now show their expected outcomes, run automatic expected-versus-actual checks and save pass/fail/error reports across browsers. The suite checks 111 assertions across event details and all five draft decisions. Free replays use the original saved AI answers; the separate fresh-AI button uses the existing shared allowance.
+
+All five saved-answer replays pass in the current implementation. This is a regression result, not five new AI successes. The original public examples passed 4/5 complete workflows before the drink repair; that history remains in [the original evidence](../evaluation/public-demo-v1/README.md). [Runner method and limits](RUNNABLE-TESTS.md).
+
+## Earlier evidence — retained as recorded
+
 Evidence through October 13, 2026 (Pacific time). All events are fictional. First attempts, repaired replays and software tests are reported separately.
 
 **Current repair: all 15 document checks pass on the three saved answers, with no new AI calls or coordinator corrections.** This is a replay of known cases, not three new AI successes. [Original answers and separate repair evidence](../evaluation/final-readiness-v1/README.md)

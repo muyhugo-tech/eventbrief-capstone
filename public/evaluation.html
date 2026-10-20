@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Run five named event-agent tests. Compare expected and actual results and save a pass or fail for every test.">
+  <title>Events Made Easy — Run agent tests</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/evaluation.css">
+  <script type="module" src="/evaluation.js"></script>
+</head>
+<body class="evaluation-page">
+  <header class="evaluation-header"><a href="/package">Events Made Easy</a><a href="/package">← Event workspace</a></header>
+  <main>
+    <p class="evaluation-eyebrow">Capstone · runnable evaluation</p>
+    <h1>Test the event agent</h1>
+    <p class="evaluation-intro">A conversation goes in. The AI extracts the latest event details. The app decides which of the five drafts are ready and which need an answer.</p>
+    <p>Each test below states the expected result. Run a test to compare it with the actual output. Passes, failures and errors are saved automatically.</p>
+    <div class="evaluation-actions"><button id="run-all-tests" class="button primary" disabled>Run all 5 tests — free</button><button id="refresh-tests" class="button secondary">Refresh saved results</button></div>
+    <p class="evaluation-help"><strong>Free replay:</strong> runs today’s draft-building and checking code on real AI answers saved on October 19, 2026. It does not call the model again. <strong>New AI test:</strong> sends that conversation to the model again, then checks the new answer. It uses one of the demo’s limited AI calls.</p>
+    <p id="evaluation-budget" class="evaluation-help" role="status">Checking the shared AI allowance…</p>
+    <p id="evaluation-notice" class="notice" role="status" aria-live="polite">Loading named tests and saved results…</p>
+    <noscript><p>Enable JavaScript to run and score the tests. Tests cover a complete event, a changed guest count, drinks, a pending allergy and a changed date.</p></noscript>
+    <section class="evaluation-report" aria-label="Test report">
+      <div class="evaluation-report-heading"><h2 id="report-heading">No test run selected</h2><button id="download-report" class="button secondary" disabled>Download report</button></div>
+      <p id="report-description">Choose Run all 5 tests to start. A correct allergy warning counts as a pass.</p>
+    </section>
+    <div id="evaluation-cases"></div>
+    <section class="evaluation-history" aria-labelledby="history-heading">
+      <h2 id="history-heading">Saved test runs</h2>
+      <p>Shared across browsers. The latest 10 runs are shown. Replaying a test never changes an event or marks its drafts reviewed.</p>
+      <div id="evaluation-history"><p>No saved runs yet.</p></div>
+    </section>
+    <footer>Five synthetic regression cases. These results measure these cases, not accuracy on all future events. No messages are sent and nothing is booked.</footer>
+  </main>
+</body>
+</html>

@@ -8,7 +8,11 @@ The sample restaurant is **Sergio’s Restaurant Venue**. The repository and hos
 
 ## Try it
 
-Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). **No sign-in or access code is needed.** Choose one of five tests, click **Use this conversation**, then **Prepare five drafts**. **Copy conversation** lets you paste or modify a test yourself. Each test includes what to check. New conversations use real AI; exact conversations with saved real-AI results reopen those results without another call. A separate written sample is labeled **no AI**. [Five test conversations](docs/DEMO-TESTS.md).
+Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). **No sign-in or access code is needed.**
+
+**For capstone evaluation:** click **Run agent tests**, then **Run all 5 tests — free**. The [public test runner](https://eventbrief-capstone.vercel.app/tests) shows five named conversations, expected results, actual results, automatic pass/fail checks and saved reports. Free replays process original saved real-AI answers through the current app. **Run new AI test — 1 call** requests and scores a fresh answer under the same shared spending limit. A failed request stays an error; it never falls back to a passing saved answer.
+
+**To explore the workflow:** choose an example, click **Use this conversation**, then **Prepare five drafts**. **Copy conversation** lets you paste or modify an example yourself. Exact conversations with saved real-AI results reopen without another call. The separate written sample is labeled **no AI**. [Five conversations](docs/DEMO-TESTS.md) · [How the runnable checks work](docs/RUNNABLE-TESTS.md).
 
 To run on your computer, use **Node.js 24**:
 

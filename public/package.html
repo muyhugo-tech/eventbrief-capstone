@@ -40,13 +40,13 @@
   <main id="workspace">
     <header class="page-header">
       <div class="header-title"><h1 id="page-title">Event workspace</h1><span class="demo-badge">Local demo</span></div>
-      <button id="header-new-event" class="button secondary">New event</button>
+      <div class="item-actions"><a href="/tests" class="button primary">Run agent tests</a><button id="header-new-event" class="button secondary">New event</button></div>
     </header>
     <section id="live-demo-tests" class="hosted-access" aria-label="Test the live AI" hidden>
       <div class="hosted-sample">
-        <h2>Test the live AI</h2>
-        <p>Choose a conversation, then prepare the five drafts. No sign-in needed. You can also paste your own fictional conversation.</p>
-        <label for="demo-test-choice">Choose a test</label>
+        <h2>Try an event conversation</h2>
+        <p>For scored tests, <a href="/tests">run the five named agent tests</a>. They compare expected and actual results and save pass or fail. Or choose a conversation here to explore the drafts yourself.</p>
+        <label for="demo-test-choice">Choose an example</label>
         <select id="demo-test-choice"></select>
         <div class="item-actions"><button id="use-demo-test" class="button primary">Use this conversation</button><button id="copy-demo-test" class="text-button">Copy conversation</button></div>
         <details><summary>Read the conversation</summary><textarea id="demo-test-text" rows="6" readonly aria-label="Example conversation"></textarea></details>

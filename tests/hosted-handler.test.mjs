@@ -4,6 +4,7 @@ import { createHostedFetch } from '../lib/hosted/handler.mjs';
 import { demoInput, demoText, demoReply, demoRecord } from '../lib/package-demo.mjs';
 import { replyInput } from '../lib/package-workspace.mjs';
 import { rehearsalExample } from '../public/restaurant-example.mjs';
+import {evaluationCases} from '../lib/demo-evaluation.mjs';
 
 const origin = 'https://eventbrief-test.example';
 const env = {
@@ -40,6 +41,72 @@ function memoryBlob() {
     }
   };
 }
+
+test('public named tests save real checked outcomes across cold starts and share the existing AI cap', async () => {
+  const sdk = memoryBlob(); let calls = 0;
+  const config = {...env,EVENTBRIEF_REQUIRE_ACCESS_CODE:'false',VERCEL_GIT_COMMIT_SHA:'test-build'};
+  const transport = async ({request}) => {
+    calls++;
+    const payload = JSON.parse(request.input[0].content);
+    const entry = evaluationCases.find(c => JSON.stringify(c.input.messages) === JSON.stringify(payload.messages));
+    assert.ok(entry,'Uses the named conversation');
+    assert.ok(!Object.hasOwn(payload,'expected')); assert.ok(!Object.hasOwn(payload,'checks'));
+    return {ok:true,status:200,body:JSON.stringify({status:'completed',model:request.model,
+      usage:{input_tokens:100,output_tokens:100},
+      output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(entry.original)}]}]})};
+  };
+  const request = async (body, headers = {}) => {
+    const response = await createHostedFetch({env:config,sdk,packageTransport:transport})(new Request(`${origin}/api/package/tests`,
+      body === undefined ? {} : {method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-EventBrief-Workspace':'demo',...headers},body:JSON.stringify(body)}));
+    return {status:response.status,data:await response.json()};
+  };
+  const initial = await request();
+  assert.equal(initial.status,200); assert.equal(initial.data.cases.length,5); assert.deepEqual(initial.data.history,[]);
+  assert.ok(initial.data.cases.every(c => c.expected.length && c.conversation));
+  assert.equal((await request({case_id:'all',mode:'replay'},{Origin:'https://unrelated.example'})).status,403);
+  assert.equal((await request({case_id:'all',mode:'live'})).status,400);
+  assert.equal((await request({case_id:'birthday',mode:'replay',passed:true})).status,400);
+  const replay = await request({case_id:'all',mode:'replay'});
+  assert.equal(replay.status,200); assert.equal(replay.data.saved,true); assert.equal(replay.data.report.passed,5);
+  assert.equal(replay.data.live.remaining,20); assert.equal(calls,0);
+  const saved = await request();
+  assert.equal(saved.data.history[0].id,replay.data.report.id);
+  assert.equal(saved.data.history[0].build_revision,'test-build');
+  for (let i = 0; i < 20; i++) {
+    const live = await request({case_id:'count-change',mode:'live'});
+    assert.equal(live.data.report.passed,1,JSON.stringify(live.data.report));
+    assert.equal(live.data.report.results[0].source.kind,'fresh_ai');
+    assert.equal(live.data.live.remaining,19-i);
+  }
+  assert.equal(calls,20);
+  const exhausted = await request({case_id:'count-change',mode:'live'});
+  assert.equal(exhausted.data.report.errors,1); assert.equal(exhausted.data.report.passed,0);
+  assert.equal(calls,20);
+  assert.equal((await request({case_id:'all',mode:'replay'})).data.report.passed,5);
+  const refreshed = await request();
+  assert.equal(refreshed.data.live.remaining,0); assert.equal(refreshed.data.history.length,10);
+  assert.ok(refreshed.data.history.some(r => r.errors === 1),'Errors stay in the saved history');
+});
+
+test('a test saving failure returns its downloadable report without repeating the paid call', async () => {
+  const sdk = memoryBlob(), put = sdk.put; let calls = 0;
+  sdk.put = async (path,...args) => {
+    if (path.includes('/evaluation-runs/')) throw new Error('storage detail');
+    return put(path,...args);
+  };
+  const handle = createHostedFetch({env:{...env,EVENTBRIEF_REQUIRE_ACCESS_CODE:'false'},sdk,
+    packageTransport:async ({request}) => {
+      calls++;
+      return {ok:true,status:200,body:JSON.stringify({status:'completed',model:request.model,
+        usage:{input_tokens:100,output_tokens:100},
+        output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(evaluationCases[0].original)}]}]})};
+    }});
+  const response = await handle(new Request(`${origin}/api/package/tests`,{method:'POST',
+    headers:{Origin:origin,'Content-Type':'application/json','X-EventBrief-Workspace':'demo'},body:JSON.stringify({case_id:'birthday',mode:'live'})}));
+  const data = await response.json();
+  assert.equal(response.status,503); assert.equal(data.saved,false); assert.equal(data.report.passed,1); assert.equal(calls,1);
+  assert.doesNotMatch(data.error,/storage detail/);
+});
 
 function setup({ duringTransport, quotePdfRenderer, inspectRequest } = {}) {
   const sdk = memoryBlob(); let calls = 0;

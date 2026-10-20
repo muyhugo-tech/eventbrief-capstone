@@ -7,12 +7,13 @@
   "functions": {
     "api/index.mjs": {
       "maxDuration": 180,
-      "includeFiles": "{fixtures/**,prompts/**,lib/**,public/**,node_modules/@sparticuz/chromium/bin/**,node_modules/@fontsource/montserrat/files/*.woff2,node_modules/@fontsource/playfair-display/files/*.woff2}"
+      "includeFiles": "{fixtures/**,prompts/**,lib/**,public/**,evaluation/public-demo-v1/cases.json,node_modules/@sparticuz/chromium/bin/**,node_modules/@fontsource/montserrat/files/*.woff2,node_modules/@fontsource/playfair-display/files/*.woff2}"
     }
   },
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index?route=:path*" },
-    { "source": "/package", "destination": "/index.html" }
+    { "source": "/package", "destination": "/index.html" },
+    { "source": "/tests", "destination": "/evaluation.html" }
   ],
   "headers": [{
     "source": "/(.*)",
