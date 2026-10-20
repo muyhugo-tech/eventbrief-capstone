@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Prepare and review five event drafts from one fictional conversation.">
+  <meta name="description" content="Paste or choose an event conversation, inspect the AI's five drafts, and run named tests with saved expected-versus-actual results.">
   <title>Events Made Easy — Event workspace</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/package.css">
@@ -15,7 +15,9 @@
   <link rel="stylesheet" href="/workspace-calendar.css">
   <link rel="stylesheet" href="/workspace-inbox.css">
   <link rel="stylesheet" href="/restaurant-settings.css">
+  <link rel="stylesheet" href="/evaluation.css">
   <script type="module" src="/package.js"></script>
+  <script type="module" src="/evaluation.js"></script>
 </head>
 <body class="package-page">
   <a class="skip-link" href="#workspace">Skip to event package</a>
@@ -40,21 +42,21 @@
   <main id="workspace">
     <header class="page-header">
       <div class="header-title"><h1 id="page-title">Event workspace</h1><span class="demo-badge">Local demo</span></div>
-      <div class="item-actions"><a href="/tests" class="button primary">Run agent tests</a><button id="header-new-event" class="button secondary">New event</button></div>
+      <div class="item-actions"><a href="#scored-tests" class="button secondary">Run scored tests</a><button id="header-new-event" class="button primary">Paste a conversation</button></div>
     </header>
-    <section id="live-demo-tests" class="hosted-access" aria-label="Test the live AI" hidden>
+    <section id="live-demo-tests" class="hosted-access" aria-label="Try the event agent">
       <div class="hosted-sample">
-        <h2>Try an event conversation</h2>
-        <p>For scored tests, <a href="/tests">run the five named agent tests</a>. They compare expected and actual results and save pass or fail. Or choose a conversation here to explore the drafts yourself.</p>
+        <h2>Try the event agent</h2>
+        <p>Choose a conversation or paste your own. The AI extracts the latest details, then the app prepares five drafts and flags anything that needs an answer. Review the result below.</p>
         <label for="demo-test-choice">Choose an example</label>
         <select id="demo-test-choice"></select>
         <div class="item-actions"><button id="use-demo-test" class="button primary">Use this conversation</button><button id="copy-demo-test" class="text-button">Copy conversation</button></div>
         <details><summary>Read the conversation</summary><textarea id="demo-test-text" rows="6" readonly aria-label="Example conversation"></textarea></details>
       </div>
       <div class="hosted-sample">
-        <h2>What to check</h2><ul id="demo-test-checks"></ul>
+        <h2>Expected result for this example</h2><ul id="demo-test-checks"></ul>
         <p id="demo-budget-status" class="live-note" role="status" aria-live="polite"></p>
-        <p class="live-note">AI calls are limited across this demo. Reopening saved drafts, editing details and downloading files use no AI calls.</p>
+        <p class="live-note">Saved AI results open free. New conversations use one AI call. <a href="#scored-tests">Run scored tests below</a> to compare expected and actual results.</p>
         <button id="open-written-sample" class="text-button">Open a written sample (no AI)</button>
         <p id="demo-test-status" class="live-note" role="status"></p>
       </div>
@@ -195,6 +197,24 @@
     <details id="export-panel" class="source-panel" hidden><summary>Keep a copy of this review</summary><p class="live-note">This file contains the conversation, staff notes, and review marks. It is for your own records. To share a draft, use its Download button above.</p><button id="download-package" class="button secondary">Download review package</button></details>
     <p class="storage-note">Drafts, saved corrections, and review marks stay on this computer. Reopening them is free. Nothing is sent or booked.</p>
     </div>
+    <section id="scored-tests" class="evaluation-panel" aria-labelledby="evaluation-heading">
+      <h2 id="evaluation-heading">Check the agent’s work</h2>
+      <p>These five named tests compare expected results with actual event details and draft decisions. Passes, failures and errors are saved automatically. Use <strong>Try this case in the agent</strong> to inspect its conversation and five drafts above.</p>
+      <div class="evaluation-actions"><button id="run-all-tests" class="button primary" disabled>Run all 5 tests — free</button><button id="refresh-tests" class="button secondary">Refresh saved results</button><a href="#live-demo-tests">Back to the agent</a></div>
+      <p class="evaluation-help"><strong>Free replay:</strong> checks the current app using real AI answers saved on October 19, 2026. <strong>New AI test:</strong> requests and scores a fresh answer using one shared AI call. These five known cases are regression tests, not an accuracy estimate for all future events.</p>
+      <p id="evaluation-budget" class="evaluation-help" role="status">Checking the shared AI allowance…</p>
+      <p id="evaluation-notice" class="notice" role="status" aria-live="polite">Loading named tests and saved results…</p>
+      <section class="evaluation-report" aria-label="Test report">
+        <div class="evaluation-report-heading"><h3 id="report-heading">No test run selected</h3><button id="download-report" class="button secondary" disabled>Download report</button></div>
+        <p id="report-description">Choose Run all 5 tests to start. A correct allergy warning counts as a pass.</p>
+      </section>
+      <div id="evaluation-cases"></div>
+      <section class="evaluation-history" aria-labelledby="evaluation-history-heading">
+        <h3 id="evaluation-history-heading">Saved test runs</h3>
+        <p>Shared across browsers. The latest 10 runs are shown. Running a scored test does not edit an event or mark its drafts reviewed.</p>
+        <div id="evaluation-history"><p>No saved runs yet.</p></div>
+      </section>
+    </section>
     <footer>Events Made Easy <span>Capstone prototype · all data fictional</span></footer>
   </main>
 </body>

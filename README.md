@@ -10,9 +10,11 @@ The sample restaurant is **Sergio’s Restaurant Venue**. The repository and hos
 
 Open [eventbrief-capstone.vercel.app](https://eventbrief-capstone.vercel.app). **No sign-in or access code is needed.**
 
-**For capstone evaluation:** click **Run agent tests**, then **Run all 5 tests — free**. The [public test runner](https://eventbrief-capstone.vercel.app/tests) shows five named conversations, expected results, actual results, automatic pass/fail checks and saved reports. Free replays process original saved real-AI answers through the current app. **Run new AI test — 1 call** requests and scores a fresh answer under the same shared spending limit. A failed request stays an error; it never falls back to a passing saved answer.
+**For capstone evaluation:** the same page contains the actual agent and its scored tests. Choose a conversation, inspect its five drafts, then click **Run scored tests** and **Run all 5 tests — free**. Each named test shows expected results, actual results, automatic pass/fail checks and saved reports. **Try this case in the agent** opens the conversation in the workspace. The old `/tests` address also opens this complete app.
 
-**To explore the workflow:** choose an example, click **Use this conversation**, then **Prepare five drafts**. **Copy conversation** lets you paste or modify an example yourself. Exact conversations with saved real-AI results reopen without another call. The separate written sample is labeled **no AI**. [Five conversations](docs/DEMO-TESTS.md) · [How the runnable checks work](docs/RUNNABLE-TESTS.md).
+Free replays process original saved real-AI answers through the current app. **Run new AI test — 1 call** requests and scores a fresh answer under the same shared spending limit. A failed request stays an error; it never falls back to a passing saved answer.
+
+**To explore the workflow:** choose an example and click **Use this conversation**, or click **Paste a conversation** and enter your own. Click **Prepare five drafts** for new input. **Copy conversation** lets you paste or modify an example yourself. Exact conversations with saved real-AI results reopen without another call. First-time visitors see one of those real saved results immediately; its source, review controls and editable event details are part of the working app. The separate written sample is labeled **no AI**. [Five conversations](docs/DEMO-TESTS.md) · [How the runnable checks work](docs/RUNNABLE-TESTS.md).
 
 To run on your computer, use **Node.js 24**:
 

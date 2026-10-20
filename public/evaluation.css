@@ -1,41 +1,35 @@
-.evaluation-page main { margin: 0 auto; max-width: 1140px; padding: 36px 26px 24px; }
-.evaluation-header { display:flex; justify-content:space-between; gap:20px; padding:22px max(26px,calc((100% - 1088px)/2)); background:var(--shell); }
-.evaluation-header a { color:#fff; font-size:.95rem; }
-.evaluation-header a:first-child { font-weight:650; text-decoration:none; }
-.evaluation-eyebrow { color:var(--muted); font-size:.8rem; margin-bottom:10px; }
-.evaluation-page h1 { font-size:2rem; margin-bottom:16px; }
-.evaluation-intro { max-width:800px; margin-bottom:12px; font-size:1.05rem; }
+.evaluation-panel { border-top:1px solid var(--line); margin-top:48px; padding-top:32px; scroll-margin-top:24px; }
+.evaluation-panel h2 { font-size:1.35rem; line-height:1.4; margin-bottom:12px; }
+.evaluation-panel h3 { font-size:1.05rem; line-height:1.4; }
+.evaluation-panel h4 { font-size:.86rem; margin:18px 0 8px; }
+.evaluation-panel>p { max-width:850px; }
+.evaluation-panel a,#live-demo-tests a { color:var(--accent-hover); }
 .evaluation-actions { display:flex; align-items:center; flex-wrap:wrap; gap:16px; margin:20px 0 14px; }
 .evaluation-help { color:var(--muted); font-size:.88rem; margin:12px 0; max-width:920px; }
 .evaluation-report { border-block:1px solid var(--line); padding:22px 0; margin-top:28px; }
 .evaluation-report-heading,.evaluation-case-heading { display:flex; align-items:center; justify-content:space-between; gap:14px; }
-.evaluation-page h2 { font-size:1.15rem; line-height:1.4; }
-.evaluation-page h3 { font-size:.86rem; margin:18px 0 8px; }
 .evaluation-report p,.evaluation-history>p { color:var(--muted); font-size:.88rem; margin-top:10px; }
-.evaluation-case { background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin:22px 0; }
+.evaluation-case { border-bottom:1px solid var(--line); padding:28px 0; }
 .evaluation-case ul { padding-left:21px; margin:8px 0; line-height:1.65; font-size:.92rem; }
 .evaluation-status { display:inline-block; flex-shrink:0; border:1px solid var(--line); border-radius:4px; padding:5px 8px; font-size:.73rem; font-weight:700; background:var(--ground); }
 .evaluation-status.passed { color:var(--green); background:var(--green-bg); border-color:#b6d4c6; }
 .evaluation-status.failed,.evaluation-status.error { color:#8c2525; background:#fce9e9; border-color:#d9b5b5; }
-.evaluation-page summary { cursor:pointer; font-size:.9rem; color:var(--accent-hover); padding:10px 0; }
-.evaluation-page pre { white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; font-size:.88rem; line-height:1.65; background:var(--ground); padding:16px; }
+.evaluation-panel summary { cursor:pointer; font-size:.9rem; color:var(--accent-hover); padding:10px 0; }
+.evaluation-panel pre { white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; font-size:.88rem; line-height:1.65; background:var(--shell); padding:16px; }
 .evaluation-result { border-top:1px solid var(--line); margin-top:16px; }
 .evaluation-result>p { font-size:.9rem; }
 .evaluation-table-wrap { overflow-x:auto; }
-.evaluation-page table { width:100%; border-collapse:collapse; font-size:.8rem; }
-.evaluation-page th,.evaluation-page td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:12px 10px; white-space:pre-line; overflow-wrap:anywhere; }
-.evaluation-page thead { background:var(--ground); }
-.evaluation-page tbody th { width:22%; }
-.evaluation-page td:last-child { white-space:nowrap; }
-.check-failed { background:#fce9e9; }
-.evaluation-history { margin-top:36px; }
+.evaluation-panel table { width:100%; border-collapse:collapse; font-size:.8rem; }
+.evaluation-panel th,.evaluation-panel td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:12px 10px; white-space:pre-line; overflow-wrap:anywhere; }
+.evaluation-panel thead { background:var(--shell); }
+.evaluation-panel tbody th { width:22%; }
+.evaluation-panel td:last-child { white-space:nowrap; }
+.evaluation-panel .check-failed { background:#fce9e9; }
+.evaluation-history { margin-top:32px; }
 .evaluation-history ol { padding-left:20px; }
 .evaluation-history .text-button { text-align:left; line-height:1.6; }
-.evaluation-page footer { border-top:1px solid var(--line); margin-top:30px; padding:22px 0; color:var(--muted); font-size:.82rem; line-height:1.6; }
 @media(max-width:600px) {
-  .evaluation-page main { padding:24px 16px; }
-  .evaluation-header { padding:18px 16px; }
-  .evaluation-case { padding:18px 14px; }
+  .evaluation-panel { margin-top:32px; padding-top:24px; }
   .evaluation-report-heading { align-items:flex-start; flex-direction:column; }
-  .evaluation-page table { min-width:570px; }
+  .evaluation-panel table { min-width:570px; }
 }

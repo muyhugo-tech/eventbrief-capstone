@@ -50,7 +50,7 @@ assets.set('/staff-document.mjs', ['public/staff-document.mjs', 'text/javascript
 assets.set('/guest-document.mjs', ['public/guest-document.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/restaurant-example.mjs', ['public/restaurant-example.mjs', 'text/javascript; charset=utf-8']);
 assets.set('/demo-examples.mjs', ['public/demo-examples.mjs', 'text/javascript; charset=utf-8']);
-assets.set('/tests', ['public/evaluation.html', 'text/html; charset=utf-8']);
+assets.set('/tests', ['public/package.html', 'text/html; charset=utf-8']);
 assets.set('/evaluation.js', ['public/evaluation.js', 'text/javascript; charset=utf-8']);
 assets.set('/evaluation.css', ['public/evaluation.css', 'text/css; charset=utf-8']);
 for (const name of ['workspace-board', 'workspace-calendar', 'workspace-inbox', 'restaurant-settings']) {

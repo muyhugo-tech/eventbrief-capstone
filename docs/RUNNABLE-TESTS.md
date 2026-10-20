@@ -1,9 +1,11 @@
 # Run the capstone tests
 
-1. Open [the public test runner](https://eventbrief-capstone.vercel.app/tests). No sign-in is needed.
-2. Click **Run all 5 tests — free**.
-3. Read the pass/fail result. Expand **See expected vs actual** to inspect each check.
-4. Refresh the page to reopen saved results, or download the JSON report.
+1. Open [the public agent and tests](https://eventbrief-capstone.vercel.app/). No sign-in is needed. The old `/tests` link opens the same complete app.
+2. Choose an example and click **Use this conversation**, or click **Paste a conversation** to enter your own. Click **Prepare five drafts** for new input; exact saved examples reopen their real-AI result without another call.
+3. Inspect the event details and all five drafts. Open **View messages in Inbox** to compare the source and AI output.
+4. Click **Run scored tests**, then **Run all 5 tests — free** on the same page.
+5. Read the pass/fail result. Expand **See expected vs actual** to inspect each check. **Try this case in the agent** opens that conversation in the actual workspace.
+6. Refresh the page to reopen saved results, or download the JSON report.
 
 | Named case | Expected decision |
 | --- | --- |

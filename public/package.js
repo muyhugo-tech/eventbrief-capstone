@@ -77,6 +77,7 @@ function applyListing(data) {
   scenarios = data.scenarios; live = data.live; updates = data.updates; history = data.history ?? []; workspace = data.workspace;
   events = data.events ?? []; sourceVersions = data.source_versions ?? {}; demo = data.demo ?? null;
   hosted = data.hosted ?? null;
+  window.dispatchEvent(new CustomEvent('eventbrief:allowance',{detail:live}));
   $('#package-scenario').innerHTML = (workspace ? '<option value="new">New event · paste messages</option>' : '') + scenarios.map(input => `<option value="${esc(input.id)}">${esc(input.title)}${sourceVersions[input.id]?.superseded ? ' · earlier version' : ''}</option>`).join('');
   $('#package-scenario').value = currentId;
   renderAccess();
@@ -660,7 +661,13 @@ async function openWorkspace(view) {
 $('#show-events').addEventListener('click', () => openWorkspace('events'));
 $('#event-inbox-source').addEventListener('click', () => { inboxId=versionFor()?.current_scenario_id??currentId; openWorkspace('inbox'); });
 $('#new-event').addEventListener('click', () => chooseScenario('new'));
-$('#header-new-event').addEventListener('click', () => chooseScenario('new'));
+$('#header-new-event').addEventListener('click', async () => {
+  if (busy) return;
+  await chooseScenario('new');
+  $('#preparation-controls').open = true;
+  $('#event-messages').focus();
+  $('#event-messages').scrollIntoView({block:'center',behavior:'smooth'});
+});
 $('#event-search').addEventListener('input', renderEvents);
 $('#asset-search').addEventListener('input', renderEvents);
 $('#open-current').addEventListener('click', () => chooseScenario(versionFor()?.current_scenario_id ?? updates?.active_scenario_id));
@@ -718,13 +725,17 @@ function showExample() {
   $('#demo-test-status').textContent = '';
 }
 $('#demo-test-choice').addEventListener('change', showExample);
-$('#use-demo-test').addEventListener('click', async () => {
+async function openDemoExample(id = selectedExample().id) {
   if (busy) return;
-  const example = selectedExample();
+  const example = demoExamples.find(item => item.id === id);
+  if (!example) return;
+  $('#demo-test-choice').value = example.id;
+  showExample();
   const existing = scenarios.find(input => input.messages.length === 1 && input.messages[0].body === example.text);
   if (existing && history.some(entry => entry.scenario_id === existing.id && entry.status === 'succeeded')) {
     await chooseScenario(existing.id);
     $('#demo-test-status').textContent = 'Saved real-AI result opened. No new AI call was used. Paste a changed conversation to run a new test.';
+    $('#event-workbench').scrollIntoView({block:'start',behavior:'smooth'});
     return;
   }
   await chooseScenario('new');
@@ -734,6 +745,14 @@ $('#use-demo-test').addEventListener('click', async () => {
   $('#event-messages').focus();
   $('#prepare').scrollIntoView({block:'center',behavior:'smooth'});
   $('#demo-test-status').textContent = 'Conversation added. Click Prepare five drafts below.';
+}
+$('#use-demo-test').addEventListener('click', () => openDemoExample());
+window.addEventListener('eventbrief:open-case', event => openDemoExample(event.detail.id));
+window.addEventListener('eventbrief:allowance', event => {
+  live = event.detail;
+  renderAccess();
+  // A fresh scored test and a workspace preparation share one paid allowance.
+  if (currentId) $('#prepare').disabled = busy || (isEarlier() && currentMode === 'live') || (currentMode === 'live' && !canAnalyze());
 });
 $('#copy-demo-test').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(selectedExample().text); $('#demo-test-status').textContent = 'Copied. Paste it into the event messages box.'; }
@@ -1057,6 +1076,14 @@ async function init() {
     let selection=null;
     try { selection=JSON.parse(localStorage.getItem(browserKey('selection'))); $('#event-messages').value=localStorage.getItem(browserKey('message-draft'))??''; }
     catch {$('#save-status').textContent='Your last place could not be restored. Saved reviews are still available.';}
+    const demoEntry = hosted?.access_required === false && (!selection || window.location.pathname === '/tests');
+    if (demoEntry) {
+      const example = scenarios.find(input => input.messages.length === 1 && input.messages[0].body === demoExamples[0].text);
+      const savedExample = example && history.find(entry => entry.scenario_id === example.id && entry.status === 'succeeded');
+      // Show the actual agent output on first visit, without spending another call.
+      selection = savedExample ? {id:example.id,mode:'live',document:'quote',view:'event',run_id:savedExample.run_id}
+        : {id:'new',mode:'live',document:'quote',view:'event'};
+    }
     $('#paste-count').textContent=`${$('#event-messages').value.length.toLocaleString()} / 8,000 characters`;
     currentId = selection && (selection.id==='new'||scenarios.some(input=>input.id===selection.id)) ? selection.id : workspace || hosted ? 'new' : updates?.active_scenario_id ?? scenarios[0].id;
     currentMode = sourceVersions[currentId]?.reference_available ? 'reference' : isPasted() ? 'live' : selection?.mode==='reference' ? 'reference' : live.ready ? 'live' : 'reference';
@@ -1081,7 +1108,7 @@ async function init() {
     restoreReplyDraft(); renderPackage();
     setBusy(false);
     if (selection?.view && Object.hasOwn(viewNames,selection.view)) { showOverview(true,selection.view); if(selection.view==='inbox') { setBusy(true);try{await loadInbox(inboxId);}finally{setBusy(false);} } }
-    else if ((hosted?.unlocked && currentId === 'new') || (!selection && eventRows().length)) showOverview(true);
+    else if (!demoEntry && ((hosted?.unlocked && currentId === 'new') || (!selection && eventRows().length))) showOverview(true);
     if (selection?.view === 'settings') { setBusy(true); try {await settingsPanel.load();} finally {setBusy(false);} }
     if (hosted && !hosted.unlocked && new URLSearchParams(window.location.search).get('sample') === '1') {
       window.history.replaceState(null, '', window.location.pathname);

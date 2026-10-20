@@ -12,18 +12,18 @@ function render() {
   $('#run-all-tests').disabled = busy || !loaded;
   $('#refresh-tests').disabled = busy;
   $('#download-report').disabled = !report;
-  $('#evaluation-budget').textContent = !live.ready ? 'Live AI is unavailable. Free replay tests still work.'
+  $('#evaluation-budget').textContent = !loaded ? 'Checking the shared AI allowance…' : !live.ready ? 'Live AI is unavailable. Free replay tests still work.'
     : `${live.remaining} new AI ${live.remaining === 1 ? 'call remains' : 'calls remain'} for all visitors. At zero, new AI tests stop; free replays still work.`;
   $('#evaluation-cases').innerHTML = cases.map(entry => {
     const result = results.get(entry.id);
     const label = result ? ({passed:'PASS',failed:'FAIL',error:'ERROR'})[result.status] : 'NOT RUN';
     return `<article class="evaluation-case" id="test-${escape(entry.id)}">
-      <div class="evaluation-case-heading"><h2>${escape(entry.title)}</h2><span class="evaluation-status ${escape(result?.status ?? '')}">${label}</span></div>
-      <h3>Expected result</h3><ul>${entry.expected.map(text => `<li>${escape(text)}</li>`).join('')}</ul>
-      <div class="evaluation-actions"><button class="button secondary" data-run="${escape(entry.id)}" ${busy || !loaded ? 'disabled' : ''}>Run test — free replay</button>
+      <div class="evaluation-case-heading"><h3>${escape(entry.title)}</h3><span class="evaluation-status ${escape(result?.status ?? '')}">${label}</span></div>
+      <h4>Expected result</h4><ul>${entry.expected.map(text => `<li>${escape(text)}</li>`).join('')}</ul>
+      <div class="evaluation-actions"><button class="button secondary" data-agent-case="${escape(entry.id)}" ${busy || !loaded ? 'disabled' : ''}>Try this case in the agent</button><button class="button secondary" data-run="${escape(entry.id)}" ${busy || !loaded ? 'disabled' : ''}>Run test — free replay</button>
       <button class="text-button" data-live="${escape(entry.id)}" ${busy || !loaded || !live.ready || live.remaining < 1 || live.paused || live.in_flight ? 'disabled' : ''}>Run new AI test — 1 call</button></div>
       <details class="evaluation-conversation"><summary>Read the test conversation</summary><pre>${escape(entry.conversation)}</pre></details>
-      ${result ? `<div class="evaluation-result"><h3>Actual result</h3>${result.error ? `<p class="error">${escape(result.error)}</p>` : `
+      ${result ? `<div class="evaluation-result"><h4>Actual result</h4>${result.error ? `<p class="error">${escape(result.error)}</p>` : `
       <p>${result.passed_checks} of ${result.total_checks} checks passed. ${report?.mode === 'live' ? 'Fresh AI answer, checked automatically.' : 'Saved AI answer, processed and checked again.'}</p>
       <ul class="evaluation-drafts">${result.drafts.map(d => `<li><strong>${escape(d.title)}:</strong> ${escape(d.state)}</li>`).join('')}</ul>
       <details ${result.status === 'failed' ? 'open' : ''}><summary>See expected vs actual — ${result.total_checks} checks</summary>
@@ -63,6 +63,7 @@ async function run(caseId, mode) {
     if (data.report) selectReport(data.report); // Keep downloadable evidence even if saving failed.
     if (!response.ok || !data.saved) throw new Error(data.error || 'The test result could not be saved.');
     live = data.live; history = [data.report,...history].slice(0,10);
+    window.dispatchEvent(new CustomEvent('eventbrief:allowance',{detail:live}));
     notice(`Saved: ${data.report.passed} passed, ${data.report.failed} failed, ${data.report.errors} errors. Open “See expected vs actual” under a test to inspect each check.`, Boolean(data.report.failed || data.report.errors));
   } catch (error) { notice(error.message || 'The request did not finish. Refresh saved results before trying another paid call.',true); }
   finally { busy = false; render(); }
@@ -70,10 +71,13 @@ async function run(caseId, mode) {
 $('#run-all-tests').addEventListener('click', () => run('all','replay'));
 $('#refresh-tests').addEventListener('click', load);
 $('#evaluation-cases').addEventListener('click', event => {
+  const agentCase = event.target.closest('[data-agent-case]');
+  if (agentCase) window.dispatchEvent(new CustomEvent('eventbrief:open-case',{detail:{id:agentCase.dataset.agentCase}}));
   const replay = event.target.closest('[data-run]'), fresh = event.target.closest('[data-live]');
   if (replay) run(replay.dataset.run,'replay');
   if (fresh) run(fresh.dataset.live,'live');
 });
+window.addEventListener('eventbrief:allowance', event => {live = event.detail; render();});
 $('#evaluation-history').addEventListener('click', event => {
   const target = event.target.closest('[data-report]');
   if (target) { selectReport(history.find(r => r.id === target.dataset.report)); notice('Showing a saved test run. No AI call was made.'); }

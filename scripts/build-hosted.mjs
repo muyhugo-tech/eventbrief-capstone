@@ -10,7 +10,8 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const files = new Map([
   ['index.html', 'public/package.html'],
   ['demo-examples.mjs', 'public/demo-examples.mjs'],
-  ...['evaluation.html','evaluation.js','evaluation.css'].map(name => [name, `public/${name}`]),
+  ['evaluation.html', 'public/package.html'],
+  ...['evaluation.js','evaluation.css'].map(name => [name, `public/${name}`]),
   ...['package.js', 'package.css', 'styles.css', 'package-render.mjs', 'package-export.mjs', 'quote-document.mjs', 'kitchen-document.mjs', 'staff-document.mjs', 'guest-document.mjs', 'workspace-board.mjs', 'workspace-board.css', 'workspace-calendar.mjs', 'workspace-calendar.css', 'workspace-inbox.mjs', 'workspace-inbox.css'].map(name => [name, `public/${name}`]),
   ...quoteFonts.map(font=>[`quote-fonts/${font.file}`,`node_modules/@fontsource/${font.package}/files/${font.file}`]),
   ...['montserrat','playfair-display'].map(name=>[`quote-fonts/${name}-LICENSE.txt`,`node_modules/@fontsource/${name}/LICENSE`]),
